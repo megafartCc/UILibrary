@@ -97,6 +97,7 @@ return {
 		ResultsWidth = 240,
 		ResultHeight = 24,
 		MaxResults = 6,
+		ResultsSlide = 6,
 		NotifyWidth = 260,
 		NotifyMargin = 10,
 		NotifyGap = 8,

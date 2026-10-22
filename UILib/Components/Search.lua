@@ -65,19 +65,23 @@ function Search.new(window)
 	self.Results = Create.new("Frame", {
 		Name = "SearchResults",
 		AnchorPoint = Vector2.new(0.5, 0),
-		Position = UDim2.new(0.5, 0, 0, sizes.HeaderHeight + 4),
+		Position = UDim2.new(0.5, 0, 0, sizes.HeaderHeight + 4 - sizes.ResultsSlide),
 		Size = UDim2.fromOffset(sizes.ResultsWidth, 0),
-		AutomaticSize = Enum.AutomaticSize.Y,
 		BackgroundColor3 = colors.Results,
+		BackgroundTransparency = 1,
 		BorderSizePixel = 0,
+		ClipsDescendants = true,
 		Visible = false,
 		ZIndex = 10,
 		Parent = window.Frame,
 		Create.new("UICorner", { CornerRadius = UDim.new(0, sizes.SearchRadius) }),
-		Create.new("UIStroke", { Color = colors.Divider, Thickness = 1 }),
 		Create.Padding(4, 4, 4, 4),
 		Create.List(Enum.FillDirection.Vertical, 0),
 	})
+
+	self._stroke = Create.new("UIStroke", { Color = colors.Divider, Thickness = 1, Transparency = 1, Parent = self.Results })
+	self._token = 0
+	self.Shown = false
 
 	self.Box:GetPropertyChangedSignal("Text"):Connect(function()
 		self:_update()
@@ -92,10 +96,10 @@ function Search.new(window)
 	end)
 
 	local connection = UserInputService.InputBegan:Connect(function(input)
-		if PRESS[input.UserInputType] and self.Results.Visible then
+		if PRESS[input.UserInputType] and self.Shown then
 			task.defer(function()
 				if not inside(self.Results, input.Position) and not inside(self.Frame, input.Position) then
-					self.Results.Visible = false
+					self:_hide()
 				end
 			end)
 		end
@@ -142,19 +146,22 @@ function Search:Find(query)
 	return results
 end
 
-function Search:_update()
+function Search:_clear()
 	for _, row in self._rows do
 		row:Destroy()
 	end
 	table.clear(self._rows)
-	self._first = nil
+end
 
+function Search:_update()
+	self._first = nil
 	local query = string.match(self.Box.Text, "^%s*(.-)%s*$")
 	if query == "" then
-		self.Results.Visible = false
+		self:_hide()
 		return
 	end
 
+	self:_clear()
 	local results = self:Find(query)
 	self._first = results[1]
 	for index = 1, math.min(#results, Theme.Sizes.MaxResults) do
@@ -163,7 +170,44 @@ function Search:_update()
 	if #results == 0 then
 		table.insert(self._rows, self:_row({ Text = "No results", Path = "" }, 1))
 	end
-	self.Results.Visible = true
+	self:_show(#self._rows)
+end
+
+function Search:_show(count)
+	local sizes = Theme.Sizes
+	self._token += 1
+	if not self.Shown then
+		self.Shown = true
+		self.Results.Visible = true
+	end
+	Motion.Apply(self.Results, {
+		Size = UDim2.fromOffset(sizes.ResultsWidth, count * sizes.ResultHeight + 8),
+		Position = UDim2.new(0.5, 0, 0, sizes.HeaderHeight + 4),
+		BackgroundTransparency = 0,
+	}, true)
+	Motion.Apply(self._stroke, { Transparency = 0 }, true)
+end
+
+function Search:_hide()
+	if not self.Shown then
+		return
+	end
+	local sizes = Theme.Sizes
+	self.Shown = false
+	self._token += 1
+	local token = self._token
+	Motion.Apply(self.Results, {
+		Size = UDim2.fromOffset(sizes.ResultsWidth, 0),
+		Position = UDim2.new(0.5, 0, 0, sizes.HeaderHeight + 4 - sizes.ResultsSlide),
+		BackgroundTransparency = 1,
+	}, true)
+	Motion.Apply(self._stroke, { Transparency = 1 }, true)
+	task.delay(Theme.Motion.Duration, function()
+		if self._token == token then
+			self.Results.Visible = false
+			self:_clear()
+		end
+	end)
 end
 
 function Search:_row(result, order)
