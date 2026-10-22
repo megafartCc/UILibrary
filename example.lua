@@ -88,6 +88,13 @@ Misc:AddButton({
 	end,
 })
 local World = Home:AddGroup({ Name = "WORLD", Side = "Right" })
+World:AddColorPicker({
+	Name = "ESP Color",
+	Default = Color3.fromRGB(255, 70, 95),
+	Callback = function(color)
+		print("ESP Color", color:ToHex())
+	end,
+})
 World:AddDropdown({
 	Name = "ESP Targets",
 	Multi = true,

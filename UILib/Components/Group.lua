@@ -20,6 +20,7 @@ local Elements = {
 	Toggle = import("Elements/Toggle"),
 	Button = import("Elements/Button"),
 	Dropdown = Dropdown,
+	ColorPicker = import("Elements/ColorPicker"),
 	SliderToggle = variant(Slider, "Toggle"),
 	DropdownToggle = variant(Dropdown, "Toggle"),
 	DropdownButton = variant(Dropdown, "Button"),
