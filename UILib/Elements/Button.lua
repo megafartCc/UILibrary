@@ -21,7 +21,7 @@ function Button.new(group, options, order)
 
 	self.Label = Create.new("TextLabel", {
 		Name = "Label",
-		Size = UDim2.new(1, -(sizes.ButtonSize + 6), 1, 0),
+		Size = UDim2.new(1, -(sizes.SwitchWidth + 6), 1, 0),
 		FontFace = Theme.Fonts.Element,
 		Text = options.Name,
 		TextSize = Theme.TextSizes.Element,
@@ -34,7 +34,7 @@ function Button.new(group, options, order)
 		Name = "Square",
 		AnchorPoint = Vector2.new(1, 0.5),
 		Position = UDim2.fromScale(1, 0.5),
-		Size = UDim2.fromOffset(sizes.ButtonSize, sizes.ButtonSize),
+		Size = UDim2.fromOffset(sizes.SwitchWidth, sizes.ButtonHeight),
 		BackgroundColor3 = colors.Track,
 		BorderSizePixel = 0,
 		Parent = self.Frame,
