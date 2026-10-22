@@ -11,6 +11,8 @@ return {
 		Muted = Color3.fromRGB(150, 150, 150),
 		SectionLabel = Color3.fromRGB(100, 100, 100),
 		Selected = Color3.fromRGB(30, 30, 30),
+		Hover = Color3.fromRGB(25, 25, 25),
+		HoverText = Color3.fromRGB(205, 205, 205),
 		Group = Color3.fromRGB(24, 24, 24),
 		GroupTitle = Color3.fromRGB(229, 229, 229),
 		ElementText = Color3.fromRGB(215, 215, 215),
