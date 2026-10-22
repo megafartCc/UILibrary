@@ -41,7 +41,7 @@ function Dropdown.new(group, options, order)
 
 	self.Label = Create.new("TextLabel", {
 		Name = "Label",
-		Size = UDim2.new(1 - sizes.SliderBarWidth, -6, 1, 0),
+		Size = UDim2.new(1 - sizes.SliderBarWidth, -(trailing + 6), 1, 0),
 		FontFace = Theme.Fonts.Element,
 		Text = options.Name,
 		TextSize = Theme.TextSizes.Element,
@@ -54,7 +54,7 @@ function Dropdown.new(group, options, order)
 		Name = "Selector",
 		AnchorPoint = Vector2.new(1, 0.5),
 		Position = UDim2.new(1, -trailing, 0.5, 0),
-		Size = UDim2.new(sizes.SliderBarWidth, -trailing, 0, sizes.DropdownHeight),
+		Size = UDim2.new(sizes.SliderBarWidth, 0, 0, sizes.DropdownHeight),
 		BackgroundColor3 = colors.Track,
 		BorderSizePixel = 0,
 		Parent = self.Header,
