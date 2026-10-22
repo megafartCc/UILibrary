@@ -1,6 +1,5 @@
 local import = ...
 local Theme = import("Theme")
-local Motion = import("Motion")
 local Create = import("Util/Create")
 local Group = import("Components/Group")
 
@@ -38,7 +37,7 @@ function Page.new(options)
 	self.Title = Create.new("TextLabel", {
 		Name = "Title",
 		LayoutOrder = 0,
-		Size = UDim2.new(0.5, -(sizes.SearchWidth / 2 + 8), 0, sizes.TitleHeight),
+		Size = UDim2.new(1, 0, 0, sizes.TitleHeight),
 		FontFace = Theme.Fonts.Title,
 		Text = options.Name,
 		TextSize = Theme.TextSizes.PageTitle,
@@ -81,23 +80,8 @@ function Page:AddGroup(options)
 	self._counts[side] += 1
 
 	local group = Group.new(self.Columns[side], options, #self.Groups + 1)
-	group.Page = self
 	table.insert(self.Groups, group)
 	return group
-end
-
-function Page:Reveal(group, element)
-	local body = self.Body
-	local y = group.Frame.AbsolutePosition.Y - body.AbsolutePosition.Y + body.CanvasPosition.Y - Theme.Sizes.GroupTitleRaise - 4
-	Motion.Apply(body, { CanvasPosition = Vector2.new(0, math.max(y, 0)) }, true)
-
-	local colors, motion = Theme.Colors, Theme.Motion
-	group.Frame.BackgroundColor3 = colors.Flash
-	Motion.Apply(group.Frame, { BackgroundColor3 = colors.Group }, true, motion.FlashDuration, Enum.EasingStyle.Quad)
-	if element and element.Label then
-		element.Label.TextColor3 = colors.Accent
-		Motion.Apply(element.Label, { TextColor3 = colors.ElementText }, true, motion.FlashDuration, Enum.EasingStyle.Quad)
-	end
 end
 
 function Page:SetSelected(on, animate)

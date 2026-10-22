@@ -15,10 +15,6 @@ return {
 		Accent = Color3.fromRGB(245, 100, 100),
 		SwitchOff = Color3.fromRGB(52, 52, 52),
 		Knob = Color3.fromRGB(255, 255, 255),
-		Search = Color3.fromRGB(28, 28, 28),
-		Results = Color3.fromRGB(30, 30, 30),
-		ResultHover = Color3.fromRGB(40, 40, 40),
-		Flash = Color3.fromRGB(46, 46, 46),
 	},
 
 	Sizes = {
@@ -54,13 +50,6 @@ return {
 		SwitchWidth = 28,
 		SwitchHeight = 16,
 		KnobInset = 2,
-		SearchWidth = 150,
-		SearchHeight = 22,
-		SearchRadius = 6,
-		SearchIconSize = 12,
-		ResultsWidth = 230,
-		ResultHeight = 24,
-		MaxResults = 6,
 		SliderRadius = 3,
 	},
 
@@ -82,8 +71,6 @@ return {
 		GroupTitle = 12,
 		Element = 12,
 		SliderValue = 11,
-		Search = 12,
-		ResultPath = 10,
 	},
 
 	Motion = {
@@ -91,6 +78,5 @@ return {
 		Style = Enum.EasingStyle.Quint,
 		DragDuration = 0.12,
 		DragStyle = Enum.EasingStyle.Quad,
-		FlashDuration = 0.9,
 	},
 }
