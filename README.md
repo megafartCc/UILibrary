@@ -41,9 +41,10 @@ See `example.lua` for a full example.
 
 | Call | What it does |
 | --- | --- |
-| `UILib:CreateWindow({ Title, Footer, DefaultPage, Width, Height, Scale, Pages, OnClose })` | Opens a window with a header bar (title, current page, X) and a bottom bar (`Footer` text). The X closes it for good |
+| `UILib:CreateWindow({ Title, Footer, DefaultPage, Width, Height, Scale, Pages, OnClose })` | Opens a window with a header bar (title, search, X) and a bottom bar (`Footer` text). The X closes it for good |
 | `Window:SetFooter(text)` | Changes the bottom bar text |
 | `Window:SetScale(scale)` | Makes the whole window bigger or smaller. Default is `Theme.Scale` (1.2) |
+| Search (top centre) | Type to find pages, boxes and controls as you go. Tap a result (or press Enter for the first) to open that page, scroll to the box and flash it. Tap outside to hide the list. `Window.Search:Find(text)` returns the matches |
 | Moving the window | Drag the header or bottom bar with mouse or finger. It follows smoothly and stays on screen |
 | `Window:OnClose(fn)` | Runs `fn` when the window closes; stop your loops here |
 | `Window:SetTitle(text)` | Renames the window |
@@ -92,6 +93,7 @@ UILib/
     PageButton.lua       icon + name row, selected highlight
     Page.lua             content area for one page, two columns
     Notifications.lua    top-right notifications
+    Search.lua           search box in the header and live results
     Group.lua            filled box, title half over its top edge; Add<Element> methods come from UILib/Elements
   Elements/
     Slider.lua           slider with a fill and the value in the middle

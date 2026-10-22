@@ -6,6 +6,7 @@ local Create = import("Util/Create")
 local Sidebar = import("Components/Sidebar")
 local PageButton = import("Components/PageButton")
 local Page = import("Components/Page")
+local Search = import("Components/Search")
 
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
@@ -83,18 +84,6 @@ function Window.new(options)
 		Parent = self.Header,
 	})
 
-	self.PageTitle = Create.new("TextLabel", {
-		Name = "PageTitle",
-		Position = UDim2.fromOffset(sizes.SidebarWidth + sizes.ContentPadX, 0),
-		Size = UDim2.new(1, -(sizes.SidebarWidth + sizes.ContentPadX * 2 + sizes.CloseSize + 4), 1, 0),
-		FontFace = Theme.Fonts.Title,
-		Text = "",
-		TextSize = Theme.TextSizes.PageTitle,
-		TextColor3 = colors.Muted,
-		TextTruncate = Enum.TextTruncate.AtEnd,
-		Parent = self.Header,
-	})
-
 	self.CloseButton = Create.new("TextButton", {
 		Name = "Close",
 		AnchorPoint = Vector2.new(1, 0.5),
@@ -157,6 +146,7 @@ function Window.new(options)
 	})
 
 	self:_makeDraggable({ self.Header, self.Bottom })
+	self.Search = Search.new(self)
 
 	self.Sidebar = Sidebar.new(self)
 	self.Sidebar.Frame.Parent = self.Frame
@@ -307,7 +297,6 @@ function Window:_show(name, animate)
 	local page = self.Pages[name]
 	page:SetSelected(true, animate)
 	self.Sidebar:Highlight(page.Button, animate)
-	self.PageTitle.Text = name
 	self.SelectedPage = name
 end
 

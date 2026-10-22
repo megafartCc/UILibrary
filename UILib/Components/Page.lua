@@ -1,5 +1,6 @@
 local import = ...
 local Theme = import("Theme")
+local Motion = import("Motion")
 local Create = import("Util/Create")
 local Group = import("Components/Group")
 
@@ -60,8 +61,25 @@ function Page:AddGroup(options)
 	self._counts[side] += 1
 
 	local group = Group.new(self.Columns[side], options, #self.Groups + 1)
+	group.Page = self
 	table.insert(self.Groups, group)
 	return group
+end
+
+function Page:Reveal(group, element, scale)
+	scale = scale or 1
+	local body = self.Body
+	local offset = (group.Frame.AbsolutePosition.Y - body.AbsolutePosition.Y) / scale
+	local y = offset + body.CanvasPosition.Y - Theme.Sizes.GroupTitleRaise - 4
+	Motion.Apply(body, { CanvasPosition = Vector2.new(0, math.max(y, 0)) }, true)
+
+	local colors, motion = Theme.Colors, Theme.Motion
+	group.Frame.BackgroundColor3 = colors.Flash
+	Motion.Apply(group.Frame, { BackgroundColor3 = colors.Group }, true, motion.FlashDuration, Enum.EasingStyle.Quad)
+	if element and element.Label then
+		element.Label.TextColor3 = colors.Accent
+		Motion.Apply(element.Label, { TextColor3 = colors.ElementText }, true, motion.FlashDuration, Enum.EasingStyle.Quad)
+	end
 end
 
 function Page:SetSelected(on, animate)
