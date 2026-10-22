@@ -69,7 +69,7 @@ return {
 		SwitchHeight = 16,
 		KnobInset = 2,
 		ButtonSize = 20,
-		ButtonIconSize = 12,
+		ButtonIconSize = 14,
 		ButtonRadius = 6,
 		DropdownHeight = 20,
 		DropdownRadius = 6,
