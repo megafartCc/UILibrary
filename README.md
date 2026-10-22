@@ -77,7 +77,7 @@ UILib/
     Section.lua          section label, page ordering
     PageButton.lua       icon + name row, selected highlight
     Page.lua             content area for one page, two columns
-    Group.lua            filled box with a title; Add<Element> methods come from UILib/Elements
+    Group.lua            filled box, title half over its top edge; Add<Element> methods come from UILib/Elements
   Elements/
     Slider.lua           slider with a fill and the value in the middle
   Vendor/Lucide/         icon sheet data from lucide-roblox (MIT + ISC)

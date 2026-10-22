@@ -16,11 +16,11 @@ Items:AddPage({ Name = "Inventory", Icon = "package" })
 local Other = Window:AddSection({ Name = "Other", Order = 3 })
 Other:AddPage({ Name = "Settings", Icon = "settings" })
 
-local Aimbot = Home:AddGroup({ Name = "Aimbot", Side = "Left" })
+local Aimbot = Home:AddGroup({ Name = "AIMBOT", Side = "Left" })
 Aimbot:AddSlider({ Name = "FOV", Min = 0, Max = 100, Default = 25, Suffix = "%" })
 Aimbot:AddSlider({ Name = "Smoothness", Min = 0, Max = 1, Step = 0.05, Default = 0.5 })
 
-local Visuals = Home:AddGroup({ Name = "Visuals", Side = "Right" })
+local Visuals = Home:AddGroup({ Name = "VISUALS", Side = "Right" })
 Visuals:AddSlider({
 	Name = "Brightness",
 	Min = 0,
@@ -32,5 +32,5 @@ Visuals:AddSlider({
 	end,
 })
 
-Home:AddGroup({ Name = "Misc", Side = "Left" })
-Home:AddGroup({ Name = "World", Side = "Right" })
+Home:AddGroup({ Name = "MISC", Side = "Left" })
+Home:AddGroup({ Name = "WORLD", Side = "Right" })

@@ -31,20 +31,21 @@ function Group.new(column, options, order)
 		AutomaticSize = Enum.AutomaticSize.Y,
 		BackgroundTransparency = 1,
 		Parent = self.Frame,
-		Create.Padding(pad, pad, pad, pad),
+		Create.Padding(pad, pad, pad, sizes.GroupPadBottom),
 		Create.List(Enum.FillDirection.Vertical, sizes.GroupItemGap),
 	})
 
 	self.Title = Create.new("TextLabel", {
 		Name = "Title",
-		LayoutOrder = 0,
-		Size = UDim2.new(1, 0, 0, sizes.GroupTitleHeight),
+		Position = UDim2.fromOffset(sizes.GroupTitleInset, -sizes.GroupTitleRaise),
+		Size = UDim2.new(1, -2 * sizes.GroupTitleInset, 0, sizes.GroupTitleHeight),
 		FontFace = Theme.Fonts.GroupTitle,
 		Text = options.Name,
 		TextSize = Theme.TextSizes.GroupTitle,
 		TextColor3 = colors.GroupTitle,
 		TextTruncate = Enum.TextTruncate.AtEnd,
-		Parent = self.Body,
+		ZIndex = 2,
+		Parent = self.Frame,
 	})
 
 	return self

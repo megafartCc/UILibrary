@@ -15,6 +15,7 @@ local function column(name, x, parent)
 		AutomaticSize = Enum.AutomaticSize.Y,
 		BackgroundTransparency = 1,
 		Parent = parent,
+		Create.Padding(0, 0, sizes.GroupTitleRaise + 1, 1),
 		Create.List(Enum.FillDirection.Vertical, sizes.GroupGap),
 	})
 end
