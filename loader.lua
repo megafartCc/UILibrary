@@ -1,4 +1,14 @@
-local BASE_URL = "https://raw.githubusercontent.com/megafartCc/UILibrary/main/UILib/"
+local REPO = "megafartCc/UILibrary"
+local BRANCH = "main"
+
+local function latestCommit()
+	local ok, body = pcall(function()
+		return game:HttpGet("https://api.github.com/repos/" .. REPO .. "/commits/" .. BRANCH)
+	end)
+	return ok and type(body) == "string" and string.match(body, '"sha"%s*:%s*"(%x+)"') or BRANCH
+end
+
+local BASE_URL = "https://raw.githubusercontent.com/" .. REPO .. "/" .. latestCommit() .. "/UILib/"
 
 local PENDING, FAILED = {}, {}
 local sources, modules, loading = {}, {}, {}
