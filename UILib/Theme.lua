@@ -2,19 +2,23 @@ local FONT = "rbxasset://fonts/families/BuilderSans.json"
 
 return {
 	Colors = {
-		Box = Color3.fromRGB(15, 15, 17),
+		Box = Color3.fromRGB(19, 19, 19),
 		Text = Color3.fromRGB(255, 255, 255),
-		Muted = Color3.fromRGB(143, 143, 148),
-		SectionLabel = Color3.fromRGB(112, 112, 118),
-		Selected = Color3.fromRGB(36, 36, 41),
-		Divider = Color3.fromRGB(32, 32, 36),
-		Group = Color3.fromRGB(22, 22, 25),
-		GroupTitle = Color3.fromRGB(220, 220, 224),
-		ElementText = Color3.fromRGB(205, 205, 210),
-		Track = Color3.fromRGB(36, 36, 41),
+		Muted = Color3.fromRGB(145, 145, 145),
+		SectionLabel = Color3.fromRGB(112, 112, 112),
+		Selected = Color3.fromRGB(34, 34, 34),
+		Divider = Color3.fromRGB(30, 30, 30),
+		Group = Color3.fromRGB(24, 24, 24),
+		GroupTitle = Color3.fromRGB(225, 225, 225),
+		ElementText = Color3.fromRGB(205, 205, 205),
+		Track = Color3.fromRGB(34, 34, 34),
 		Accent = Color3.fromRGB(245, 100, 100),
-		SwitchOff = Color3.fromRGB(52, 52, 58),
+		SwitchOff = Color3.fromRGB(52, 52, 52),
 		Knob = Color3.fromRGB(255, 255, 255),
+		Search = Color3.fromRGB(28, 28, 28),
+		Results = Color3.fromRGB(30, 30, 30),
+		ResultHover = Color3.fromRGB(40, 40, 40),
+		Flash = Color3.fromRGB(46, 46, 46),
 	},
 
 	Sizes = {
@@ -50,6 +54,13 @@ return {
 		SwitchWidth = 32,
 		SwitchHeight = 18,
 		KnobInset = 2,
+		SearchWidth = 170,
+		SearchHeight = 26,
+		SearchRadius = 6,
+		SearchIconSize = 14,
+		ResultsWidth = 230,
+		ResultHeight = 28,
+		MaxResults = 6,
 		SliderRadius = 3,
 	},
 
@@ -71,6 +82,8 @@ return {
 		GroupTitle = 14,
 		Element = 13,
 		SliderValue = 12,
+		Search = 13,
+		ResultPath = 11,
 	},
 
 	Motion = {
@@ -78,5 +91,6 @@ return {
 		Style = Enum.EasingStyle.Quint,
 		DragDuration = 0.12,
 		DragStyle = Enum.EasingStyle.Quad,
+		FlashDuration = 0.9,
 	},
 }

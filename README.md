@@ -52,6 +52,7 @@ See `example.lua` for a full example.
 | `Group:AddSlider({ Name, Min, Max, Default, Step, Suffix, Callback })` | Adds a one-row slider: name on the left, bar on the right. `slider:Set(value)` and `slider:Get()` read and change it; `Callback(value)` runs when the value changes |
 | `Group:AddToggle({ Name, Default, Callback })` | Adds an iPhone-style switch. `toggle:Set(true)` and `toggle:Get()`; `Callback(on)` runs when it changes |
 | `Window:Destroy()` | Closes the window |
+| Search box (top middle) | Type to find pages, boxes and controls. Tap a result (or press Enter for the first) to open that page, scroll to the box and flash it. `Window.Search:Find(text)` returns the same matches |
 
 **Order:** sections sort by their `Order`, and pages sort by `Order` inside
 their section. Leave it out and they appear in the order you add them.
@@ -78,6 +79,7 @@ UILib/
     Section.lua          section label, page ordering
     PageButton.lua       icon + name row, selected highlight
     Page.lua             content area for one page, two columns
+    Search.lua           search box and live results
     Group.lua            filled box, title half over its top edge; Add<Element> methods come from UILib/Elements
   Elements/
     Slider.lua           slider with a fill and the value in the middle

@@ -4,6 +4,7 @@ local Create = import("Util/Create")
 local Sidebar = import("Components/Sidebar")
 local PageButton = import("Components/PageButton")
 local Page = import("Components/Page")
+local Search = import("Components/Search")
 
 local Players = game:GetService("Players")
 
@@ -58,6 +59,8 @@ function Window.new(options)
 		BackgroundTransparency = 1,
 		Parent = self.Frame,
 	})
+
+	self.Search = Search.new(self)
 
 	for _, pageOptions in ipairs(options.Pages or {}) do
 		self:AddPage(pageOptions)
