@@ -17,7 +17,7 @@ return {
 
 	Sizes = {
 		WindowWidth = 560,
-		WindowHeight = 340,
+		WindowHeight = 370,
 		SidebarWidth = 150,
 		SidebarPadX = 4,
 		EdgePadY = 10,
