@@ -80,23 +80,23 @@ function Slider.new(group, options, order)
 	})
 
 	local dragging = false
-	local function slideTo(x, animate)
+	local function slideTo(x, dragging)
 		local track = self.Track
 		local alpha = math.clamp((x - track.AbsolutePosition.X) / math.max(track.AbsoluteSize.X, 1), 0, 1)
-		self:Set(self.Min + alpha * (self.Max - self.Min), animate)
+		self:_set(self.Min + alpha * (self.Max - self.Min), true, dragging)
 	end
 
 	self.Track.InputBegan:Connect(function(input)
 		if PRESS[input.UserInputType] then
 			dragging = true
-			slideTo(input.Position.X, true)
+			slideTo(input.Position.X, false)
 		end
 	end)
 
 	local connections = {
 		UserInputService.InputChanged:Connect(function(input)
 			if dragging and MOVE[input.UserInputType] then
-				slideTo(input.Position.X, false)
+				slideTo(input.Position.X, true)
 			end
 		end),
 		UserInputService.InputEnded:Connect(function(input)
@@ -111,17 +111,26 @@ function Slider.new(group, options, order)
 		end
 	end)
 
-	self:Set(options.Default or self.Min)
+	self:_set(options.Default or self.Min, false)
 	self.Callback = options.Callback
 	return self
 end
 
-function Slider:Set(value, animate)
+function Slider:Set(value)
+	self:_set(value, true)
+end
+
+function Slider:_set(value, animate, dragging)
 	value = math.clamp(value, self.Min, self.Max)
 	value = self.Min + math.floor((value - self.Min) / self.Step + 0.5) * self.Step
 	value = tonumber(string.format(self._format, math.clamp(value, self.Min, self.Max)))
 
-	Motion.Apply(self.Fill, { Size = UDim2.fromScale((value - self.Min) / (self.Max - self.Min), 1) }, animate)
+	local size = UDim2.fromScale((value - self.Min) / (self.Max - self.Min), 1)
+	if dragging then
+		Motion.Apply(self.Fill, { Size = size }, true, Theme.Motion.DragDuration, Theme.Motion.DragStyle)
+	else
+		Motion.Apply(self.Fill, { Size = size }, animate)
+	end
 	self.ValueLabel.Text = string.format(self._format, value) .. self.Suffix
 
 	if value ~= self.Value then

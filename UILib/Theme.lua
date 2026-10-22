@@ -70,5 +70,7 @@ return {
 	Motion = {
 		Duration = 0.25,
 		Style = Enum.EasingStyle.Quint,
+		DragDuration = 0.12,
+		DragStyle = Enum.EasingStyle.Quad,
 	},
 }

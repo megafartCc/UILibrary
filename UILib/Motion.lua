@@ -8,7 +8,7 @@ local Motion = { Enabled = true }
 local TWEENABLE = { number = true, Color3 = true, UDim = true, UDim2 = true, Vector2 = true }
 local playing = setmetatable({}, { __mode = "k" })
 
-function Motion.Apply(instance, props, animate)
+function Motion.Apply(instance, props, animate, duration, style)
 	if playing[instance] then
 		playing[instance]:Cancel()
 		playing[instance] = nil
@@ -25,7 +25,7 @@ function Motion.Apply(instance, props, animate)
 	end
 
 	if goals then
-		local info = TweenInfo.new(Theme.Motion.Duration, Theme.Motion.Style, Enum.EasingDirection.Out)
+		local info = TweenInfo.new(duration or Theme.Motion.Duration, style or Theme.Motion.Style, Enum.EasingDirection.Out)
 		local tween = TweenService:Create(instance, info, goals)
 		playing[instance] = tween
 		tween:Play()
