@@ -68,6 +68,46 @@ See `example.lua` for a full example.
 | `UILib:Notify({ Title, Text, Duration })` or `UILib:Notify(title, text, duration)` | Shows a notification in the top right. It slides in, a line at the bottom drains until it slides out, and tapping it closes it early. Up to 5 stack. Returns a handle with `:Close()` |
 | `UILib:Destroy()` | Destroys every window this UILib made and clears notifications |
 
+## Key system
+
+Same logic as the old UiLib. While locked, the window shrinks to a key card
+(title, key box, status line, **Get Key** and **Unlock**). A valid key expands
+it into the full UI. `CreateWindow` waits until the key is accepted, so code
+after it only runs once unlocked (`WaitForKey = false` turns that off).
+
+```lua
+-- your own fixed key
+local Window = UILib:CreateWindow({ Title = "Black Box", KeySystem = true, Key = "my-key" })
+
+-- UnknownHub key server
+local Window = UILib:CreateWindow({
+	Title = "Black Box",
+	KeySystem = true,
+	ScriptId = "your-script-id", -- or ProjectId
+})
+```
+
+| Option | What it does |
+| --- | --- |
+| `KeySystem = true` | Turns the key screen on |
+| `Key` | A fixed key checked locally |
+| `ScriptId` / `ProjectId` | Checks keys with the UnknownHub server instead |
+| `KeyVerifyUrl` | Server address (default `https://unknownhub.win/api/lua/key/verify`) |
+| `GetKeyLink` | Link Get Key copies (default `https://unknownhub.win/#get-key`) |
+| `OnGetKey(link)` | Your own Get Key action; return `true` to skip the copy |
+| `DeveloperKey` | A key that always works |
+| `KeyFolder`, `KeyStorageTag` | Where the accepted key is saved (default `UILib/key.json`) |
+| `GetKeyText`, `SubmitKeyText` | Button labels |
+| `Expire` | Text for the expiry when the server gives no time (default `never`) |
+| `WaitForKey = false` | Don't pause `CreateWindow` until unlocked |
+
+- **Server check:** sends the key, script/project id, Roblox user id, place id, job id and HWID. It needs a valid response with a signed unlock ticket.
+- **Error messages:** invalid, expired, script disabled, script not registered, missing ticket, HTTP errors, no executor `request`.
+- **Saved key:** the accepted key is saved and checked again on the next run, so players don't retype it.
+- **For your script:** the key and ticket are published to `getgenv()`, `_G` and `shared` under the same names as the old UiLib (`UnknownHubKey`, `UnknownHubTicket`, `UnknownHub.getKey()`), and also as `UILib.Key` / `UILib.GetKey()`.
+- **Expiry:** if the server returns `keySecondsRemaining`, the bottom bar counts down and the window locks again when it runs out.
+- `Window.KeyVerified` tells you whether it's unlocked.
+
 **Order:** sections sort by their `Order`, and pages sort by `Order` inside
 their section. Leave it out and they appear in the order you add them.
 
@@ -103,6 +143,9 @@ UILib/
     Button.lua           row with a tappable rounded square
     Dropdown.lua         single or multi select list that opens under the row
     ColorPicker.lua      swatch with a saturation square, hue bar and hex input
+  Key/
+    Backend.lua          key check against the server, saving, publishing, clipboard
+    Gate.lua             key screen, lock/unlock, expiry countdown
   Vendor/Lucide/         icon sheet data from lucide-roblox (MIT + ISC)
 ```
 

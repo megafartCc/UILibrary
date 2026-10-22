@@ -7,6 +7,7 @@ local Sidebar = import("Components/Sidebar")
 local PageButton = import("Components/PageButton")
 local Page = import("Components/Page")
 local Search = import("Components/Search")
+local Gate = import("Key/Gate")
 
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
@@ -17,7 +18,7 @@ local MOVE = { [Enum.UserInputType.MouseMovement] = true, [Enum.UserInputType.To
 local Window = {}
 Window.__index = Window
 
-function Window.new(options)
+function Window.new(options, library)
 	options = options or {}
 	local sizes, colors = Theme.Sizes, Theme.Colors
 	local self = setmetatable({
@@ -49,6 +50,7 @@ function Window.new(options)
 		ClipsDescendants = true,
 		Parent = self.Gui,
 	})
+	self._fullSize = self.Frame.Size
 	self.UIScale = Create.new("UIScale", { Scale = options.Scale or Theme.Scale, Parent = self.Frame })
 
 	local top = sizes.HeaderHeight + 1
@@ -151,7 +153,7 @@ function Window.new(options)
 	self.Sidebar = Sidebar.new(self)
 	self.Sidebar.Frame.Parent = self.Frame
 
-	Create.new("Frame", {
+	self.Divider = Create.new("Frame", {
 		Name = "Divider",
 		Position = UDim2.fromOffset(sizes.SidebarWidth - 1, top),
 		Size = UDim2.new(0, 1, 1, -middle),
@@ -173,6 +175,9 @@ function Window.new(options)
 		self:AddPage(pageOptions)
 	end
 
+	self.KeyVerified = true
+	self.Gate = Gate.new(self, options, library)
+
 	local parent = options.Parent or Players.LocalPlayer:WaitForChild("PlayerGui")
 	local previous = parent:FindFirstChild(self.Gui.Name)
 	if previous and previous:GetAttribute("UILib") then
@@ -180,6 +185,10 @@ function Window.new(options)
 	end
 	self.Gui:SetAttribute("UILib", true)
 	self.Gui.Parent = parent
+
+	if self.Gate and options.WaitForKey ~= false then
+		self.Gate:Wait()
+	end
 	return self
 end
 

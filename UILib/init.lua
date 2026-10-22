@@ -12,7 +12,7 @@ local UILib = {
 local windows = {}
 
 function UILib.new(options)
-	local window = Window.new(options)
+	local window = Window.new(options, UILib)
 	table.insert(windows, window)
 	return window
 end

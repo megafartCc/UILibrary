@@ -89,6 +89,12 @@ return {
 		PickerRadius = 4,
 		PickerCursor = 10,
 		SwatchSize = 16,
+		KeyWidth = 320,
+		KeyHeight = 190,
+		KeyPad = 14,
+		KeyInputHeight = 30,
+		KeyButtonHeight = 28,
+		KeyRadius = 6,
 		SwatchRadius = 3,
 		SearchWidth = 180,
 		SearchHeight = 22,
@@ -136,6 +142,10 @@ return {
 		ResultPath = 10,
 		NotifyTitle = 13,
 		NotifyText = 12,
+		KeyTitle = 15,
+		KeyText = 11,
+		KeyInput = 12,
+		KeyButton = 12,
 	},
 
 	Motion = {
