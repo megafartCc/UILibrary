@@ -32,14 +32,14 @@ function Slider.new(group, options, order)
 	self.Frame = Create.new("Frame", {
 		Name = "Slider_" .. options.Name,
 		LayoutOrder = order,
-		Size = UDim2.new(1, 0, 0, sizes.ElementLabelHeight + sizes.SliderGap + sizes.SliderHeight),
+		Size = UDim2.new(1, 0, 0, sizes.ElementHeight),
 		BackgroundTransparency = 1,
 		Parent = group.Body,
 	})
 
 	self.Label = Create.new("TextLabel", {
 		Name = "Label",
-		Size = UDim2.new(1, 0, 0, sizes.ElementLabelHeight),
+		Size = UDim2.new(1 - sizes.SliderBarWidth, -6, 1, 0),
 		FontFace = Theme.Fonts.Element,
 		Text = options.Name,
 		TextSize = Theme.TextSizes.Element,
@@ -50,10 +50,12 @@ function Slider.new(group, options, order)
 
 	self.Track = Create.new("TextButton", {
 		Name = "Track",
-		Position = UDim2.fromOffset(0, sizes.ElementLabelHeight + sizes.SliderGap),
-		Size = UDim2.new(1, 0, 0, sizes.SliderHeight),
+		AnchorPoint = Vector2.new(1, 0.5),
+		Position = UDim2.fromScale(1, 0.5),
+		Size = UDim2.new(sizes.SliderBarWidth, 0, 0, sizes.SliderBarHeight),
 		BackgroundColor3 = colors.Track,
 		BorderSizePixel = 0,
+		ClipsDescendants = true,
 		Parent = self.Frame,
 		Create.new("UICorner", { CornerRadius = UDim.new(0, sizes.SliderRadius) }),
 	})

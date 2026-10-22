@@ -41,7 +41,8 @@ See `example.lua` for a full example.
 
 | Call | What it does |
 | --- | --- |
-| `UILib:CreateWindow({ Title, DefaultPage, Width, Height, Pages })` | Opens a window |
+| `UILib:CreateWindow({ Title, DefaultPage, Width, Height, Pages, Scale })` | Opens a window. It scales to the screen on its own (1x on phones, up to 2x on big screens); pass `Scale` to fix it |
+| `Window:SetScale(scale)` | Sets the scale; `nil` goes back to automatic |
 | `Window:SetTitle(text)` | Renames the window |
 | `Window:AddSection(name)` or `Window:AddSection({ Name, Order })` | Adds a section label, or returns the existing one with that name |
 | `Section:AddPage({ Name, Icon, Order })` | Adds a page to a section |
@@ -49,7 +50,7 @@ See `example.lua` for a full example.
 | `Window:SelectPage(name)` | Shows a page. Pages added later won't take over the selection |
 | `Window:GetPage(name)` | Returns a page |
 | `Page:AddGroup(name)` or `Page:AddGroup({ Name, Side })` | Adds an outlined box to the page. `Side` is `"Left"` or `"Right"`; leave it out to use the column with fewer boxes. Put your UI in `group.Body`; the box grows to fit it |
-| `Group:AddSlider({ Name, Min, Max, Default, Step, Suffix, Callback })` | Adds a slider. `slider:Set(value)` and `slider:Get()` read and change it; `Callback(value)` runs when the value changes |
+| `Group:AddSlider({ Name, Min, Max, Default, Step, Suffix, Callback })` | Adds a one-row slider: name on the left, bar on the right. `slider:Set(value)` and `slider:Get()` read and change it; `Callback(value)` runs when the value changes |
 | `Window:Destroy()` | Closes the window |
 
 **Order:** sections sort by their `Order`, and pages sort by `Order` inside

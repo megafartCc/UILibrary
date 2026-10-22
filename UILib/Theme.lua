@@ -41,10 +41,10 @@ return {
 		GroupTitleInset = 8,
 		GroupTitleRaise = 6,
 		GroupItemGap = 6,
-		ElementLabelHeight = 16,
-		SliderGap = 4,
-		SliderHeight = 22,
-		SliderRadius = 6,
+		ElementHeight = 22,
+		SliderBarWidth = 0.55,
+		SliderBarHeight = 16,
+		SliderRadius = 3,
 	},
 
 	Fonts = {
@@ -64,7 +64,14 @@ return {
 		PageTitle = 20,
 		GroupTitle = 11,
 		Element = 13,
-		SliderValue = 13,
+		SliderValue = 12,
+	},
+
+	Scale = {
+		ScreenHeight = 0.5,
+		Min = 1,
+		Max = 2,
+		Margin = 10,
 	},
 
 	Motion = {
