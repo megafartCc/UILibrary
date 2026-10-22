@@ -6,37 +6,34 @@ local Page = {}
 Page.__index = Page
 
 function Page.new(options)
-	local self = setmetatable({}, Page)
 	local sizes = Theme.Sizes
+	local pad = sizes.ContentPad
+	local self = setmetatable({ Name = options.Name }, Page)
 
-	self.Name = options.Name
 	self.Frame = Create.new("Frame", {
 		Name = "Page_" .. options.Name,
 		Size = UDim2.fromScale(1, 1),
 		BackgroundTransparency = 1,
 		Visible = false,
-	}, {
-		Create.Padding(sizes.ContentPad, sizes.ContentPad, sizes.ContentPad, sizes.ContentPad),
-		Create.List(Enum.FillDirection.Vertical, 8),
+		Create.Padding(pad, pad, pad, pad),
+		Create.List(Enum.FillDirection.Vertical, sizes.PageGap),
 	})
 
 	self.Title = Create.new("TextLabel", {
 		Name = "Title",
 		LayoutOrder = 0,
-		Size = UDim2.new(1, 0, 0, 18),
-		BackgroundTransparency = 1,
+		Size = UDim2.new(1, 0, 0, sizes.PageTitleHeight),
 		Font = Theme.Fonts.Title,
 		Text = options.Name,
 		TextSize = Theme.TextSizes.PageTitle,
 		TextColor3 = Theme.Colors.Text,
-		TextXAlignment = Enum.TextXAlignment.Left,
 		Parent = self.Frame,
 	})
 
 	self.Body = Create.new("Frame", {
 		Name = "Body",
 		LayoutOrder = 1,
-		Size = UDim2.new(1, 0, 1, -26),
+		Size = UDim2.new(1, 0, 1, -(sizes.PageTitleHeight + sizes.PageGap)),
 		BackgroundTransparency = 1,
 		Parent = self.Frame,
 	})
@@ -44,8 +41,11 @@ function Page.new(options)
 	return self
 end
 
-function Page:SetVisible(on)
+function Page:SetSelected(on)
 	self.Frame.Visible = on
+	if self.Button then
+		self.Button:SetSelected(on)
+	end
 end
 
 return Page

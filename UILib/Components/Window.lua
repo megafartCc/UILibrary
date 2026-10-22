@@ -2,6 +2,7 @@ local import = ...
 local Theme = import("Theme")
 local Create = import("Util/Create")
 local Sidebar = import("Components/Sidebar")
+local PageButton = import("Components/PageButton")
 local Page = import("Components/Page")
 
 local Players = game:GetService("Players")
@@ -11,14 +12,13 @@ Window.__index = Window
 
 function Window.new(options)
 	options = options or {}
-	local self = setmetatable({}, Window)
 	local sizes, colors = Theme.Sizes, Theme.Colors
-
-	self.Pages = {}
-	self.SelectedPage = nil
-	self._userPicked = false
-	self._defaultPage = options.DefaultPage
-	self._sections = {}
+	local self = setmetatable({
+		Pages = {},
+		SelectedPage = nil,
+		_defaultPage = options.DefaultPage,
+		_userPicked = false,
+	}, Window)
 
 	self.Gui = Create.new("ScreenGui", {
 		Name = options.Title or "UILib",
@@ -59,10 +59,8 @@ function Window.new(options)
 		Parent = self.Frame,
 	})
 
-	if type(options.Pages) == "table" then
-		for _, pageOptions in ipairs(options.Pages) do
-			self:AddPage(pageOptions)
-		end
+	for _, pageOptions in ipairs(options.Pages or {}) do
+		self:AddPage(pageOptions)
 	end
 
 	self.Gui.Parent = options.Parent or Players.LocalPlayer:WaitForChild("PlayerGui")
@@ -70,58 +68,20 @@ function Window.new(options)
 end
 
 function Window:SetTitle(text)
-	self.Sidebar:SetTitle(text)
+	self.Sidebar.Title.Text = text
 	self.Gui.Name = text
 end
 
 function Window:AddSection(options)
-	local section = self.Sidebar:AddSection(options)
-	self._sections[section.Name] = section
-	return section
+	return self.Sidebar:AddSection(options)
 end
 
 function Window:AddPage(options)
-	local sectionName = options.Section or ""
-	local section = self._sections[sectionName]
-	if not section then
-		section = self:AddSection({ Name = sectionName, ShowLabel = sectionName ~= "" })
-	end
-	return section:AddPage(options)
+	return self:AddSection(options.Section or ""):AddPage(options)
 end
 
 function Window:GetPage(name)
 	return self.Pages[name]
-end
-
-function Window:_registerPage(options, button, layoutOrder)
-	assert(self.Pages[options.Name] == nil, "UILib: a page named " .. options.Name .. " already exists")
-
-	local page = Page.new(options)
-	page.Frame.Parent = self.Content
-	page.Button = button
-	page.LayoutOrder = layoutOrder
-	self.Pages[options.Name] = page
-
-	button.Activated:Connect(function()
-		self._userPicked = true
-		self:SelectPage(options.Name)
-	end)
-
-	if not self._userPicked then
-		if self._defaultPage then
-			if options.Name == self._defaultPage then
-				self:SelectPage(options.Name)
-			elseif self.SelectedPage == nil then
-				self:SelectPage(options.Name)
-			end
-		else
-			local current = self.SelectedPage and self.Pages[self.SelectedPage]
-			if not current or layoutOrder < current.LayoutOrder then
-				self:SelectPage(options.Name)
-			end
-		end
-	end
-	return page
 end
 
 function Window:SelectPage(name)
@@ -129,16 +89,48 @@ function Window:SelectPage(name)
 		warn("UILib: no page named " .. tostring(name))
 		return
 	end
-	for pageName, page in pairs(self.Pages) do
-		local on = pageName == name
-		page:SetVisible(on)
-		page.Button:SetSelected(on)
-	end
-	self.SelectedPage = name
+	self._userPicked = true
+	self:_show(name)
 end
 
 function Window:Destroy()
 	self.Gui:Destroy()
+	table.clear(self.Pages)
+	self.SelectedPage = nil
+end
+
+function Window:_show(name)
+	local previous = self.Pages[self.SelectedPage]
+	if previous then
+		previous:SetSelected(false)
+	end
+	self.Pages[name]:SetSelected(true)
+	self.SelectedPage = name
+end
+
+function Window:_addPage(options, layoutOrder)
+	local name = options.Name
+	assert(self.Pages[name] == nil, "UILib: a page named " .. name .. " already exists")
+
+	local page = Page.new(options)
+	page.LayoutOrder = layoutOrder
+	page.Button = PageButton.new(options, layoutOrder)
+	page.Button.Frame.Parent = self.Sidebar.Frame
+	page.Frame.Parent = self.Content
+	self.Pages[name] = page
+
+	page.Button.Activated:Connect(function()
+		self:SelectPage(name)
+	end)
+
+	if not self._userPicked then
+		local current = self.Pages[self.SelectedPage]
+		local default = self._defaultPage
+		if not current or name == default or (not default and layoutOrder < current.LayoutOrder) then
+			self:_show(name)
+		end
+	end
+	return page
 end
 
 return Window

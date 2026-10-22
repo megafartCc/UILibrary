@@ -43,10 +43,10 @@ See `example.lua` for a full example.
 | --- | --- |
 | `UILib:CreateWindow({ Title, DefaultPage, Width, Height, Pages })` | Opens a window |
 | `Window:SetTitle(text)` | Renames the window |
-| `Window:AddSection(name)` or `Window:AddSection({ Name, Order })` | Adds a section label |
+| `Window:AddSection(name)` or `Window:AddSection({ Name, Order })` | Adds a section label, or returns the existing one with that name |
 | `Section:AddPage({ Name, Icon, Order })` | Adds a page to a section |
 | `Window:AddPage({ Name, Icon, Section, Order })` | Adds a page, making the section if needed |
-| `Window:SelectPage(name)` | Shows a page |
+| `Window:SelectPage(name)` | Shows a page. Pages added later won't take over the selection |
 | `Window:GetPage(name)` | Returns a page. Put your UI in `page.Body` |
 | `Window:Destroy()` | Closes the window |
 
@@ -61,18 +61,18 @@ You can also pass `"rbxassetid://123"`.
 ## Files
 
 ```
-loader.lua               downloads the modules and returns UILib
+loader.lua               downloads the modules in parallel and returns UILib
 example.lua              example window
 UILib/
   init.lua               UILib:CreateWindow
-  Theme.lua              colors, sizes, fonts
+  Theme.lua              colors, sizes, fonts (every number the layout uses)
   Icons.lua              Lucide icons by name
   Motion.lua             all state changes go through here (no animations yet)
-  Util/Create.lua        instance helpers
+  Util/Create.lua        instance helpers with per-class defaults
   Components/
-    Window.lua           the black box, page selection
-    Sidebar.lua          title + sections
-    Section.lua          section label, AddPage, ordering
+    Window.lua           the black box, creates pages and handles selection
+    Sidebar.lua          title, sections by name and order
+    Section.lua          section label, page ordering
     PageButton.lua       icon + name row, selected highlight
     Page.lua             content area for one page
   Vendor/Lucide/         icon sheet data from lucide-roblox (MIT + ISC)

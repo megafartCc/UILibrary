@@ -1,19 +1,18 @@
 local import = ...
-local Theme = import("Theme")
-local Icons = import("Icons")
-local Motion = import("Motion")
 local Window = import("Components/Window")
 
-local UILib = {}
-UILib.Theme = Theme
-UILib.Icons = Icons
-UILib.Motion = Motion
+local UILib = {
+	Theme = import("Theme"),
+	Icons = import("Icons"),
+	Motion = import("Motion"),
+	Window = Window,
+}
 
-function UILib:CreateWindow(options)
+function UILib.new(options)
 	return Window.new(options)
 end
 
-function UILib.new(options)
+function UILib:CreateWindow(options)
 	return Window.new(options)
 end
 

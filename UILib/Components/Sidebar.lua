@@ -7,18 +7,14 @@ local Sidebar = {}
 Sidebar.__index = Sidebar
 
 function Sidebar.new(window, title)
-	local self = setmetatable({}, Sidebar)
-	local sizes, colors = Theme.Sizes, Theme.Colors
-
-	self.Window = window
-	self._sectionCount = 0
+	local sizes = Theme.Sizes
+	local self = setmetatable({ Window = window, Sections = {}, _autoOrder = 0 }, Sidebar)
 
 	self.Frame = Create.new("Frame", {
 		Name = "Sidebar",
 		Size = UDim2.new(0, sizes.SidebarWidth, 1, 0),
-		BackgroundColor3 = colors.Box,
+		BackgroundColor3 = Theme.Colors.Box,
 		BorderSizePixel = 0,
-	}, {
 		Create.Padding(sizes.SidebarPadX, sizes.SidebarPadX, sizes.SidebarPadY, sizes.SidebarPadY),
 		Create.List(Enum.FillDirection.Vertical, sizes.ItemGap),
 	})
@@ -26,34 +22,36 @@ function Sidebar.new(window, title)
 	self.Title = Create.new("TextLabel", {
 		Name = "Title",
 		LayoutOrder = 0,
-		Size = UDim2.new(1, 0, 0, 22),
-		BackgroundTransparency = 1,
+		Size = UDim2.new(1, 0, 0, sizes.TitleHeight),
 		Font = Theme.Fonts.Title,
 		Text = title,
 		TextSize = Theme.TextSizes.Title,
-		TextColor3 = colors.Text,
-		TextXAlignment = Enum.TextXAlignment.Left,
+		TextColor3 = Theme.Colors.Text,
 		TextTruncate = Enum.TextTruncate.AtEnd,
 		Parent = self.Frame,
-	}, { Create.Padding(sizes.ItemPadX, 0, 0, 0) })
+		Create.Padding(sizes.ItemPadX),
+	})
 
 	return self
-end
-
-function Sidebar:NextSectionOrder()
-	self._sectionCount += 1
-	return self._sectionCount
-end
-
-function Sidebar:SetTitle(text)
-	self.Title.Text = text
 end
 
 function Sidebar:AddSection(options)
 	if type(options) == "string" then
 		options = { Name = options }
 	end
-	return Section.new(self, options)
+	assert(type(options) == "table" and options.Name, "UILib: AddSection needs a Name")
+
+	local section = self.Sections[options.Name]
+	if not section then
+		local order = options.Order
+		if not order then
+			self._autoOrder += 1
+			order = self._autoOrder
+		end
+		section = Section.new(self, options, order)
+		self.Sections[options.Name] = section
+	end
+	return section
 end
 
 return Sidebar

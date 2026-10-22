@@ -1,9 +1,7 @@
 local Motion = {}
 
-Motion.Enabled = false
-
 function Motion.Apply(instance, props)
-	for prop, value in pairs(props) do
+	for prop, value in props do
 		instance[prop] = value
 	end
 end

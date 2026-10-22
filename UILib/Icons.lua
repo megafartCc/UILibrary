@@ -1,5 +1,5 @@
 local import = ...
-local IconData = import("Vendor/Lucide/IconData")
+local Sheet = import("Vendor/Lucide/IconData")["48px"]
 
 local Icons = {}
 local custom = {}
@@ -12,23 +12,19 @@ function Icons.Get(icon)
 	if icon == nil or icon == "" then
 		return nil
 	end
+	if type(icon) == "string" then
+		icon = custom[string.lower(icon)] or icon
+	end
 	if type(icon) == "number" then
 		icon = "rbxassetid://" .. icon
 	end
-	local key = string.lower(icon)
-	if custom[key] then
-		icon = custom[key]
-		if type(icon) == "number" then
-			icon = "rbxassetid://" .. icon
-		end
-	end
-	if string.match(icon, "^rbxassetid://") then
+	if string.find(icon, "://", 1, true) then
 		return { Image = icon, ImageRectSize = Vector2.zero, ImageRectOffset = Vector2.zero }
 	end
 
-	local entry = IconData["48px"][key]
+	local entry = Sheet[string.lower(icon)]
 	if not entry then
-		warn("UILib: no Lucide icon named \"" .. tostring(icon) .. "\"")
+		warn('UILib: no Lucide icon named "' .. icon .. '"')
 		return nil
 	end
 	return {
@@ -40,13 +36,12 @@ end
 
 function Icons.Apply(imageLabel, icon)
 	local asset = Icons.Get(icon)
-	if not asset then
-		return false
+	if asset then
+		imageLabel.Image = asset.Image
+		imageLabel.ImageRectSize = asset.ImageRectSize
+		imageLabel.ImageRectOffset = asset.ImageRectOffset
 	end
-	imageLabel.Image = asset.Image
-	imageLabel.ImageRectSize = asset.ImageRectSize
-	imageLabel.ImageRectOffset = asset.ImageRectOffset
-	return true
+	return asset ~= nil
 end
 
 return Icons

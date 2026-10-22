@@ -1,19 +1,33 @@
 local Create = {}
 
-function Create.new(className, props, children)
-	local inst = Instance.new(className)
-	for key, value in pairs(props or {}) do
-		if key ~= "Parent" then
-			inst[key] = value
+local DEFAULTS = {
+	TextLabel = { BackgroundTransparency = 1, TextXAlignment = Enum.TextXAlignment.Left },
+	ImageLabel = { BackgroundTransparency = 1 },
+	TextButton = { AutoButtonColor = false, Text = "" },
+}
+
+local function assign(instance, props)
+	for key, value in props do
+		if type(key) == "number" then
+			value.Parent = instance
+		elseif key ~= "Parent" then
+			instance[key] = value
 		end
 	end
-	for _, child in ipairs(children or {}) do
-		child.Parent = inst
+end
+
+function Create.new(className, props)
+	local instance = Instance.new(className)
+	if DEFAULTS[className] then
+		assign(instance, DEFAULTS[className])
 	end
-	if props and props.Parent then
-		inst.Parent = props.Parent
+	if props then
+		assign(instance, props)
+		if props.Parent then
+			instance.Parent = props.Parent
+		end
 	end
-	return inst
+	return instance
 end
 
 function Create.Padding(left, right, top, bottom)
