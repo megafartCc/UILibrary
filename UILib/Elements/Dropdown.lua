@@ -160,8 +160,8 @@ function Dropdown:_row(option, index)
 	if self.Multi then
 		box = Create.new("Frame", {
 			Name = "Box",
-			AnchorPoint = Vector2.new(0, 0.5),
-			Position = UDim2.new(0, pad, 0.5, 0),
+			AnchorPoint = Vector2.new(1, 0.5),
+			Position = UDim2.new(1, -pad, 0.5, 0),
 			Size = UDim2.fromOffset(sizes.CheckBoxSize, sizes.CheckBoxSize),
 			BackgroundColor3 = colors.CheckBox,
 			BorderSizePixel = 0,
@@ -191,11 +191,11 @@ function Dropdown:_row(option, index)
 	end
 	Icons.Apply(check, "check")
 
-	local labelX = if self.Multi then pad + sizes.CheckBoxSize + 8 else pad
+	local marker = if self.Multi then sizes.CheckBoxSize else sizes.OptionCheckSize
 	local label = Create.new("TextLabel", {
 		Name = "Label",
-		Position = UDim2.fromOffset(labelX, 0),
-		Size = UDim2.new(1, -(labelX + pad + (if self.Multi then 0 else sizes.OptionCheckSize + 4)), 1, 0),
+		Position = UDim2.fromOffset(pad, 0),
+		Size = UDim2.new(1, -(pad * 2 + marker + 6), 1, 0),
 		FontFace = Theme.Fonts.Element,
 		Text = tostring(option),
 		TextSize = Theme.TextSizes.Dropdown,
