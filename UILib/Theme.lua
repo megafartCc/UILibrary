@@ -30,6 +30,8 @@ return {
 		Results = Color3.fromRGB(26, 26, 26),
 		ResultHover = Color3.fromRGB(38, 38, 38),
 		Flash = Color3.fromRGB(42, 42, 42),
+		SerifFill = Color3.fromRGB(0, 0, 0),
+		SerifOutline = Color3.fromRGB(255, 255, 255),
 		Notify = Color3.fromRGB(22, 22, 22),
 		NotifyStroke = Color3.fromRGB(36, 36, 36),
 	},
@@ -41,7 +43,8 @@ return {
 		SidebarPadX = 4,
 		EdgePadY = 10,
 		HeaderHeight = 30,
-		SerifBold = 0.5,
+		SerifOutline = 1.5,
+		FooterOutline = 1,
 		BottomHeight = 30,
 		SectionLabelHeight = 14,
 		SectionLabelPadBottom = 1,
@@ -112,8 +115,8 @@ return {
 	},
 
 	Fonts = {
-		Title = Font.new(SERIF, Enum.FontWeight.Bold),
-		Footer = Font.new(SERIF, Enum.FontWeight.Bold),
+		Title = Font.new(SERIF, Enum.FontWeight.Bold, Enum.FontStyle.Italic),
+		Footer = Font.new(SERIF, Enum.FontWeight.Bold, Enum.FontStyle.Italic),
 		SectionLabel = Font.new(FONT, Enum.FontWeight.SemiBold),
 		Page = Font.new(FONT, Enum.FontWeight.Medium),
 		PageSelected = Font.new(FONT, Enum.FontWeight.SemiBold),
@@ -126,10 +129,10 @@ return {
 	},
 
 	TextSizes = {
-		Title = 20,
+		Title = 18,
 		SectionLabel = 11,
 		Page = 14,
-		Footer = 14,
+		Footer = 12,
 		GroupTitle = 12,
 		Element = 12,
 		SliderValue = 11,
