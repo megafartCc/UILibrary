@@ -6,6 +6,7 @@ local Elements = {
 	Slider = import("Elements/Slider"),
 	Toggle = import("Elements/Toggle"),
 	Button = import("Elements/Button"),
+	Dropdown = import("Elements/Dropdown"),
 }
 
 local Group = {}

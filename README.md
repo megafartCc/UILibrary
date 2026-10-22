@@ -53,6 +53,7 @@ See `example.lua` for a full example.
 | `Group:AddSlider({ Name, Min, Max, Default, Step, Suffix, Callback })` | Adds a one-row slider: name on the left, bar on the right. `slider:Set(value)` and `slider:Get()` read and change it; `Callback(value)` runs when the value changes |
 | `Group:AddToggle({ Name, Default, Callback })` | Adds an iPhone-style switch. `toggle:Set(true)` and `toggle:Get()`; `Callback(on)` runs when it changes |
 | `Group:AddButton({ Name, Icon, Callback })` | Adds a row with a small rounded square on the right. Tapping the row runs `Callback()` with a press animation. `Icon` is any Lucide name (default `chevron-right`) |
+| `Group:AddDropdown({ Name, Options, Default, Multi, Callback })` | Adds a dropdown that opens a list under the row. With `Multi = true` you can tick several and `Default`/values are tables. `dropdown:Set(v)`, `:Get()`, `:SetOptions(list)`, `:Open()`, `:Close()` |
 | `Window:Destroy()` | Same as the X: runs OnClose, clears every callback and value, disconnects input, deletes the UI. `Window.Destroyed` turns true |
 | `UILib:Notify({ Title, Text, Duration })` or `UILib:Notify(title, text, duration)` | Shows a notification in the top right. It slides in, a line at the bottom drains until it slides out, and tapping it closes it early. Up to 5 stack. Returns a handle with `:Close()` |
 | `UILib:Destroy()` | Destroys every window this UILib made and clears notifications |
@@ -88,6 +89,7 @@ UILib/
     Slider.lua           slider with a fill and the value in the middle
     Toggle.lua           pill switch with a sliding knob
     Button.lua           row with a tappable rounded square
+    Dropdown.lua         single or multi select list that opens under the row
   Vendor/Lucide/         icon sheet data from lucide-roblox (MIT + ISC)
 ```
 

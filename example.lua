@@ -28,6 +28,14 @@ Aimbot:AddToggle({
 	end,
 })
 Aimbot:AddToggle({ Name = "Team Check" })
+Aimbot:AddDropdown({
+	Name = "Target Part",
+	Options = { "Head", "Torso", "Closest" },
+	Default = "Head",
+	Callback = function(part)
+		print("Target Part", part)
+	end,
+})
 Aimbot:AddSlider({ Name = "FOV", Min = 0, Max = 100, Default = 25, Suffix = "%" })
 Aimbot:AddSlider({ Name = "Smoothness", Min = 0, Max = 1, Step = 0.05, Default = 0.5 })
 
@@ -52,6 +60,15 @@ Misc:AddButton({
 		UILib:Notify({ Title = "Rejoin", Text = "Rejoining the server...", Duration = 3 })
 	end,
 })
-Home:AddGroup({ Name = "WORLD", Side = "Right" })
+local World = Home:AddGroup({ Name = "WORLD", Side = "Right" })
+World:AddDropdown({
+	Name = "ESP Targets",
+	Multi = true,
+	Options = { "Players", "NPCs", "Items", "Chests" },
+	Default = { "Players" },
+	Callback = function(selected)
+		print("ESP Targets", table.concat(selected, ", "))
+	end,
+})
 
 UILib:Notify({ Title = "Black Box", Text = "Loaded successfully", Duration = 4 })
