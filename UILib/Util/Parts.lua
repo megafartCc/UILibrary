@@ -85,7 +85,13 @@ function Parts.Square(parent, icon)
 end
 
 function Parts.Trailing(kind)
-	return if kind then Theme.Sizes.SwitchWidth + 6 else 0
+	local sizes = Theme.Sizes
+	if kind == "Button" then
+		return (sizes.SwitchWidth + sizes.ButtonSize) / 2 + sizes.AccessoryGap
+	elseif kind then
+		return sizes.SwitchWidth + sizes.AccessoryGap
+	end
+	return 0
 end
 
 function Parts.Attach(element, row, options)
