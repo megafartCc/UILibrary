@@ -31,25 +31,11 @@ function Page.new(options)
 		BackgroundTransparency = 1,
 		Visible = false,
 		Create.Padding(padX, padX, padY, padY),
-		Create.List(Enum.FillDirection.Vertical, sizes.PageGap),
-	})
-
-	self.Title = Create.new("TextLabel", {
-		Name = "Title",
-		LayoutOrder = 0,
-		Size = UDim2.new(1, -(sizes.CloseSize + 4), 0, sizes.TitleHeight),
-		FontFace = Theme.Fonts.Title,
-		Text = options.Name,
-		TextSize = Theme.TextSizes.PageTitle,
-		TextColor3 = Theme.Colors.Text,
-		TextTruncate = Enum.TextTruncate.AtEnd,
-		Parent = self.Frame,
 	})
 
 	self.Body = Create.new("ScrollingFrame", {
 		Name = "Body",
-		LayoutOrder = 1,
-		Size = UDim2.new(1, 0, 1, -(sizes.TitleHeight + sizes.PageGap)),
+		Size = UDim2.fromScale(1, 1),
 		BackgroundTransparency = 1,
 		BorderSizePixel = 0,
 		ScrollBarThickness = 0,

@@ -7,34 +7,22 @@ local Section = import("Components/Section")
 local Sidebar = {}
 Sidebar.__index = Sidebar
 
-function Sidebar.new(window, title)
+function Sidebar.new(window)
 	local sizes = Theme.Sizes
 	local self = setmetatable({ Window = window, Sections = {}, _autoOrder = 0 }, Sidebar)
 
+	local top = sizes.HeaderHeight + 1
 	self.Frame = Create.new("Frame", {
 		Name = "Sidebar",
-		Size = UDim2.new(0, sizes.SidebarWidth, 1, 0),
-		BackgroundColor3 = Theme.Colors.Box,
-		BorderSizePixel = 0,
+		Position = UDim2.fromOffset(0, top),
+		Size = UDim2.new(0, sizes.SidebarWidth, 1, -(top + sizes.BottomHeight + 1)),
+		BackgroundTransparency = 1,
 		Create.Padding(sizes.SidebarPadX, sizes.SidebarPadX, sizes.EdgePadY, sizes.EdgePadY),
-	})
-
-	self.Title = Create.new("TextLabel", {
-		Name = "Title",
-		Size = UDim2.new(1, 0, 0, sizes.TitleHeight),
-		FontFace = Theme.Fonts.Title,
-		Text = title,
-		TextSize = Theme.TextSizes.Title,
-		TextColor3 = Theme.Colors.Text,
-		TextTruncate = Enum.TextTruncate.AtEnd,
-		Parent = self.Frame,
-		Create.Padding(sizes.ItemPadX),
 	})
 
 	self.List = Create.new("ScrollingFrame", {
 		Name = "Pages",
-		Position = UDim2.fromOffset(0, sizes.TitleHeight + sizes.PageGap),
-		Size = UDim2.new(1, 0, 1, -(sizes.TitleHeight + sizes.PageGap)),
+		Size = UDim2.fromScale(1, 1),
 		BackgroundTransparency = 1,
 		BorderSizePixel = 0,
 		ScrollBarThickness = 0,

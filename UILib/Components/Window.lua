@@ -45,38 +45,59 @@ function Window.new(options)
 		Parent = self.Gui,
 	})
 
-	self.Sidebar = Sidebar.new(self, options.Title or "UI Library")
-	self.Sidebar.Frame.Parent = self.Frame
+	local top = sizes.HeaderHeight + 1
+	local middle = top + sizes.BottomHeight + 1
+	local textX = sizes.SidebarPadX + sizes.ItemPadX
 
-	Create.new("Frame", {
-		Name = "Divider",
-		Position = UDim2.fromOffset(sizes.SidebarWidth - 1, 0),
-		Size = UDim2.new(0, 1, 1, 0),
-		BackgroundColor3 = colors.Divider,
+	self.Header = Create.new("Frame", {
+		Name = "Header",
+		Size = UDim2.new(1, 0, 0, sizes.HeaderHeight),
+		BackgroundColor3 = colors.Bar,
 		BorderSizePixel = 0,
 		ZIndex = 2,
 		Parent = self.Frame,
 	})
-
 	Create.new("Frame", {
-		Name = "HeaderLine",
-		Position = UDim2.fromOffset(0, sizes.EdgePadY + sizes.TitleHeight + sizes.PageGap / 2),
+		Name = "Line",
+		Position = UDim2.new(0, 0, 1, 0),
 		Size = UDim2.new(1, 0, 0, 1),
 		BackgroundColor3 = colors.Divider,
 		BorderSizePixel = 0,
-		ZIndex = 2,
-		Parent = self.Frame,
+		Parent = self.Header,
+	})
+
+	self.Title = Create.new("TextLabel", {
+		Name = "Title",
+		Position = UDim2.fromOffset(textX, 0),
+		Size = UDim2.new(0, sizes.SidebarWidth - textX - 4, 1, 0),
+		FontFace = Theme.Fonts.Title,
+		Text = options.Title or "UI Library",
+		TextSize = Theme.TextSizes.Title,
+		TextColor3 = colors.Text,
+		TextTruncate = Enum.TextTruncate.AtEnd,
+		Parent = self.Header,
+	})
+
+	self.PageTitle = Create.new("TextLabel", {
+		Name = "PageTitle",
+		Position = UDim2.fromOffset(sizes.SidebarWidth + sizes.ContentPadX, 0),
+		Size = UDim2.new(1, -(sizes.SidebarWidth + sizes.ContentPadX * 2 + sizes.CloseSize + 4), 1, 0),
+		FontFace = Theme.Fonts.Title,
+		Text = "",
+		TextSize = Theme.TextSizes.PageTitle,
+		TextColor3 = colors.Muted,
+		TextTruncate = Enum.TextTruncate.AtEnd,
+		Parent = self.Header,
 	})
 
 	self.CloseButton = Create.new("TextButton", {
 		Name = "Close",
 		AnchorPoint = Vector2.new(1, 0.5),
-		Position = UDim2.new(1, -(sizes.ContentPadX - (sizes.CloseSize - sizes.CloseIconSize) / 2), 0, sizes.EdgePadY + sizes.TitleHeight / 2),
+		Position = UDim2.new(1, -(sizes.ContentPadX - (sizes.CloseSize - sizes.CloseIconSize) / 2), 0.5, 0),
 		Size = UDim2.fromOffset(sizes.CloseSize, sizes.CloseSize),
 		BackgroundColor3 = colors.Selected,
 		BackgroundTransparency = 1,
-		ZIndex = 3,
-		Parent = self.Frame,
+		Parent = self.Header,
 		Create.new("UICorner", { CornerRadius = UDim.new(0, sizes.HighlightRadius) }),
 	})
 	local closeIcon = Create.new("ImageLabel", {
@@ -100,10 +121,53 @@ function Window.new(options)
 		self:Destroy()
 	end)
 
+	self.Bottom = Create.new("Frame", {
+		Name = "Bottom",
+		AnchorPoint = Vector2.new(0, 1),
+		Position = UDim2.fromScale(0, 1),
+		Size = UDim2.new(1, 0, 0, sizes.BottomHeight),
+		BackgroundColor3 = colors.Bar,
+		BorderSizePixel = 0,
+		ZIndex = 2,
+		Parent = self.Frame,
+	})
+	Create.new("Frame", {
+		Name = "Line",
+		Position = UDim2.fromOffset(0, -1),
+		Size = UDim2.new(1, 0, 0, 1),
+		BackgroundColor3 = colors.Divider,
+		BorderSizePixel = 0,
+		Parent = self.Bottom,
+	})
+	self.Footer = Create.new("TextLabel", {
+		Name = "Footer",
+		Position = UDim2.fromOffset(textX, 0),
+		Size = UDim2.new(1, -textX * 2, 1, 0),
+		FontFace = Theme.Fonts.Element,
+		Text = options.Footer or "",
+		TextSize = Theme.TextSizes.Footer,
+		TextColor3 = colors.SectionLabel,
+		TextTruncate = Enum.TextTruncate.AtEnd,
+		Parent = self.Bottom,
+	})
+
+	self.Sidebar = Sidebar.new(self)
+	self.Sidebar.Frame.Parent = self.Frame
+
+	Create.new("Frame", {
+		Name = "Divider",
+		Position = UDim2.fromOffset(sizes.SidebarWidth - 1, top),
+		Size = UDim2.new(0, 1, 1, -middle),
+		BackgroundColor3 = colors.Divider,
+		BorderSizePixel = 0,
+		ZIndex = 2,
+		Parent = self.Frame,
+	})
+
 	self.Content = Create.new("Frame", {
 		Name = "Content",
-		Position = UDim2.fromOffset(sizes.SidebarWidth, 0),
-		Size = UDim2.new(1, -sizes.SidebarWidth, 1, 0),
+		Position = UDim2.fromOffset(sizes.SidebarWidth, top),
+		Size = UDim2.new(1, -sizes.SidebarWidth, 1, -middle),
 		BackgroundTransparency = 1,
 		Parent = self.Frame,
 	})
@@ -117,8 +181,12 @@ function Window.new(options)
 end
 
 function Window:SetTitle(text)
-	self.Sidebar.Title.Text = text
+	self.Title.Text = text
 	self.Gui.Name = text
+end
+
+function Window:SetFooter(text)
+	self.Footer.Text = text
 end
 
 function Window:AddSection(options)
@@ -181,6 +249,7 @@ function Window:_show(name, animate)
 	local page = self.Pages[name]
 	page:SetSelected(true, animate)
 	self.Sidebar:Highlight(page.Button, animate)
+	self.PageTitle.Text = name
 	self.SelectedPage = name
 end
 

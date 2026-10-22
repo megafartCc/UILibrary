@@ -41,7 +41,8 @@ See `example.lua` for a full example.
 
 | Call | What it does |
 | --- | --- |
-| `UILib:CreateWindow({ Title, DefaultPage, Width, Height, Pages, OnClose })` | Opens a window. The X in the top right closes it for good |
+| `UILib:CreateWindow({ Title, Footer, DefaultPage, Width, Height, Pages, OnClose })` | Opens a window with a header bar (title, current page, X) and a bottom bar (`Footer` text). The X closes it for good |
+| `Window:SetFooter(text)` | Changes the bottom bar text |
 | `Window:OnClose(fn)` | Runs `fn` when the window closes; stop your loops here |
 | `Window:SetTitle(text)` | Renames the window |
 | `Window:AddSection(name)` or `Window:AddSection({ Name, Order })` | Adds a section label, or returns the existing one with that name |
