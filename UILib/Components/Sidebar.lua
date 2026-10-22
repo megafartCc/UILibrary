@@ -61,7 +61,9 @@ end
 
 function Sidebar:Highlight(button, animate)
 	self._selected = button
-	local y = button.Frame.AbsolutePosition.Y - self.Items.AbsolutePosition.Y
+	local frame = button.Frame
+	local scale = if frame.AbsoluteSize.Y > 0 then frame.AbsoluteSize.Y / Theme.Sizes.RowHeight else 1
+	local y = (frame.AbsolutePosition.Y - self.Items.AbsolutePosition.Y) / scale
 	self.HighlightFrame.Visible = true
 	Motion.Apply(self.HighlightFrame, { Position = UDim2.fromOffset(0, y) }, animate)
 end
