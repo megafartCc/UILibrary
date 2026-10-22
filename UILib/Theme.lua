@@ -1,3 +1,5 @@
+local FONT = "rbxasset://fonts/families/BuilderSans.json"
+
 return {
 	Colors = {
 		Box = Color3.fromRGB(0, 0, 0),
@@ -25,10 +27,11 @@ return {
 		IconSize = 15,
 		IconGap = 7,
 		HighlightRadius = 6,
+		GroupRadius = 6,
 		ContentPadX = 14,
 		PageGap = 8,
-		ColumnGap = 12,
-		GroupGap = 14,
+		ColumnGap = 10,
+		GroupGap = 8,
 		GroupPad = 10,
 		GroupMinHeight = 44,
 		GroupItemGap = 6,
@@ -37,11 +40,11 @@ return {
 	},
 
 	Fonts = {
-		Title = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Bold),
-		SectionLabel = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.SemiBold),
-		Page = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.SemiBold),
-		GroupTitle = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.SemiBold),
-		PageSelected = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Bold),
+		Title = Font.new(FONT, Enum.FontWeight.Bold),
+		SectionLabel = Font.new(FONT, Enum.FontWeight.SemiBold),
+		Page = Font.new(FONT, Enum.FontWeight.SemiBold),
+		GroupTitle = Font.new(FONT, Enum.FontWeight.SemiBold),
+		PageSelected = Font.new(FONT, Enum.FontWeight.Bold),
 	},
 
 	Motion = {
@@ -50,10 +53,10 @@ return {
 	},
 
 	TextSizes = {
-		Title = 18,
-		SectionLabel = 10,
-		Page = 12,
-		PageTitle = 18,
-		GroupTitle = 11,
+		Title = 20,
+		SectionLabel = 11,
+		Page = 14,
+		PageTitle = 20,
+		GroupTitle = 12,
 	},
 }

@@ -18,6 +18,7 @@ function Group.new(column, options, order)
 		AutomaticSize = Enum.AutomaticSize.Y,
 		BackgroundTransparency = 1,
 		Parent = column,
+		Create.new("UICorner", { CornerRadius = UDim.new(0, sizes.GroupRadius) }),
 		Create.new("UIStroke", { Color = colors.GroupBorder, Thickness = 1 }),
 	})
 
