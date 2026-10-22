@@ -47,7 +47,8 @@ See `example.lua` for a full example.
 | `Section:AddPage({ Name, Icon, Order })` | Adds a page to a section |
 | `Window:AddPage({ Name, Icon, Section, Order })` | Adds a page, making the section if needed |
 | `Window:SelectPage(name)` | Shows a page. Pages added later won't take over the selection |
-| `Window:GetPage(name)` | Returns a page. Put your UI in `page.Body` |
+| `Window:GetPage(name)` | Returns a page |
+| `Page:AddGroup(name)` or `Page:AddGroup({ Name, Side })` | Adds an outlined box to the page. `Side` is `"Left"` or `"Right"`; leave it out to use the column with fewer boxes. Put your UI in `group.Body`; the box grows to fit it |
 | `Window:Destroy()` | Closes the window |
 
 **Order:** sections sort by their `Order`, and pages sort by `Order` inside
@@ -74,7 +75,8 @@ UILib/
     Sidebar.lua          title, sections by name and order
     Section.lua          section label, page ordering
     PageButton.lua       icon + name row, selected highlight
-    Page.lua             content area for one page
+    Page.lua             content area for one page, two columns
+    Group.lua            outlined box with its name on the top border
   Vendor/Lucide/         icon sheet data from lucide-roblox (MIT + ISC)
 ```
 
