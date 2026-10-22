@@ -50,7 +50,7 @@ See `example.lua` for a full example.
 | `Window:GetPage(name)` | Returns a page |
 | `Page:AddGroup(name)` or `Page:AddGroup({ Name, Side })` | Adds an outlined box to the page. `Side` is `"Left"` or `"Right"`; leave it out to use the column with fewer boxes. Put your UI in `group.Body`; the box grows to fit it |
 | `Group:AddSlider({ Name, Min, Max, Default, Step, Suffix, Callback })` | Adds a one-row slider: name on the left, bar on the right. `slider:Set(value)` and `slider:Get()` read and change it; `Callback(value)` runs when the value changes |
-| `Group:AddToggle({ Name, Default, Callback })` | Adds a checkbox toggle. `toggle:Set(true)` and `toggle:Get()`; `Callback(on)` runs when it changes |
+| `Group:AddToggle({ Name, Default, Callback })` | Adds an iPhone-style switch. `toggle:Set(true)` and `toggle:Get()`; `Callback(on)` runs when it changes |
 | `Window:Destroy()` | Closes the window |
 
 **Order:** sections sort by their `Order`, and pages sort by `Order` inside
@@ -81,7 +81,7 @@ UILib/
     Group.lua            filled box, title half over its top edge; Add<Element> methods come from UILib/Elements
   Elements/
     Slider.lua           slider with a fill and the value in the middle
-    Toggle.lua           checkbox with a tick
+    Toggle.lua           pill switch with a sliding knob
   Vendor/Lucide/         icon sheet data from lucide-roblox (MIT + ISC)
 ```
 
