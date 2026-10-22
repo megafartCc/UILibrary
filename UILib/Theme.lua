@@ -41,6 +41,7 @@ return {
 		SidebarPadX = 4,
 		EdgePadY = 10,
 		HeaderHeight = 30,
+		SerifBold = 0.5,
 		BottomHeight = 30,
 		SectionLabelHeight = 14,
 		SectionLabelPadBottom = 1,
@@ -112,6 +113,7 @@ return {
 
 	Fonts = {
 		Title = Font.new(SERIF, Enum.FontWeight.Bold),
+		Footer = Font.new(SERIF, Enum.FontWeight.Bold),
 		SectionLabel = Font.new(FONT, Enum.FontWeight.SemiBold),
 		Page = Font.new(FONT, Enum.FontWeight.Medium),
 		PageSelected = Font.new(FONT, Enum.FontWeight.SemiBold),
@@ -127,7 +129,7 @@ return {
 		Title = 20,
 		SectionLabel = 11,
 		Page = 14,
-		Footer = 11,
+		Footer = 14,
 		GroupTitle = 12,
 		Element = 12,
 		SliderValue = 11,

@@ -82,6 +82,7 @@ function Window.new(options)
 		TextColor3 = colors.Text,
 		TextTruncate = Enum.TextTruncate.AtEnd,
 		Parent = self.Header,
+		Create.new("UIStroke", { Color = colors.Text, Thickness = sizes.SerifBold }),
 	})
 
 	self.CloseButton = Create.new("TextButton", {
@@ -137,12 +138,13 @@ function Window.new(options)
 		Name = "Footer",
 		Position = UDim2.fromOffset(textX, 0),
 		Size = UDim2.new(1, -textX * 2, 1, 0),
-		FontFace = Theme.Fonts.Element,
+		FontFace = Theme.Fonts.Footer,
 		Text = options.Footer or "",
 		TextSize = Theme.TextSizes.Footer,
-		TextColor3 = colors.SectionLabel,
+		TextColor3 = colors.Muted,
 		TextTruncate = Enum.TextTruncate.AtEnd,
 		Parent = self.Bottom,
+		Create.new("UIStroke", { Color = colors.Muted, Thickness = sizes.SerifBold }),
 	})
 
 	self:_makeDraggable({ self.Header, self.Bottom })
