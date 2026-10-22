@@ -1,6 +1,8 @@
 local FONT = "rbxasset://fonts/families/BuilderSans.json"
 
 return {
+	Scale = 1.2,
+
 	Colors = {
 		Box = Color3.fromRGB(19, 19, 19),
 		Bar = Color3.fromRGB(21, 21, 21),

@@ -48,6 +48,7 @@ function Window.new(options)
 		ClipsDescendants = true,
 		Parent = self.Gui,
 	})
+	self.UIScale = Create.new("UIScale", { Scale = options.Scale or Theme.Scale, Parent = self.Frame })
 
 	local top = sizes.HeaderHeight + 1
 	local middle = top + sizes.BottomHeight + 1
@@ -189,6 +190,10 @@ end
 function Window:SetTitle(text)
 	self.Title.Text = text
 	self.Gui.Name = text
+end
+
+function Window:SetScale(scale)
+	self.UIScale.Scale = scale
 end
 
 function Window:SetFooter(text)

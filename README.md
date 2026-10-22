@@ -41,8 +41,9 @@ See `example.lua` for a full example.
 
 | Call | What it does |
 | --- | --- |
-| `UILib:CreateWindow({ Title, Footer, DefaultPage, Width, Height, Pages, OnClose })` | Opens a window with a header bar (title, current page, X) and a bottom bar (`Footer` text). The X closes it for good |
+| `UILib:CreateWindow({ Title, Footer, DefaultPage, Width, Height, Scale, Pages, OnClose })` | Opens a window with a header bar (title, current page, X) and a bottom bar (`Footer` text). The X closes it for good |
 | `Window:SetFooter(text)` | Changes the bottom bar text |
+| `Window:SetScale(scale)` | Makes the whole window bigger or smaller. Default is `Theme.Scale` (1.2) |
 | Moving the window | Drag the header or bottom bar with mouse or finger. It follows smoothly and stays on screen |
 | `Window:OnClose(fn)` | Runs `fn` when the window closes; stop your loops here |
 | `Window:SetTitle(text)` | Renames the window |
