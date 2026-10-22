@@ -11,7 +11,7 @@ local function column(name, x, parent)
 	local sizes = Theme.Sizes
 	return Create.new("Frame", {
 		Name = name,
-		Position = UDim2.new(x, if x == 0 then 0 else sizes.ColumnGap / 2, 0, 0),
+		Position = UDim2.new(x, if x == 0 then 0 else sizes.ColumnGap / 2, 0, sizes.PageTitleHeight + sizes.PageTitleGap),
 		Size = UDim2.new(0.5, -sizes.ColumnGap / 2, 0, 0),
 		AutomaticSize = Enum.AutomaticSize.Y,
 		BackgroundTransparency = 1,
@@ -38,6 +38,17 @@ function Page.new(options)
 		Name = "Body",
 		Size = UDim2.fromScale(1, 1),
 		Parent = self.Frame,
+	})
+
+	self.Title = Create.new("TextLabel", {
+		Name = "Title",
+		Size = UDim2.new(1, 0, 0, sizes.PageTitleHeight),
+		FontFace = Theme.Fonts.PageTitle,
+		Text = options.Name,
+		TextSize = Theme.TextSizes.PageTitle,
+		TextColor3 = Theme.Colors.Text,
+		TextTruncate = Enum.TextTruncate.AtEnd,
+		Parent = self.Body,
 	})
 
 	self.Columns = {

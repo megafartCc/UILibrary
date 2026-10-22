@@ -173,7 +173,13 @@ function Window.new(options)
 		self:AddPage(pageOptions)
 	end
 
-	self.Gui.Parent = options.Parent or Players.LocalPlayer:WaitForChild("PlayerGui")
+	local parent = options.Parent or Players.LocalPlayer:WaitForChild("PlayerGui")
+	local previous = parent:FindFirstChild(self.Gui.Name)
+	if previous and previous:GetAttribute("UILib") then
+		previous:Destroy()
+	end
+	self.Gui:SetAttribute("UILib", true)
+	self.Gui.Parent = parent
 	return self
 end
 
