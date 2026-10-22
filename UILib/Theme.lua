@@ -67,13 +67,6 @@ return {
 		SliderValue = 12,
 	},
 
-	Scale = {
-		ScreenHeight = 0.5,
-		Min = 1,
-		Max = 2,
-		Margin = 10,
-	},
-
 	Motion = {
 		Duration = 0.25,
 		Style = Enum.EasingStyle.Quint,

@@ -59,19 +59,6 @@ function Window.new(options)
 		Parent = self.Frame,
 	})
 
-	self.UIScale = Create.new("UIScale", { Parent = self.Frame })
-	self._scale = options.Scale
-	self:_fitToScreen()
-	local camera = workspace.CurrentCamera
-	if camera then
-		local connection = camera:GetPropertyChangedSignal("ViewportSize"):Connect(function()
-			self:_fitToScreen()
-		end)
-		self.Gui.Destroying:Connect(function()
-			connection:Disconnect()
-		end)
-	end
-
 	for _, pageOptions in ipairs(options.Pages or {}) do
 		self:AddPage(pageOptions)
 	end
@@ -104,24 +91,6 @@ function Window:SelectPage(name)
 	end
 	self._userPicked = true
 	self:_show(name, true)
-end
-
-function Window:SetScale(scale)
-	self._scale = scale
-	self:_fitToScreen()
-end
-
-function Window:_fitToScreen()
-	local camera = workspace.CurrentCamera
-	if not camera then
-		return
-	end
-	local rules = Theme.Scale
-	local viewport = camera.ViewportSize
-	local width, height = self.Frame.Size.X.Offset, self.Frame.Size.Y.Offset
-	local scale = self._scale or math.clamp(viewport.Y * rules.ScreenHeight / height, rules.Min, rules.Max)
-	local fit = math.min((viewport.X - 2 * rules.Margin) / width, (viewport.Y - 2 * rules.Margin) / height)
-	self.UIScale.Scale = math.max(math.min(scale, fit), 0.1)
 end
 
 function Window:Destroy()

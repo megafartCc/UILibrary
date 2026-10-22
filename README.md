@@ -41,8 +41,7 @@ See `example.lua` for a full example.
 
 | Call | What it does |
 | --- | --- |
-| `UILib:CreateWindow({ Title, DefaultPage, Width, Height, Pages, Scale })` | Opens a window. It scales to the screen on its own (1x on phones, up to 2x on big screens); pass `Scale` to fix it |
-| `Window:SetScale(scale)` | Sets the scale; `nil` goes back to automatic |
+| `UILib:CreateWindow({ Title, DefaultPage, Width, Height, Pages })` | Opens a window |
 | `Window:SetTitle(text)` | Renames the window |
 | `Window:AddSection(name)` or `Window:AddSection({ Name, Order })` | Adds a section label, or returns the existing one with that name |
 | `Section:AddPage({ Name, Icon, Order })` | Adds a page to a section |
