@@ -1,5 +1,4 @@
 local FONT = "rbxasset://fonts/families/Montserrat.json"
-local SERIF = Font.fromEnum(Enum.Font.Garamond).Family
 
 return {
 	Scale = 1.2,
@@ -30,8 +29,6 @@ return {
 		Results = Color3.fromRGB(26, 26, 26),
 		ResultHover = Color3.fromRGB(38, 38, 38),
 		Flash = Color3.fromRGB(42, 42, 42),
-		SerifFill = Color3.fromRGB(0, 0, 0),
-		SerifOutline = Color3.fromRGB(255, 255, 255),
 		Notify = Color3.fromRGB(22, 22, 22),
 		NotifyStroke = Color3.fromRGB(36, 36, 36),
 	},
@@ -43,8 +40,6 @@ return {
 		SidebarPadX = 4,
 		EdgePadY = 10,
 		HeaderHeight = 30,
-		SerifOutline = 1,
-		FooterOutline = 1,
 		BottomHeight = 30,
 		SectionLabelHeight = 14,
 		SectionLabelPadBottom = 1,
@@ -115,8 +110,8 @@ return {
 	},
 
 	Fonts = {
-		Title = Font.new(SERIF, Enum.FontWeight.Regular, Enum.FontStyle.Italic),
-		Footer = Font.new(SERIF, Enum.FontWeight.Bold, Enum.FontStyle.Italic),
+		Title = Font.new(FONT, Enum.FontWeight.Bold),
+		Footer = Font.new(FONT, Enum.FontWeight.Medium),
 		SectionLabel = Font.new(FONT, Enum.FontWeight.SemiBold),
 		Page = Font.new(FONT, Enum.FontWeight.Medium),
 		PageSelected = Font.new(FONT, Enum.FontWeight.SemiBold),
@@ -129,10 +124,10 @@ return {
 	},
 
 	TextSizes = {
-		Title = 18,
+		Title = 16,
 		SectionLabel = 11,
 		Page = 14,
-		Footer = 12,
+		Footer = 11,
 		GroupTitle = 11,
 		Element = 12,
 		SliderValue = 11,

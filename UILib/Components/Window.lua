@@ -79,10 +79,9 @@ function Window.new(options)
 		FontFace = Theme.Fonts.Title,
 		Text = options.Title or "UI Library",
 		TextSize = Theme.TextSizes.Title,
-		TextColor3 = colors.SerifFill,
+		TextColor3 = colors.Text,
 		TextTruncate = Enum.TextTruncate.AtEnd,
 		Parent = self.Header,
-		Create.new("UIStroke", { Color = colors.SerifOutline, Thickness = sizes.SerifOutline }),
 	})
 
 	self.CloseButton = Create.new("TextButton", {
@@ -141,10 +140,9 @@ function Window.new(options)
 		FontFace = Theme.Fonts.Footer,
 		Text = options.Footer or "",
 		TextSize = Theme.TextSizes.Footer,
-		TextColor3 = colors.SerifFill,
+		TextColor3 = colors.SectionLabel,
 		TextTruncate = Enum.TextTruncate.AtEnd,
 		Parent = self.Bottom,
-		Create.new("UIStroke", { Color = colors.SerifOutline, Thickness = sizes.FooterOutline }),
 	})
 
 	self:_makeDraggable({ self.Header, self.Bottom })
