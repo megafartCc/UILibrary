@@ -4,10 +4,15 @@ local Window = UILib:CreateWindow({
 	Title = "Black Box",
 	Footer = "v1.0",
 	DefaultPage = "Home",
+	KeySystem = true,
+	Key = "blackbox",
+	GetKeyLink = "https://github.com/megafartCc/UILibrary",
 	OnClose = function()
 		print("UI closed")
 	end,
 })
+
+UILib:Notify({ Title = "Key accepted", Text = "Welcome, key " .. UILib.GetKey(), Duration = 3 })
 
 local Main = Window:AddSection({ Name = "Main", Order = 1 })
 local Home = Main:AddPage({ Name = "Home", Icon = "home", Order = 1 })
