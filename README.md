@@ -52,6 +52,7 @@ See `example.lua` for a full example.
 | `Page:AddGroup(name)` or `Page:AddGroup({ Name, Side })` | Adds an outlined box to the page. `Side` is `"Left"` or `"Right"`; leave it out to use the column with fewer boxes. Put your UI in `group.Body`; the box grows to fit it |
 | `Group:AddSlider({ Name, Min, Max, Default, Step, Suffix, Callback })` | Adds a one-row slider: name on the left, bar on the right. `slider:Set(value)` and `slider:Get()` read and change it; `Callback(value)` runs when the value changes |
 | `Group:AddToggle({ Name, Default, Callback })` | Adds an iPhone-style switch. `toggle:Set(true)` and `toggle:Get()`; `Callback(on)` runs when it changes |
+| `Group:AddButton({ Name, Icon, Callback })` | Adds a row with a small rounded square on the right. Tapping the row runs `Callback()` with a press animation. `Icon` is any Lucide name (default `chevron-right`) |
 | `Window:Destroy()` | Same as the X: runs OnClose, clears every callback and value, disconnects input, deletes the UI. `Window.Destroyed` turns true |
 | `UILib:Destroy()` | Destroys every window this UILib made |
 
@@ -84,6 +85,7 @@ UILib/
   Elements/
     Slider.lua           slider with a fill and the value in the middle
     Toggle.lua           pill switch with a sliding knob
+    Button.lua           row with a tappable rounded square
   Vendor/Lucide/         icon sheet data from lucide-roblox (MIT + ISC)
 ```
 

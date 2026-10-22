@@ -48,10 +48,13 @@ return {
 		GroupItemGap = 4,
 		ElementHeight = 20,
 		SliderBarWidth = 0.45,
-		SliderBarHeight = 12,
+		SliderBarHeight = 16,
 		SwitchWidth = 28,
 		SwitchHeight = 16,
 		KnobInset = 2,
+		ButtonSize = 16,
+		ButtonIconSize = 10,
+		ButtonRadius = 4,
 		SliderRadius = 3,
 	},
 
@@ -80,5 +83,7 @@ return {
 		Style = Enum.EasingStyle.Quint,
 		DragDuration = 0.12,
 		DragStyle = Enum.EasingStyle.Quad,
+		PressScale = 0.8,
+		PressDuration = 0.35,
 	},
 }

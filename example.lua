@@ -46,4 +46,10 @@ Visuals:AddSlider({
 local Misc = Home:AddGroup({ Name = "MISC", Side = "Left" })
 Misc:AddToggle({ Name = "Anti AFK", Default = true })
 Misc:AddToggle({ Name = "Auto Respawn" })
+Misc:AddButton({
+	Name = "Rejoin",
+	Callback = function()
+		print("Rejoin pressed")
+	end,
+})
 Home:AddGroup({ Name = "WORLD", Side = "Right" })

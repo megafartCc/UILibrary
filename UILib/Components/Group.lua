@@ -5,6 +5,7 @@ local Create = import("Util/Create")
 local Elements = {
 	Slider = import("Elements/Slider"),
 	Toggle = import("Elements/Toggle"),
+	Button = import("Elements/Button"),
 }
 
 local Group = {}
