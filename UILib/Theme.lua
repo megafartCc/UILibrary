@@ -8,8 +8,11 @@ return {
 		SectionLabel = Color3.fromRGB(112, 112, 118),
 		Selected = Color3.fromRGB(33, 33, 38),
 		Divider = Color3.fromRGB(36, 36, 38),
-		GroupBorder = Color3.fromRGB(44, 44, 48),
+		Group = Color3.fromRGB(16, 16, 19),
 		GroupTitle = Color3.fromRGB(220, 220, 224),
+		ElementText = Color3.fromRGB(205, 205, 210),
+		Track = Color3.fromRGB(30, 30, 35),
+		Accent = Color3.fromRGB(245, 100, 100),
 	},
 
 	Sizes = {
@@ -27,29 +30,28 @@ return {
 		IconSize = 15,
 		IconGap = 7,
 		HighlightRadius = 6,
-		GroupRadius = 6,
 		ContentPadX = 14,
 		PageGap = 8,
 		ColumnGap = 10,
 		GroupGap = 8,
 		GroupPad = 10,
-		GroupMinHeight = 44,
-		GroupItemGap = 6,
-		GroupTitleInset = 8,
-		GroupTitlePadX = 4,
+		GroupRadius = 8,
+		GroupTitleHeight = 14,
+		GroupItemGap = 8,
+		ElementLabelHeight = 16,
+		SliderGap = 4,
+		SliderHeight = 22,
+		SliderRadius = 6,
 	},
 
 	Fonts = {
 		Title = Font.new(FONT, Enum.FontWeight.Bold),
 		SectionLabel = Font.new(FONT, Enum.FontWeight.SemiBold),
 		Page = Font.new(FONT, Enum.FontWeight.SemiBold),
-		GroupTitle = Font.new(FONT, Enum.FontWeight.SemiBold),
 		PageSelected = Font.new(FONT, Enum.FontWeight.Bold),
-	},
-
-	Motion = {
-		Duration = 0.25,
-		Style = Enum.EasingStyle.Quint,
+		GroupTitle = Font.new(FONT, Enum.FontWeight.Bold),
+		Element = Font.new(FONT, Enum.FontWeight.SemiBold),
+		SliderValue = Font.new(FONT, Enum.FontWeight.Bold),
 	},
 
 	TextSizes = {
@@ -58,5 +60,12 @@ return {
 		Page = 14,
 		PageTitle = 20,
 		GroupTitle = 12,
+		Element = 13,
+		SliderValue = 13,
+	},
+
+	Motion = {
+		Duration = 0.25,
+		Style = Enum.EasingStyle.Quint,
 	},
 }

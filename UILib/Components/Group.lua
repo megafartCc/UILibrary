@@ -2,42 +2,27 @@ local import = ...
 local Theme = import("Theme")
 local Create = import("Util/Create")
 
+local Elements = {
+	Slider = import("Elements/Slider"),
+}
+
 local Group = {}
 Group.__index = Group
 
 function Group.new(column, options, order)
 	local sizes, colors = Theme.Sizes, Theme.Colors
-	local titleSize = Theme.TextSizes.GroupTitle
 	local pad = sizes.GroupPad
-	local self = setmetatable({ Name = options.Name }, Group)
+	local self = setmetatable({ Name = options.Name, Elements = {} }, Group)
 
 	self.Frame = Create.new("Frame", {
 		Name = "Group_" .. options.Name,
 		LayoutOrder = order,
-		Size = UDim2.new(1, 0, 0, sizes.GroupMinHeight),
+		Size = UDim2.fromScale(1, 0),
 		AutomaticSize = Enum.AutomaticSize.Y,
-		BackgroundTransparency = 1,
+		BackgroundColor3 = colors.Group,
+		BorderSizePixel = 0,
 		Parent = column,
 		Create.new("UICorner", { CornerRadius = UDim.new(0, sizes.GroupRadius) }),
-		Create.new("UIStroke", { Color = colors.GroupBorder, Thickness = 1 }),
-	})
-
-	self.Title = Create.new("TextLabel", {
-		Name = "Title",
-		AnchorPoint = Vector2.new(0, 0.5),
-		Position = UDim2.fromOffset(sizes.GroupTitleInset, 0),
-		Size = UDim2.fromOffset(0, titleSize),
-		AutomaticSize = Enum.AutomaticSize.X,
-		BackgroundColor3 = colors.Box,
-		BackgroundTransparency = 0,
-		BorderSizePixel = 0,
-		FontFace = Theme.Fonts.GroupTitle,
-		Text = options.Name,
-		TextSize = titleSize,
-		TextColor3 = colors.GroupTitle,
-		ZIndex = 2,
-		Parent = self.Frame,
-		Create.Padding(sizes.GroupTitlePadX, sizes.GroupTitlePadX),
 	})
 
 	self.Body = Create.new("Frame", {
@@ -46,11 +31,36 @@ function Group.new(column, options, order)
 		AutomaticSize = Enum.AutomaticSize.Y,
 		BackgroundTransparency = 1,
 		Parent = self.Frame,
-		Create.Padding(pad, pad, pad + math.ceil(titleSize / 2), pad),
+		Create.Padding(pad, pad, pad, pad),
 		Create.List(Enum.FillDirection.Vertical, sizes.GroupItemGap),
 	})
 
+	self.Title = Create.new("TextLabel", {
+		Name = "Title",
+		LayoutOrder = 0,
+		Size = UDim2.new(1, 0, 0, sizes.GroupTitleHeight),
+		FontFace = Theme.Fonts.GroupTitle,
+		Text = options.Name,
+		TextSize = Theme.TextSizes.GroupTitle,
+		TextColor3 = colors.GroupTitle,
+		TextTruncate = Enum.TextTruncate.AtEnd,
+		Parent = self.Body,
+	})
+
 	return self
+end
+
+function Group:_add(kind, options)
+	assert(type(options) == "table" and options.Name, "UILib: Add" .. kind .. " needs a Name")
+	local element = Elements[kind].new(self, options, #self.Elements + 1)
+	table.insert(self.Elements, element)
+	return element
+end
+
+for kind in Elements do
+	Group["Add" .. kind] = function(self, options)
+		return self:_add(kind, options)
+	end
 end
 
 return Group

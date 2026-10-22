@@ -49,6 +49,7 @@ See `example.lua` for a full example.
 | `Window:SelectPage(name)` | Shows a page. Pages added later won't take over the selection |
 | `Window:GetPage(name)` | Returns a page |
 | `Page:AddGroup(name)` or `Page:AddGroup({ Name, Side })` | Adds an outlined box to the page. `Side` is `"Left"` or `"Right"`; leave it out to use the column with fewer boxes. Put your UI in `group.Body`; the box grows to fit it |
+| `Group:AddSlider({ Name, Min, Max, Default, Step, Suffix, Callback })` | Adds a slider. `slider:Set(value)` and `slider:Get()` read and change it; `Callback(value)` runs when the value changes |
 | `Window:Destroy()` | Closes the window |
 
 **Order:** sections sort by their `Order`, and pages sort by `Order` inside
@@ -76,9 +77,13 @@ UILib/
     Section.lua          section label, page ordering
     PageButton.lua       icon + name row, selected highlight
     Page.lua             content area for one page, two columns
-    Group.lua            outlined box with its name on the top border
+    Group.lua            filled box with a title; Add<Element> methods come from UILib/Elements
+  Elements/
+    Slider.lua           slider with a fill and the value in the middle
   Vendor/Lucide/         icon sheet data from lucide-roblox (MIT + ISC)
 ```
+
+To add an element: create `UILib/Elements/Name.lua` with `Name.new(group, options, order)` and add it to the `Elements` table in `Group.lua`; `Group:AddName` then exists.
 
 To add a module: create `UILib/Something.lua`, start it with
 `local import = ...`, and load other modules with `import("Theme")`.

@@ -10,12 +10,11 @@ local function column(name, x, parent)
 	local sizes = Theme.Sizes
 	return Create.new("Frame", {
 		Name = name,
-		Position = UDim2.new(x, if x == 0 then 1 else sizes.ColumnGap / 2, 0, 0),
-		Size = UDim2.new(0.5, -(sizes.ColumnGap / 2 + 1), 0, 0),
+		Position = UDim2.new(x, if x == 0 then 0 else sizes.ColumnGap / 2, 0, 0),
+		Size = UDim2.new(0.5, -sizes.ColumnGap / 2, 0, 0),
 		AutomaticSize = Enum.AutomaticSize.Y,
 		BackgroundTransparency = 1,
 		Parent = parent,
-		Create.Padding(0, 0, math.ceil(Theme.TextSizes.GroupTitle / 2) + 1, 1),
 		Create.List(Enum.FillDirection.Vertical, sizes.GroupGap),
 	})
 end
