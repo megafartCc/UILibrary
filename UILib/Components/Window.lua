@@ -115,7 +115,7 @@ function Window:_addPage(options, layoutOrder)
 	local page = Page.new(options)
 	page.LayoutOrder = layoutOrder
 	page.Button = PageButton.new(options, layoutOrder)
-	page.Button.Frame.Parent = self.Sidebar.Frame
+	page.Button.Frame.Parent = self.Sidebar.List
 	page.Frame.Parent = self.Content
 	self.Pages[name] = page
 

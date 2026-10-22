@@ -16,12 +16,10 @@ function Sidebar.new(window, title)
 		BackgroundColor3 = Theme.Colors.Box,
 		BorderSizePixel = 0,
 		Create.Padding(sizes.SidebarPadX, sizes.SidebarPadX, sizes.EdgePadY, sizes.EdgePadY),
-		Create.List(Enum.FillDirection.Vertical, sizes.ItemGap),
 	})
 
 	self.Title = Create.new("TextLabel", {
 		Name = "Title",
-		LayoutOrder = 0,
 		Size = UDim2.new(1, 0, 0, sizes.TitleHeight),
 		Font = Theme.Fonts.Title,
 		Text = title,
@@ -30,6 +28,20 @@ function Sidebar.new(window, title)
 		TextTruncate = Enum.TextTruncate.AtEnd,
 		Parent = self.Frame,
 		Create.Padding(sizes.ItemPadX),
+	})
+
+	self.List = Create.new("ScrollingFrame", {
+		Name = "Pages",
+		Position = UDim2.fromOffset(0, sizes.TitleHeight),
+		Size = UDim2.new(1, 0, 1, -sizes.TitleHeight),
+		BackgroundTransparency = 1,
+		BorderSizePixel = 0,
+		ScrollBarThickness = 0,
+		ScrollingDirection = Enum.ScrollingDirection.Y,
+		CanvasSize = UDim2.new(),
+		AutomaticCanvasSize = Enum.AutomaticSize.Y,
+		Parent = self.Frame,
+		Create.List(Enum.FillDirection.Vertical, sizes.ItemGap),
 	})
 
 	return self
