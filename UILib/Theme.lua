@@ -58,7 +58,7 @@ return {
 		ButtonIconSize = 12,
 		ButtonRadius = 6,
 		NotifyWidth = 260,
-		NotifyMargin = 14,
+		NotifyMargin = 10,
 		NotifyGap = 8,
 		NotifyPad = 10,
 		NotifyRadius = 6,

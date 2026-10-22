@@ -19,6 +19,8 @@ local function host()
 	gui = Create.new("ScreenGui", {
 		Name = "UILibNotifications",
 		ResetOnSpawn = false,
+		IgnoreGuiInset = true,
+		ScreenInsets = Enum.ScreenInsets.None,
 		DisplayOrder = 100,
 		ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
 	})
