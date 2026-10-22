@@ -54,7 +54,8 @@ See `example.lua` for a full example.
 | `Group:AddToggle({ Name, Default, Callback })` | Adds an iPhone-style switch. `toggle:Set(true)` and `toggle:Get()`; `Callback(on)` runs when it changes |
 | `Group:AddButton({ Name, Icon, Callback })` | Adds a row with a small rounded square on the right. Tapping the row runs `Callback()` with a press animation. `Icon` is any Lucide name (default `chevron-right`) |
 | `Window:Destroy()` | Same as the X: runs OnClose, clears every callback and value, disconnects input, deletes the UI. `Window.Destroyed` turns true |
-| `UILib:Destroy()` | Destroys every window this UILib made |
+| `UILib:Notify({ Title, Text, Duration })` or `UILib:Notify(title, text, duration)` | Shows a notification in the top right. It slides in, a line at the bottom drains until it slides out, and tapping it closes it early. Up to 5 stack. Returns a handle with `:Close()` |
+| `UILib:Destroy()` | Destroys every window this UILib made and clears notifications |
 
 **Order:** sections sort by their `Order`, and pages sort by `Order` inside
 their section. Leave it out and they appear in the order you add them.
@@ -81,6 +82,7 @@ UILib/
     Section.lua          section label, page ordering
     PageButton.lua       icon + name row, selected highlight
     Page.lua             content area for one page, two columns
+    Notifications.lua    top-right notifications
     Group.lua            filled box, title half over its top edge; Add<Element> methods come from UILib/Elements
   Elements/
     Slider.lua           slider with a fill and the value in the middle

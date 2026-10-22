@@ -15,6 +15,8 @@ return {
 		Accent = Color3.fromRGB(245, 100, 100),
 		SwitchOff = Color3.fromRGB(52, 52, 52),
 		Knob = Color3.fromRGB(255, 255, 255),
+		Notify = Color3.fromRGB(24, 24, 24),
+		NotifyStroke = Color3.fromRGB(44, 44, 44),
 	},
 
 	Sizes = {
@@ -52,9 +54,17 @@ return {
 		SwitchWidth = 28,
 		SwitchHeight = 16,
 		KnobInset = 2,
-		ButtonHeight = 20,
+		ButtonSize = 20,
 		ButtonIconSize = 12,
 		ButtonRadius = 6,
+		NotifyWidth = 260,
+		NotifyMargin = 14,
+		NotifyGap = 8,
+		NotifyPad = 10,
+		NotifyRadius = 6,
+		NotifySlide = 30,
+		NotifyLine = 2,
+		NotifyMax = 5,
 		SliderRadius = 3,
 	},
 
@@ -66,6 +76,8 @@ return {
 		GroupTitle = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Bold),
 		Element = Font.new(FONT, Enum.FontWeight.SemiBold),
 		SliderValue = Font.new(FONT, Enum.FontWeight.Bold),
+		NotifyTitle = Font.new(FONT, Enum.FontWeight.Bold),
+		NotifyText = Font.new(FONT, Enum.FontWeight.Medium),
 	},
 
 	TextSizes = {
@@ -76,6 +88,8 @@ return {
 		GroupTitle = 12,
 		Element = 12,
 		SliderValue = 11,
+		NotifyTitle = 14,
+		NotifyText = 12,
 	},
 
 	Motion = {

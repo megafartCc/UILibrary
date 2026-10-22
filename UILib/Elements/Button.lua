@@ -33,8 +33,8 @@ function Button.new(group, options, order)
 	self.Square = Create.new("Frame", {
 		Name = "Square",
 		AnchorPoint = Vector2.new(1, 0.5),
-		Position = UDim2.fromScale(1, 0.5),
-		Size = UDim2.fromOffset(sizes.SwitchWidth, sizes.ButtonHeight),
+		Position = UDim2.new(1, -(sizes.SwitchWidth - sizes.ButtonSize) / 2, 0.5, 0),
+		Size = UDim2.fromOffset(sizes.ButtonSize, sizes.ButtonSize),
 		BackgroundColor3 = colors.Track,
 		BorderSizePixel = 0,
 		Parent = self.Frame,

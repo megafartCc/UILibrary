@@ -49,7 +49,9 @@ Misc:AddToggle({ Name = "Auto Respawn" })
 Misc:AddButton({
 	Name = "Rejoin",
 	Callback = function()
-		print("Rejoin pressed")
+		UILib:Notify({ Title = "Rejoin", Text = "Rejoining the server...", Duration = 3 })
 	end,
 })
 Home:AddGroup({ Name = "WORLD", Side = "Right" })
+
+UILib:Notify({ Title = "Black Box", Text = "Loaded successfully", Duration = 4 })
