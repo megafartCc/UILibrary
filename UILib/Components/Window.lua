@@ -54,7 +54,7 @@ function Window.new(options)
 		Size = UDim2.new(1, 0, 0, sizes.HeaderHeight),
 		BackgroundColor3 = colors.Bar,
 		BorderSizePixel = 0,
-		ZIndex = 2,
+		ZIndex = 3,
 		Parent = self.Frame,
 	})
 	Create.new("Frame", {
@@ -128,7 +128,7 @@ function Window.new(options)
 		Size = UDim2.new(1, 0, 0, sizes.BottomHeight),
 		BackgroundColor3 = colors.Bar,
 		BorderSizePixel = 0,
-		ZIndex = 2,
+		ZIndex = 3,
 		Parent = self.Frame,
 	})
 	Create.new("Frame", {
