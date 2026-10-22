@@ -1,4 +1,5 @@
 local FONT = "rbxasset://fonts/families/Montserrat.json"
+local SERIF = Font.fromEnum(Enum.Font.Garamond).Family
 
 return {
 	Scale = 1.2,
@@ -110,7 +111,7 @@ return {
 	},
 
 	Fonts = {
-		Title = Font.new(FONT, Enum.FontWeight.Bold),
+		Title = Font.new(SERIF, Enum.FontWeight.Bold),
 		SectionLabel = Font.new(FONT, Enum.FontWeight.SemiBold),
 		Page = Font.new(FONT, Enum.FontWeight.Medium),
 		PageSelected = Font.new(FONT, Enum.FontWeight.SemiBold),
@@ -123,7 +124,7 @@ return {
 	},
 
 	TextSizes = {
-		Title = 16,
+		Title = 20,
 		SectionLabel = 11,
 		Page = 14,
 		Footer = 11,
