@@ -16,14 +16,7 @@ Items:AddPage({ Name = "Inventory", Icon = "package" })
 local Other = Window:AddSection({ Name = "Other", Order = 3 })
 Other:AddPage({ Name = "Settings", Icon = "settings" })
 
-local function space(group, height)
-	local filler = Instance.new("Frame")
-	filler.BackgroundTransparency = 1
-	filler.Size = UDim2.new(1, 0, 0, height)
-	filler.Parent = group.Body
-end
-
-space(Home:AddGroup({ Name = "Aimbot", Side = "Left" }), 90)
-space(Home:AddGroup({ Name = "Visuals", Side = "Right" }), 30)
-space(Home:AddGroup({ Name = "Misc", Side = "Left" }), 20)
-space(Home:AddGroup({ Name = "World", Side = "Right" }), 110)
+Home:AddGroup({ Name = "Aimbot", Side = "Left" })
+Home:AddGroup({ Name = "Visuals", Side = "Right" })
+Home:AddGroup({ Name = "Misc", Side = "Left" })
+Home:AddGroup({ Name = "World", Side = "Right" })
