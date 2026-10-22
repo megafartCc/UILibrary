@@ -43,7 +43,7 @@ return {
 		GroupItemGap = 6,
 		ElementHeight = 26,
 		SliderBarWidth = 0.45,
-		SliderBarHeight = 20,
+		SliderBarHeight = 16,
 		SliderRadius = 3,
 	},
 
