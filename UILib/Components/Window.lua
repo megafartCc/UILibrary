@@ -71,7 +71,7 @@ function Window.new(options)
 	self.CloseButton = Create.new("TextButton", {
 		Name = "Close",
 		AnchorPoint = Vector2.new(1, 0.5),
-		Position = UDim2.new(1, -sizes.EdgePadY, 0, sizes.EdgePadY + sizes.TitleHeight / 2),
+		Position = UDim2.new(1, -(sizes.ContentPadX - (sizes.CloseSize - sizes.CloseIconSize) / 2), 0, sizes.EdgePadY + sizes.TitleHeight / 2),
 		Size = UDim2.fromOffset(sizes.CloseSize, sizes.CloseSize),
 		BackgroundColor3 = colors.Selected,
 		BackgroundTransparency = 1,
