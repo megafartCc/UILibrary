@@ -21,7 +21,7 @@ function Section.new(sidebar, options, order)
 		TextYAlignment = Enum.TextYAlignment.Bottom,
 		Visible = options.Name ~= "" and options.ShowLabel ~= false,
 		Parent = sidebar.Frame,
-		Create.Padding(Theme.Sizes.ItemPadX, 0, 0, 2),
+		Create.Padding(Theme.Sizes.ItemPadX, 0, 0, Theme.Sizes.SectionLabelPadBottom),
 	})
 
 	return self

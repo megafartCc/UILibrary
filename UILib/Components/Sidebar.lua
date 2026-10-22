@@ -15,7 +15,7 @@ function Sidebar.new(window, title)
 		Size = UDim2.new(0, sizes.SidebarWidth, 1, 0),
 		BackgroundColor3 = Theme.Colors.Box,
 		BorderSizePixel = 0,
-		Create.Padding(sizes.SidebarPadX, sizes.SidebarPadX, sizes.SidebarPadY, sizes.SidebarPadY),
+		Create.Padding(sizes.SidebarPadX, sizes.SidebarPadX, sizes.EdgePadY, sizes.EdgePadY),
 		Create.List(Enum.FillDirection.Vertical, sizes.ItemGap),
 	})
 

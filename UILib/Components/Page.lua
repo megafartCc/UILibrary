@@ -7,7 +7,7 @@ Page.__index = Page
 
 function Page.new(options)
 	local sizes = Theme.Sizes
-	local pad = sizes.ContentPad
+	local padX, padY = sizes.ContentPadX, sizes.EdgePadY
 	local self = setmetatable({ Name = options.Name }, Page)
 
 	self.Frame = Create.new("Frame", {
@@ -15,14 +15,14 @@ function Page.new(options)
 		Size = UDim2.fromScale(1, 1),
 		BackgroundTransparency = 1,
 		Visible = false,
-		Create.Padding(pad, pad, pad, pad),
+		Create.Padding(padX, padX, padY, padY),
 		Create.List(Enum.FillDirection.Vertical, sizes.PageGap),
 	})
 
 	self.Title = Create.new("TextLabel", {
 		Name = "Title",
 		LayoutOrder = 0,
-		Size = UDim2.new(1, 0, 0, sizes.PageTitleHeight),
+		Size = UDim2.new(1, 0, 0, sizes.TitleHeight),
 		Font = Theme.Fonts.Title,
 		Text = options.Name,
 		TextSize = Theme.TextSizes.PageTitle,
@@ -33,7 +33,7 @@ function Page.new(options)
 	self.Body = Create.new("Frame", {
 		Name = "Body",
 		LayoutOrder = 1,
-		Size = UDim2.new(1, 0, 1, -(sizes.PageTitleHeight + sizes.PageGap)),
+		Size = UDim2.new(1, 0, 1, -(sizes.TitleHeight + sizes.PageGap)),
 		BackgroundTransparency = 1,
 		Parent = self.Frame,
 	})

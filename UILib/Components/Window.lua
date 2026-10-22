@@ -43,8 +43,8 @@ function Window.new(options)
 
 	Create.new("Frame", {
 		Name = "Divider",
-		Position = UDim2.fromOffset(sizes.SidebarWidth - 1, 0),
-		Size = UDim2.new(0, 1, 1, 0),
+		Position = UDim2.fromOffset(sizes.SidebarWidth - 1, sizes.EdgePadY),
+		Size = UDim2.new(0, 1, 1, -2 * sizes.EdgePadY),
 		BackgroundColor3 = colors.Divider,
 		BorderSizePixel = 0,
 		ZIndex = 2,
