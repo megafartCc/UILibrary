@@ -4,6 +4,15 @@ local DEFAULTS = {
 	TextLabel = { BackgroundTransparency = 1, TextXAlignment = Enum.TextXAlignment.Left },
 	ImageLabel = { BackgroundTransparency = 1 },
 	TextButton = { AutoButtonColor = false, Text = "" },
+	ScrollingFrame = {
+		BackgroundTransparency = 1,
+		BorderSizePixel = 0,
+		ScrollBarThickness = 0,
+		ScrollBarImageTransparency = 1,
+		ScrollingDirection = Enum.ScrollingDirection.Y,
+		CanvasSize = UDim2.new(),
+		AutomaticCanvasSize = Enum.AutomaticSize.Y,
+	},
 }
 
 local function assign(instance, props)

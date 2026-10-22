@@ -36,12 +36,6 @@ function Page.new(options)
 	self.Body = Create.new("ScrollingFrame", {
 		Name = "Body",
 		Size = UDim2.fromScale(1, 1),
-		BackgroundTransparency = 1,
-		BorderSizePixel = 0,
-		ScrollBarThickness = 0,
-		ScrollingDirection = Enum.ScrollingDirection.Y,
-		CanvasSize = UDim2.new(),
-		AutomaticCanvasSize = Enum.AutomaticSize.Y,
 		Parent = self.Frame,
 	})
 
