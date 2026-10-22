@@ -67,7 +67,7 @@ UILib/
   init.lua               UILib:CreateWindow
   Theme.lua              colors, sizes, fonts (every number the layout uses)
   Icons.lua              Lucide icons by name
-  Motion.lua             all state changes go through here (no animations yet)
+  Motion.lua             all state changes go through here (tweens, set Motion.Enabled = false to turn off)
   Util/Create.lua        instance helpers with per-class defaults
   Components/
     Window.lua           the black box, creates pages and handles selection
@@ -83,6 +83,6 @@ To add a module: create `UILib/Something.lua`, start it with
 
 ## Rules
 
-- The window has sharp corners. Only the selected page highlight is rounded.
+- The window has sharp corners. Only the selected page highlight is rounded, and it slides between pages.
 - No CanvasGroup.
-- No animations for now. To add them later, change only `Motion.lua`.
+- Animations go through `Motion.lua`. Speed and easing live in `Theme.Motion`.

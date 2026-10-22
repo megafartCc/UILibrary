@@ -14,13 +14,13 @@ function Section.new(sidebar, options, order)
 		Name = "Section_" .. options.Name,
 		LayoutOrder = order * SLOT,
 		Size = UDim2.new(1, 0, 0, Theme.Sizes.SectionLabelHeight),
-		Font = Theme.Fonts.SectionLabel,
+		FontFace = Theme.Fonts.SectionLabel,
 		Text = options.Name,
 		TextSize = Theme.TextSizes.SectionLabel,
 		TextColor3 = Theme.Colors.SectionLabel,
 		TextYAlignment = Enum.TextYAlignment.Bottom,
 		Visible = options.Name ~= "" and options.ShowLabel ~= false,
-		Parent = sidebar.List,
+		Parent = sidebar.Items,
 		Create.Padding(Theme.Sizes.ItemPadX, 0, 0, Theme.Sizes.SectionLabelPadBottom),
 	})
 

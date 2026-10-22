@@ -23,7 +23,7 @@ function Page.new(options)
 		Name = "Title",
 		LayoutOrder = 0,
 		Size = UDim2.new(1, 0, 0, sizes.TitleHeight),
-		Font = Theme.Fonts.Title,
+		FontFace = Theme.Fonts.Title,
 		Text = options.Name,
 		TextSize = Theme.TextSizes.PageTitle,
 		TextColor3 = Theme.Colors.Text,
@@ -41,10 +41,10 @@ function Page.new(options)
 	return self
 end
 
-function Page:SetSelected(on)
+function Page:SetSelected(on, animate)
 	self.Frame.Visible = on
 	if self.Button then
-		self.Button:SetSelected(on)
+		self.Button:SetSelected(on, animate)
 	end
 end
 

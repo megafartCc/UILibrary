@@ -90,7 +90,7 @@ function Window:SelectPage(name)
 		return
 	end
 	self._userPicked = true
-	self:_show(name)
+	self:_show(name, true)
 end
 
 function Window:Destroy()
@@ -99,12 +99,14 @@ function Window:Destroy()
 	self.SelectedPage = nil
 end
 
-function Window:_show(name)
+function Window:_show(name, animate)
 	local previous = self.Pages[self.SelectedPage]
 	if previous then
-		previous:SetSelected(false)
+		previous:SetSelected(false, animate)
 	end
-	self.Pages[name]:SetSelected(true)
+	local page = self.Pages[name]
+	page:SetSelected(true, animate)
+	self.Sidebar:Highlight(page.Button, animate)
 	self.SelectedPage = name
 end
 
@@ -115,7 +117,7 @@ function Window:_addPage(options, layoutOrder)
 	local page = Page.new(options)
 	page.LayoutOrder = layoutOrder
 	page.Button = PageButton.new(options, layoutOrder)
-	page.Button.Frame.Parent = self.Sidebar.List
+	page.Button.Frame.Parent = self.Sidebar.Items
 	page.Frame.Parent = self.Content
 	self.Pages[name] = page
 

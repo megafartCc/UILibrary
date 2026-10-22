@@ -28,10 +28,15 @@ return {
 	},
 
 	Fonts = {
-		Title = Enum.Font.GothamBold,
-		SectionLabel = Enum.Font.GothamMedium,
-		Page = Enum.Font.GothamMedium,
-		PageSelected = Enum.Font.GothamBold,
+		Title = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Bold),
+		SectionLabel = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.SemiBold),
+		Page = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.SemiBold),
+		PageSelected = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Bold),
+	},
+
+	Motion = {
+		Duration = 0.25,
+		Style = Enum.EasingStyle.Quint,
 	},
 
 	TextSizes = {

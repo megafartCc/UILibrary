@@ -15,9 +15,7 @@ function PageButton.new(options, layoutOrder)
 		Name = "Page_" .. options.Name,
 		LayoutOrder = layoutOrder,
 		Size = UDim2.new(1, 0, 0, sizes.RowHeight),
-		BackgroundColor3 = colors.Selected,
 		BackgroundTransparency = 1,
-		Create.new("UICorner", { CornerRadius = UDim.new(0, sizes.HighlightRadius) }),
 		Create.Padding(sizes.ItemPadX, sizes.ItemPadX),
 		Create.List(Enum.FillDirection.Horizontal, sizes.IconGap),
 	})
@@ -36,7 +34,7 @@ function PageButton.new(options, layoutOrder)
 		Name = "Label",
 		LayoutOrder = 2,
 		Size = UDim2.new(1, -(sizes.IconSize + sizes.IconGap), 1, 0),
-		Font = Theme.Fonts.Page,
+		FontFace = Theme.Fonts.Page,
 		Text = options.Name,
 		TextSize = Theme.TextSizes.Page,
 		TextColor3 = colors.Muted,
@@ -47,11 +45,10 @@ function PageButton.new(options, layoutOrder)
 	return self
 end
 
-function PageButton:SetSelected(on)
+function PageButton:SetSelected(on, animate)
 	local color = if on then Theme.Colors.Text else Theme.Colors.Muted
-	Motion.Apply(self.Frame, { BackgroundTransparency = if on then 0 else 1 })
-	Motion.Apply(self.Label, { TextColor3 = color, Font = if on then Theme.Fonts.PageSelected else Theme.Fonts.Page })
-	Motion.Apply(self.Icon, { ImageColor3 = color })
+	Motion.Apply(self.Label, { TextColor3 = color, FontFace = if on then Theme.Fonts.PageSelected else Theme.Fonts.Page }, animate)
+	Motion.Apply(self.Icon, { ImageColor3 = color }, animate)
 end
 
 return PageButton
