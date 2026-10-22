@@ -1,24 +1,13 @@
---[[
-	Icons: Lucide icons (https://lucide.dev) by name, e.g. "home", "settings".
-	Uses the icon sheet from lucide-roblox (Vendor/Lucide, MIT + ISC), which is
-	already uploaded to Roblox, so nothing is downloaded at runtime.
-	All names: https://github.com/latte-soft/lucide-roblox/blob/master/md/icon-index.md
-
-	You can also pass your own image: "rbxassetid://123" or a number.
-]]
-
 local import = ...
 local IconData = import("Vendor/Lucide/IconData")
 
 local Icons = {}
 local custom = {}
 
--- Use your own image for a name: Icons.Register("logo", "rbxassetid://123")
 function Icons.Register(name, image)
 	custom[string.lower(name)] = image
 end
 
--- Returns { Image, ImageRectSize, ImageRectOffset } or nil.
 function Icons.Get(icon)
 	if icon == nil or icon == "" then
 		return nil
@@ -49,7 +38,6 @@ function Icons.Get(icon)
 	}
 end
 
--- Puts the icon on an ImageLabel. Returns true if it worked.
 function Icons.Apply(imageLabel, icon)
 	local asset = Icons.Get(icon)
 	if not asset then

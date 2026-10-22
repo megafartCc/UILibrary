@@ -1,10 +1,3 @@
---[[
-	Motion: every visual state change goes through Motion.Apply.
-	Right now it sets properties instantly (no animations).
-	To add animations later, change only this file, for example by
-	tweening instead of assigning when Motion.Enabled is true.
-]]
-
 local Motion = {}
 
 Motion.Enabled = false

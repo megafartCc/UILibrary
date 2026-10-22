@@ -1,7 +1,3 @@
---[[
-	UILib entry module. Load it with loader.lua (see README).
-]]
-
 local import = ...
 local Theme = import("Theme")
 local Icons = import("Icons")
@@ -17,7 +13,6 @@ function UILib:CreateWindow(options)
 	return Window.new(options)
 end
 
--- Same as CreateWindow, for UILib.new({...}) style
 function UILib.new(options)
 	return Window.new(options)
 end

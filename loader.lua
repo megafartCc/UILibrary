@@ -1,9 +1,3 @@
---[[
-	UILib loader. Downloads the modules from GitHub and returns the library.
-
-	local UILib = loadstring(game:HttpGet("https://raw.githubusercontent.com/megafartCc/UILibrary/main/loader.lua"))()
-]]
-
 local BASE_URL = "https://raw.githubusercontent.com/megafartCc/UILibrary/main/UILib/"
 
 local cache = {}
@@ -22,7 +16,6 @@ end
 
 local import
 
--- import("Components/Window") loads UILib/Components/Window.lua once and caches it
 function import(path)
 	if cache[path] ~= nil then
 		return cache[path]

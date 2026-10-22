@@ -1,5 +1,3 @@
--- Sidebar: window title, section labels and page buttons.
-
 local import = ...
 local Theme = import("Theme")
 local Create = import("Util/Create")
@@ -25,7 +23,6 @@ function Sidebar.new(window, title)
 		Create.List(Enum.FillDirection.Vertical, sizes.ItemGap),
 	})
 
-	-- Window name, top left. Always first.
 	self.Title = Create.new("TextLabel", {
 		Name = "Title",
 		LayoutOrder = 0,

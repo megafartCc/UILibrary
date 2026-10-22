@@ -1,6 +1,3 @@
--- Page: the content area shown when its sidebar button is selected.
--- Put your own elements inside page.Body.
-
 local import = ...
 local Theme = import("Theme")
 local Create = import("Util/Create")

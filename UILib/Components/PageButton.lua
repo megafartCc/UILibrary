@@ -1,5 +1,3 @@
--- PageButton: one row in the sidebar (icon + name). Highlighted when selected.
-
 local import = ...
 local Theme = import("Theme")
 local Icons = import("Icons")
@@ -36,7 +34,6 @@ function PageButton.new(options, layoutOrder)
 		ImageColor3 = colors.Muted,
 		Parent = self.Frame,
 	})
-	-- Hidden when no icon is given or the name isn't found
 	self.Icon.Visible = Icons.Apply(self.Icon, options.Icon)
 
 	self.Label = Create.new("TextLabel", {

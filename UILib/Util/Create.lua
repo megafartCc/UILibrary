@@ -1,5 +1,3 @@
--- Create: small helpers for building instances.
-
 local Create = {}
 
 function Create.new(className, props, children)

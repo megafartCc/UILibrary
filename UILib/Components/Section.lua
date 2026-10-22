@@ -1,13 +1,9 @@
--- Section: an uppercase label in the sidebar that groups pages.
--- Order: sections sort by Order (default: the order you create them),
--- and pages inside a section sort by their own Order the same way.
-
 local import = ...
 local Theme = import("Theme")
 local Create = import("Util/Create")
 local PageButton = import("Components/PageButton")
 
-local SLOT = 1000 -- room for up to 999 pages per section
+local SLOT = 1000
 
 local Section = {}
 Section.__index = Section
@@ -37,7 +33,6 @@ function Section.new(sidebar, options)
 	return self
 end
 
--- options: { Name = "Home", Icon = "home", Order = 1 }
 function Section:AddPage(options)
 	assert(type(options) == "table" and options.Name, "UILib: AddPage needs a Name")
 	self._pageCount += 1

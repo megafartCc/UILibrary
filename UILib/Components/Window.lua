@@ -1,5 +1,3 @@
--- Window: the black box with sharp corners. Holds the sidebar and the pages.
-
 local import = ...
 local Theme = import("Theme")
 local Create = import("Util/Create")
@@ -11,14 +9,6 @@ local Players = game:GetService("Players")
 local Window = {}
 Window.__index = Window
 
---[[
-	options:
-		Title   = "Black Box"          -- name shown top left
-		Width, Height                  -- optional, defaults from Theme
-		Parent                         -- optional, defaults to PlayerGui
-		DefaultPage = "Home"           -- optional, otherwise the first page in order
-		Pages = { ... }                -- optional quick setup, see README
-]]
 function Window.new(options)
 	options = options or {}
 	local self = setmetatable({}, Window)
@@ -37,7 +27,6 @@ function Window.new(options)
 		ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
 	})
 
-	-- No UICorner: the box keeps sharp corners.
 	self.Frame = Create.new("Frame", {
 		Name = "Window",
 		AnchorPoint = Vector2.new(0.5, 0.5),
@@ -52,7 +41,6 @@ function Window.new(options)
 	self.Sidebar = Sidebar.new(self, options.Title or "UI Library")
 	self.Sidebar.Frame.Parent = self.Frame
 
-	-- 1px line between sidebar and content
 	Create.new("Frame", {
 		Name = "Divider",
 		Position = UDim2.fromOffset(sizes.SidebarWidth - 1, 0),
@@ -71,7 +59,6 @@ function Window.new(options)
 		Parent = self.Frame,
 	})
 
-	-- Quick setup: Pages = { { Name = "Home", Icon = "home", Section = "Main" }, ... }
 	if type(options.Pages) == "table" then
 		for _, pageOptions in ipairs(options.Pages) do
 			self:AddPage(pageOptions)
@@ -82,21 +69,17 @@ function Window.new(options)
 	return self
 end
 
--- Change the window name (top left)
 function Window:SetTitle(text)
 	self.Sidebar:SetTitle(text)
 	self.Gui.Name = text
 end
 
--- AddSection("Main") or AddSection({ Name = "Main", Order = 1 })
 function Window:AddSection(options)
 	local section = self.Sidebar:AddSection(options)
 	self._sections[section.Name] = section
 	return section
 end
 
--- Add a page straight to the window. Uses options.Section (created if needed),
--- or a section with no label when no Section is given.
 function Window:AddPage(options)
 	local sectionName = options.Section or ""
 	local section = self._sections[sectionName]
@@ -110,7 +93,6 @@ function Window:GetPage(name)
 	return self.Pages[name]
 end
 
--- Called by Section:AddPage
 function Window:_registerPage(options, button, layoutOrder)
 	assert(self.Pages[options.Name] == nil, "UILib: a page named " .. options.Name .. " already exists")
 
@@ -125,7 +107,6 @@ function Window:_registerPage(options, button, layoutOrder)
 		self:SelectPage(options.Name)
 	end)
 
-	-- Until someone picks a page, show the default page or the first one in order.
 	if not self._userPicked then
 		if self._defaultPage then
 			if options.Name == self._defaultPage then

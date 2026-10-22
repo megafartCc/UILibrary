@@ -1,5 +1,3 @@
--- Theme: colors, sizes and fonts. Change values here to restyle everything.
-
 local Theme = {}
 
 Theme.Colors = {
@@ -11,19 +9,18 @@ Theme.Colors = {
 	Divider = Color3.fromRGB(36, 36, 38),
 }
 
--- Sized for a phone in landscape (designed on an 812 x 375 screen).
 Theme.Sizes = {
 	WindowWidth = 400,
 	WindowHeight = 256,
 	SidebarWidth = 124,
-	SidebarPadX = 4, -- sidebar edge to highlight
+	SidebarPadX = 4,
 	SidebarPadY = 10,
-	ItemPadX = 5, -- highlight edge to icon
-	ItemGap = 2, -- space between rows
+	ItemPadX = 5,
+	ItemGap = 2,
 	RowHeight = 28,
 	IconSize = 14,
-	IconGap = 5, -- icon to page name
-	HighlightRadius = 6, -- only the selected highlight is rounded
+	IconGap = 5,
+	HighlightRadius = 6,
 	ContentPad = 16,
 }
 
