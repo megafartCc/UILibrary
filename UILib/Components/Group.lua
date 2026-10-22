@@ -31,7 +31,7 @@ function Group.new(column, options, order)
 		AutomaticSize = Enum.AutomaticSize.Y,
 		BackgroundTransparency = 1,
 		Parent = self.Frame,
-		Create.Padding(pad, pad, pad, sizes.GroupPadBottom),
+		Create.Padding(pad, pad, sizes.GroupPadTop, sizes.GroupPadBottom),
 		Create.List(Enum.FillDirection.Vertical, sizes.GroupItemGap),
 	})
 
