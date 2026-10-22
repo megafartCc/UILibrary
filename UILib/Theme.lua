@@ -16,7 +16,7 @@ return {
 	},
 
 	Sizes = {
-		WindowWidth = 620,
+		WindowWidth = 560,
 		WindowHeight = 340,
 		SidebarWidth = 150,
 		SidebarPadX = 4,
@@ -41,9 +41,9 @@ return {
 		GroupTitleInset = 8,
 		GroupTitleRaise = 6,
 		GroupItemGap = 6,
-		ElementHeight = 24,
-		SliderBarWidth = 0.5,
-		SliderBarHeight = 18,
+		ElementHeight = 26,
+		SliderBarWidth = 0.45,
+		SliderBarHeight = 20,
 		SliderRadius = 3,
 	},
 
@@ -63,8 +63,8 @@ return {
 		Page = 15,
 		PageTitle = 22,
 		GroupTitle = 12,
-		Element = 14,
-		SliderValue = 13,
+		Element = 16,
+		SliderValue = 14,
 	},
 
 	Motion = {
