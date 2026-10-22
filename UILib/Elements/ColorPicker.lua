@@ -71,11 +71,11 @@ function ColorPicker.new(group, options, order)
 	self.Swatch = Create.new("Frame", {
 		Name = "Swatch",
 		AnchorPoint = Vector2.new(1, 0.5),
-		Position = UDim2.new(1, -(sizes.SwitchWidth - sizes.ButtonSize) / 2, 0.5, 0),
-		Size = UDim2.fromOffset(sizes.ButtonSize, sizes.ButtonSize),
+		Position = UDim2.new(1, -(sizes.SwitchWidth - sizes.SwatchSize) / 2, 0.5, 0),
+		Size = UDim2.fromOffset(sizes.SwatchSize, sizes.SwatchSize),
 		BorderSizePixel = 0,
 		Parent = self.Header,
-		Create.new("UICorner", { CornerRadius = UDim.new(0, sizes.ButtonRadius) }),
+		Create.new("UICorner", { CornerRadius = UDim.new(0, sizes.SwatchRadius) }),
 		Create.new("UIStroke", { Color = colors.SwatchStroke, Thickness = 1 }),
 	})
 

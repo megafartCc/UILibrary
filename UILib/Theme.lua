@@ -75,6 +75,8 @@ return {
 		HexHeight = 20,
 		PickerRadius = 4,
 		PickerCursor = 10,
+		SwatchSize = 16,
+		SwatchRadius = 3,
 		NotifyWidth = 260,
 		NotifyMargin = 10,
 		NotifyGap = 8,
