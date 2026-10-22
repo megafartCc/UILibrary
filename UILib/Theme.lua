@@ -9,9 +9,9 @@ return {
 	},
 
 	Sizes = {
-		WindowWidth = 440,
-		WindowHeight = 288,
-		SidebarWidth = 132,
+		WindowWidth = 480,
+		WindowHeight = 312,
+		SidebarWidth = 140,
 		SidebarPadX = 4,
 		EdgePadY = 10,
 		TitleHeight = 28,
