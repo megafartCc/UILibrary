@@ -43,7 +43,7 @@ return {
 		SidebarPadX = 4,
 		EdgePadY = 10,
 		HeaderHeight = 30,
-		SerifOutline = 1.5,
+		SerifOutline = 1,
 		FooterOutline = 1,
 		BottomHeight = 30,
 		SectionLabelHeight = 14,
@@ -115,7 +115,7 @@ return {
 	},
 
 	Fonts = {
-		Title = Font.new(SERIF, Enum.FontWeight.Bold, Enum.FontStyle.Italic),
+		Title = Font.new(SERIF, Enum.FontWeight.Regular, Enum.FontStyle.Italic),
 		Footer = Font.new(SERIF, Enum.FontWeight.Bold, Enum.FontStyle.Italic),
 		SectionLabel = Font.new(FONT, Enum.FontWeight.SemiBold),
 		Page = Font.new(FONT, Enum.FontWeight.Medium),
