@@ -8,6 +8,10 @@ local PageButton = import("Components/PageButton")
 local Page = import("Components/Page")
 
 local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+
+local PRESS = { [Enum.UserInputType.MouseButton1] = true, [Enum.UserInputType.Touch] = true }
+local MOVE = { [Enum.UserInputType.MouseMovement] = true, [Enum.UserInputType.Touch] = true }
 
 local Window = {}
 Window.__index = Window
@@ -151,6 +155,8 @@ function Window.new(options)
 		Parent = self.Bottom,
 	})
 
+	self:_makeDraggable({ self.Header, self.Bottom })
+
 	self.Sidebar = Sidebar.new(self)
 	self.Sidebar.Frame.Parent = self.Frame
 
@@ -239,6 +245,53 @@ function Window:Destroy()
 	self.Gui:Destroy()
 	table.clear(self.Pages)
 	self.SelectedPage = nil
+end
+
+function Window:_makeDraggable(handles)
+	local dragInput, startPointer, startPosition
+
+	for _, handle in handles do
+		handle.InputBegan:Connect(function(input)
+			if PRESS[input.UserInputType] and not dragInput then
+				dragInput = input
+				startPointer = input.Position
+				startPosition = self.Frame.Position
+			end
+		end)
+	end
+
+	local function clamp(value, size, screen)
+		if size >= screen then
+			return value
+		end
+		return math.clamp(value, size / 2, screen - size / 2)
+	end
+
+	local connections = {
+		UserInputService.InputChanged:Connect(function(input)
+			if not dragInput or not MOVE[input.UserInputType] then
+				return
+			end
+			if input.UserInputType == Enum.UserInputType.Touch and input ~= dragInput then
+				return
+			end
+			local screen, size = self.Gui.AbsoluteSize, self.Frame.AbsoluteSize
+			local delta = input.Position - startPointer
+			local x = clamp(startPosition.X.Scale * screen.X + startPosition.X.Offset + delta.X, size.X, screen.X)
+			local y = clamp(startPosition.Y.Scale * screen.Y + startPosition.Y.Offset + delta.Y, size.Y, screen.Y)
+			Motion.Apply(self.Frame, { Position = UDim2.fromOffset(x, y) }, true, Theme.Motion.DragDuration, Theme.Motion.DragStyle)
+		end),
+		UserInputService.InputEnded:Connect(function(input)
+			if input == dragInput or (dragInput and input.UserInputType == Enum.UserInputType.MouseButton1) then
+				dragInput = nil
+			end
+		end),
+	}
+	self.Gui.Destroying:Connect(function()
+		for _, connection in connections do
+			connection:Disconnect()
+		end
+	end)
 end
 
 function Window:_show(name, animate)
