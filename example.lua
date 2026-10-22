@@ -3,6 +3,9 @@ local UILib = loadstring(game:HttpGet("https://raw.githubusercontent.com/megafar
 local Window = UILib:CreateWindow({
 	Title = "Black Box",
 	DefaultPage = "Home",
+	OnClose = function()
+		print("UI closed")
+	end,
 })
 
 local Main = Window:AddSection({ Name = "Main", Order = 1 })

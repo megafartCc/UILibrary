@@ -33,8 +33,8 @@ function Sidebar.new(window, title)
 
 	self.List = Create.new("ScrollingFrame", {
 		Name = "Pages",
-		Position = UDim2.fromOffset(0, sizes.TitleHeight),
-		Size = UDim2.new(1, 0, 1, -sizes.TitleHeight),
+		Position = UDim2.fromOffset(0, sizes.TitleHeight + sizes.PageGap),
+		Size = UDim2.new(1, 0, 1, -(sizes.TitleHeight + sizes.PageGap)),
 		BackgroundTransparency = 1,
 		BorderSizePixel = 0,
 		ScrollBarThickness = 0,

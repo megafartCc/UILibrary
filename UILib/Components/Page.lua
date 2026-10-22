@@ -37,7 +37,7 @@ function Page.new(options)
 	self.Title = Create.new("TextLabel", {
 		Name = "Title",
 		LayoutOrder = 0,
-		Size = UDim2.new(1, 0, 0, sizes.TitleHeight),
+		Size = UDim2.new(1, -(sizes.CloseSize + 4), 0, sizes.TitleHeight),
 		FontFace = Theme.Fonts.Title,
 		Text = options.Name,
 		TextSize = Theme.TextSizes.PageTitle,

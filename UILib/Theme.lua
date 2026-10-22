@@ -34,6 +34,8 @@ return {
 		HighlightRadius = 6,
 		ContentPadX = 12,
 		PageGap = 8,
+		CloseSize = 22,
+		CloseIconSize = 14,
 		ColumnGap = 8,
 		GroupGap = 12,
 		GroupPad = 10,
