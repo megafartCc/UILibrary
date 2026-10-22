@@ -61,6 +61,8 @@ See `example.lua` for a full example.
 | `Group:AddSliderToggle({ Name, Min, Max, Default, Step, Suffix, Enabled, Callback })` | Slider and switch on one line. `Callback(value, enabled)` runs when either changes. `:SetEnabled(on)` |
 | `Group:AddDropdownToggle({ Name, Options, Default, Multi, Enabled, Callback })` | Dropdown and switch on one line. `Callback(choice, enabled)` runs when either changes. `:SetEnabled(on)` |
 | `Group:AddDropdownButton({ Name, Options, Default, Icon, Callback })` | Dropdown and button on one line. Picking only selects; tapping the button runs `Callback(choice)` |
+| `Group:AddMultiDropdown({ Name, Options, Default, Callback })` | Dropdown where each option has a checkbox; tick as many as you want and the list stays open. `Default` and `Callback(list)` use tables |
+| `Group:AddMultiDropdownToggle({ Name, Options, Default, Enabled, Callback })` | Multi-select dropdown and switch on one line. `Callback(list, enabled)` |
 | `Group:AddColorPicker({ Name, Default, Callback })` | Colour swatch on the right; tap the row to open a saturation square, hue bar and hex box under it. `Callback(color)` gets a Color3. `:Set(color)`, `:Get()`, `:Open()`, `:Close()` |
 | `Window:Destroy()` | Same as the X: runs OnClose, clears every callback and value, disconnects input, deletes the UI. `Window.Destroyed` turns true |
 | `UILib:Notify({ Title, Text, Duration })` or `UILib:Notify(title, text, duration)` | Shows a notification in the top right. It slides in, a line at the bottom drains until it slides out, and tapping it closes it early. Up to 5 stack. Returns a handle with `:Close()` |

@@ -155,10 +155,47 @@ function Dropdown:_row(option, index)
 		Create.new("UICorner", { CornerRadius = UDim.new(0, sizes.DropdownRadius - 2) }),
 	})
 
+	local pad = sizes.DropdownPad
+	local box, stroke, check
+	if self.Multi then
+		box = Create.new("Frame", {
+			Name = "Box",
+			AnchorPoint = Vector2.new(0, 0.5),
+			Position = UDim2.new(0, pad, 0.5, 0),
+			Size = UDim2.fromOffset(sizes.CheckBoxSize, sizes.CheckBoxSize),
+			BackgroundColor3 = colors.CheckBox,
+			BorderSizePixel = 0,
+			Parent = button,
+			Create.new("UICorner", { CornerRadius = UDim.new(0, sizes.CheckBoxRadius) }),
+		})
+		stroke = Create.new("UIStroke", { Color = colors.CheckBorder, Thickness = 1, Parent = box })
+		check = Create.new("ImageLabel", {
+			Name = "Check",
+			AnchorPoint = Vector2.new(0.5, 0.5),
+			Position = UDim2.fromScale(0.5, 0.5),
+			Size = UDim2.fromOffset(sizes.CheckBoxIcon, sizes.CheckBoxIcon),
+			ImageColor3 = colors.Accent,
+			ImageTransparency = 1,
+			Parent = box,
+		})
+	else
+		check = Create.new("ImageLabel", {
+			Name = "Check",
+			AnchorPoint = Vector2.new(1, 0.5),
+			Position = UDim2.new(1, -pad, 0.5, 0),
+			Size = UDim2.fromOffset(sizes.OptionCheckSize, sizes.OptionCheckSize),
+			ImageColor3 = colors.Accent,
+			ImageTransparency = 1,
+			Parent = button,
+		})
+	end
+	Icons.Apply(check, "check")
+
+	local labelX = if self.Multi then pad + sizes.CheckBoxSize + 8 else pad
 	local label = Create.new("TextLabel", {
 		Name = "Label",
-		Position = UDim2.fromOffset(sizes.DropdownPad, 0),
-		Size = UDim2.new(1, -(sizes.DropdownPad * 2 + sizes.OptionCheckSize + 4), 1, 0),
+		Position = UDim2.fromOffset(labelX, 0),
+		Size = UDim2.new(1, -(labelX + pad + (if self.Multi then 0 else sizes.OptionCheckSize + 4)), 1, 0),
 		FontFace = Theme.Fonts.Element,
 		Text = tostring(option),
 		TextSize = Theme.TextSizes.Dropdown,
@@ -166,17 +203,6 @@ function Dropdown:_row(option, index)
 		TextTruncate = Enum.TextTruncate.AtEnd,
 		Parent = button,
 	})
-
-	local check = Create.new("ImageLabel", {
-		Name = "Check",
-		AnchorPoint = Vector2.new(1, 0.5),
-		Position = UDim2.new(1, -sizes.DropdownPad, 0.5, 0),
-		Size = UDim2.fromOffset(sizes.OptionCheckSize, sizes.OptionCheckSize),
-		ImageColor3 = colors.Accent,
-		ImageTransparency = 1,
-		Parent = button,
-	})
-	Icons.Apply(check, "check")
 
 	button.MouseEnter:Connect(function()
 		Motion.Apply(button, { BackgroundTransparency = 0 }, true)
@@ -197,7 +223,7 @@ function Dropdown:_row(option, index)
 		end
 	end)
 
-	return { Option = option, Button = button, Label = label, Check = check }
+	return { Option = option, Button = button, Label = label, Check = check, Box = box, Stroke = stroke }
 end
 
 function Dropdown:_refresh(animate)
@@ -208,8 +234,14 @@ function Dropdown:_refresh(animate)
 		if on then
 			table.insert(picked, tostring(row.Option))
 		end
-		Motion.Apply(row.Label, { TextColor3 = if on then colors.Text else colors.Muted }, animate)
 		Motion.Apply(row.Check, { ImageTransparency = if on then 0 else 1 }, animate)
+		if row.Box then
+			Motion.Apply(row.Label, { TextColor3 = if on then colors.Accent else colors.ElementText }, animate)
+			Motion.Apply(row.Box, { BackgroundColor3 = if on then colors.AccentSurface else colors.CheckBox }, animate)
+			Motion.Apply(row.Stroke, { Color = if on then colors.Accent else colors.CheckBorder }, animate)
+		else
+			Motion.Apply(row.Label, { TextColor3 = if on then colors.Text else colors.Muted }, animate)
+		end
 	end
 
 	if self.Multi then

@@ -95,9 +95,8 @@ World:AddColorPicker({
 		print("ESP Color", color:ToHex())
 	end,
 })
-World:AddDropdown({
+World:AddMultiDropdown({
 	Name = "ESP Targets",
-	Multi = true,
 	Options = { "Players", "NPCs", "Items", "Chests" },
 	Default = { "Players" },
 	Callback = function(selected)

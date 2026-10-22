@@ -5,11 +5,13 @@ local Create = import("Util/Create")
 local Slider = import("Elements/Slider")
 local Dropdown = import("Elements/Dropdown")
 
-local function variant(element, accessory)
+local function variant(element, overrides)
 	return {
 		new = function(group, options, order)
 			local merged = table.clone(options)
-			merged.Accessory = accessory
+			for key, value in overrides do
+				merged[key] = value
+			end
 			return element.new(group, merged, order)
 		end,
 	}
@@ -21,9 +23,11 @@ local Elements = {
 	Button = import("Elements/Button"),
 	Dropdown = Dropdown,
 	ColorPicker = import("Elements/ColorPicker"),
-	SliderToggle = variant(Slider, "Toggle"),
-	DropdownToggle = variant(Dropdown, "Toggle"),
-	DropdownButton = variant(Dropdown, "Button"),
+	SliderToggle = variant(Slider, { Accessory = "Toggle" }),
+	DropdownToggle = variant(Dropdown, { Accessory = "Toggle" }),
+	DropdownButton = variant(Dropdown, { Accessory = "Button" }),
+	MultiDropdown = variant(Dropdown, { Multi = true }),
+	MultiDropdownToggle = variant(Dropdown, { Multi = true, Accessory = "Toggle" }),
 }
 
 local Group = {}
