@@ -1,4 +1,4 @@
-local FONT = "rbxasset://fonts/families/BuilderSans.json"
+local FONT = "rbxasset://fonts/families/Montserrat.json"
 
 return {
 	Scale = 1.2,
@@ -112,27 +112,28 @@ return {
 	Fonts = {
 		Title = Font.new(FONT, Enum.FontWeight.Bold),
 		SectionLabel = Font.new(FONT, Enum.FontWeight.SemiBold),
-		Page = Font.new(FONT, Enum.FontWeight.SemiBold),
-		PageSelected = Font.new(FONT, Enum.FontWeight.Bold),
-		GroupTitle = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Bold),
-		Element = Font.new(FONT, Enum.FontWeight.SemiBold),
-		SliderValue = Font.new(FONT, Enum.FontWeight.Bold),
+		Page = Font.new(FONT, Enum.FontWeight.Medium),
+		PageSelected = Font.new(FONT, Enum.FontWeight.SemiBold),
+		GroupTitle = Font.new(FONT, Enum.FontWeight.Bold),
+		Element = Font.new(FONT, Enum.FontWeight.Medium),
+		Value = Font.new(FONT, Enum.FontWeight.SemiBold),
+		SliderValue = Font.new(FONT, Enum.FontWeight.SemiBold),
 		NotifyTitle = Font.new(FONT, Enum.FontWeight.Bold),
 		NotifyText = Font.new(FONT, Enum.FontWeight.Medium),
 	},
 
 	TextSizes = {
-		Title = 17,
-		SectionLabel = 12,
-		Page = 15,
+		Title = 16,
+		SectionLabel = 11,
+		Page = 14,
 		Footer = 11,
 		GroupTitle = 12,
 		Element = 12,
 		SliderValue = 11,
-		Dropdown = 12,
+		Dropdown = 11,
 		Search = 12,
 		ResultPath = 10,
-		NotifyTitle = 14,
+		NotifyTitle = 13,
 		NotifyText = 12,
 	},
 

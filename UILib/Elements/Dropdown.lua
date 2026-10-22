@@ -65,7 +65,7 @@ function Dropdown.new(group, options, order)
 		Name = "Value",
 		Position = UDim2.fromOffset(sizes.DropdownPad, 0),
 		Size = UDim2.new(1, -(sizes.DropdownPad * 2 + sizes.ChevronSize + 4), 1, 0),
-		FontFace = Theme.Fonts.Element,
+		FontFace = Theme.Fonts.Value,
 		TextSize = Theme.TextSizes.Dropdown,
 		TextColor3 = colors.Text,
 		TextTruncate = Enum.TextTruncate.AtEnd,
