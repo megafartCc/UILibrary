@@ -40,6 +40,24 @@ Aimbot:AddSlider({ Name = "FOV", Min = 0, Max = 100, Default = 25, Suffix = "%" 
 Aimbot:AddSlider({ Name = "Smoothness", Min = 0, Max = 1, Step = 0.05, Default = 0.5 })
 
 local Visuals = Home:AddGroup({ Name = "VISUALS", Side = "Right" })
+Visuals:AddSliderToggle({
+	Name = "Field of View",
+	Min = 70,
+	Max = 120,
+	Default = 90,
+	Enabled = false,
+	Callback = function(value, enabled)
+		print("FOV", value, enabled)
+	end,
+})
+Visuals:AddDropdownToggle({
+	Name = "Skybox",
+	Options = { "Default", "Night", "Space" },
+	Default = "Night",
+	Callback = function(choice, enabled)
+		print("Skybox", choice, enabled)
+	end,
+})
 Visuals:AddSlider({
 	Name = "Brightness",
 	Min = 0,
@@ -52,6 +70,14 @@ Visuals:AddSlider({
 })
 
 local Misc = Home:AddGroup({ Name = "MISC", Side = "Left" })
+Misc:AddDropdownButton({
+	Name = "Teleport",
+	Options = { "Spawn", "Shop", "Arena" },
+	Default = "Spawn",
+	Callback = function(place)
+		UILib:Notify({ Title = "Teleport", Text = "Going to " .. place })
+	end,
+})
 Misc:AddToggle({ Name = "Anti AFK", Default = true })
 Misc:AddToggle({ Name = "Auto Respawn" })
 Misc:AddButton({

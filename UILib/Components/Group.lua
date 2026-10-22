@@ -2,11 +2,27 @@ local import = ...
 local Theme = import("Theme")
 local Create = import("Util/Create")
 
+local Slider = import("Elements/Slider")
+local Dropdown = import("Elements/Dropdown")
+
+local function variant(element, accessory)
+	return {
+		new = function(group, options, order)
+			local merged = table.clone(options)
+			merged.Accessory = accessory
+			return element.new(group, merged, order)
+		end,
+	}
+end
+
 local Elements = {
-	Slider = import("Elements/Slider"),
+	Slider = Slider,
 	Toggle = import("Elements/Toggle"),
 	Button = import("Elements/Button"),
-	Dropdown = import("Elements/Dropdown"),
+	Dropdown = Dropdown,
+	SliderToggle = variant(Slider, "Toggle"),
+	DropdownToggle = variant(Dropdown, "Toggle"),
+	DropdownButton = variant(Dropdown, "Button"),
 }
 
 local Group = {}

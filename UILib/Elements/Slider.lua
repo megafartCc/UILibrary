@@ -2,6 +2,7 @@ local import = ...
 local Theme = import("Theme")
 local Motion = import("Motion")
 local Create = import("Util/Create")
+local Parts = import("Util/Parts")
 
 local UserInputService = game:GetService("UserInputService")
 
@@ -19,6 +20,7 @@ end
 
 function Slider.new(group, options, order)
 	local sizes, colors = Theme.Sizes, Theme.Colors
+	local trailing = Parts.Trailing(options.Accessory)
 	local self = setmetatable({
 		Name = options.Name,
 		Min = options.Min or 0,
@@ -51,8 +53,8 @@ function Slider.new(group, options, order)
 	self.Track = Create.new("TextButton", {
 		Name = "Track",
 		AnchorPoint = Vector2.new(1, 0.5),
-		Position = UDim2.fromScale(1, 0.5),
-		Size = UDim2.new(sizes.SliderBarWidth, 0, 0, sizes.SliderBarHeight),
+		Position = UDim2.new(1, -trailing, 0.5, 0),
+		Size = UDim2.new(sizes.SliderBarWidth, -trailing, 0, sizes.SliderBarHeight),
 		BackgroundColor3 = colors.Track,
 		BorderSizePixel = 0,
 		ClipsDescendants = true,
@@ -113,6 +115,7 @@ function Slider.new(group, options, order)
 		end
 	end)
 
+	Parts.Attach(self, self.Frame, options)
 	self:_set(options.Default or self.Min, false)
 	self.Callback = options.Callback
 	return self
@@ -137,11 +140,15 @@ function Slider:_set(value, animate, dragging)
 
 	if value ~= self.Value then
 		self.Value = value
-		if self.Callback then
-			task.spawn(self.Callback, value)
-		end
+		self:_fire()
 	end
 end
+
+function Slider:_fire()
+	Parts.Fire(self, self.Value)
+end
+
+Slider.SetEnabled = Parts.SetEnabled
 
 function Slider:Get()
 	return self.Value
