@@ -111,6 +111,10 @@ function Dropdown.new(group, options, order)
 	end)
 
 	Parts.Attach(self, self.Header, options)
+	Parts.Hover(self, self.Header, function(hovered)
+		Motion.Apply(self.Selector, { BackgroundColor3 = if hovered then colors.TrackHover else colors.Track }, true)
+		Motion.Apply(self.Chevron, { ImageColor3 = if hovered then colors.Text else colors.Muted }, true)
+	end)
 	self:SetOptions(options.Options or {})
 	if options.Default ~= nil then
 		self:_select(options.Default)

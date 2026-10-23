@@ -116,6 +116,9 @@ function Slider.new(group, options, order)
 	end)
 
 	Parts.Attach(self, self.Frame, options)
+	Parts.Hover(self, self.Frame, function(hovered)
+		Motion.Apply(self.Track, { BackgroundColor3 = if hovered then colors.TrackHover else colors.Track }, true)
+	end)
 	self:_set(options.Default or self.Min, false)
 	self.Callback = options.Callback
 	return self

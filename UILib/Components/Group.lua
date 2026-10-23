@@ -49,6 +49,7 @@ function Group.new(column, options, order)
 		BorderSizePixel = 0,
 		Parent = column,
 		Create.new("UICorner", { CornerRadius = UDim.new(0, sizes.GroupRadius) }),
+		Create.new("UIStroke", { Color = colors.GroupStroke, Thickness = 1 }),
 		Create.List(Enum.FillDirection.Vertical, 0),
 	})
 

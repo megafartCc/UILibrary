@@ -33,12 +33,23 @@ function Parts.Switch(parent)
 		Create.new("UICorner", { CornerRadius = UDim.new(1, 0) }),
 	})
 
-	local switch = { Frame = frame, Knob = knob }
+	local switch = { Frame = frame, Knob = knob, On = false, Hovered = false }
+
+	local function paint(animate)
+		local off = if switch.Hovered then colors.SwitchOffHover else colors.SwitchOff
+		Motion.Apply(frame, { BackgroundColor3 = if switch.On then colors.Accent else off }, animate)
+	end
 
 	function switch.Set(on, animate)
+		switch.On = on
 		local x = if on then sizes.SwitchWidth - sizes.SwitchHeight + inset else inset
-		Motion.Apply(frame, { BackgroundColor3 = if on then colors.Accent else colors.SwitchOff }, animate)
+		paint(animate)
 		Motion.Apply(knob, { Position = UDim2.new(0, x, 0.5, 0) }, animate)
+	end
+
+	function switch.SetHover(hovered)
+		switch.Hovered = hovered
+		paint(true)
 	end
 
 	return switch
@@ -69,19 +80,56 @@ function Parts.Square(parent, icon)
 	})
 	Icons.Apply(image, icon or "pointer")
 
-	local square = { Frame = frame, Icon = image, Scale = scale }
+	local square = { Frame = frame, Icon = image, Scale = scale, Hovered = false }
+
+	local function rest()
+		return if square.Hovered then colors.TrackHover else colors.Track, if square.Hovered then colors.Text else colors.Muted
+	end
 
 	function square.Press()
 		local motion = Theme.Motion
+		local background, iconColor = rest()
 		scale.Scale = motion.PressScale
 		frame.BackgroundColor3 = colors.Accent
 		image.ImageColor3 = colors.Text
 		Motion.Apply(scale, { Scale = 1 }, true, motion.PressDuration, Enum.EasingStyle.Back)
-		Motion.Apply(frame, { BackgroundColor3 = colors.Track }, true, motion.PressDuration, Enum.EasingStyle.Quad)
-		Motion.Apply(image, { ImageColor3 = colors.Muted }, true, motion.PressDuration, Enum.EasingStyle.Quad)
+		Motion.Apply(frame, { BackgroundColor3 = background }, true, motion.PressDuration, Enum.EasingStyle.Quad)
+		Motion.Apply(image, { ImageColor3 = iconColor }, true, motion.PressDuration, Enum.EasingStyle.Quad)
+	end
+
+	function square.SetHover(hovered)
+		square.Hovered = hovered
+		local background, iconColor = rest()
+		Motion.Apply(frame, { BackgroundColor3 = background }, true)
+		Motion.Apply(image, { ImageColor3 = iconColor }, true)
 	end
 
 	return square
+end
+
+function Parts.Hover(element, row, extra)
+	local colors = Theme.Colors
+	local function set(hovered)
+		element.Hovered = hovered
+		if element.Label then
+			Motion.Apply(element.Label, { TextColor3 = if hovered then colors.ElementTextHover else colors.ElementText }, true)
+		end
+		if type(element.Switch) == "table" then
+			element.Switch.SetHover(hovered)
+		end
+		if type(element.Square) == "table" then
+			element.Square.SetHover(hovered)
+		end
+		if extra then
+			extra(hovered)
+		end
+	end
+	row.MouseEnter:Connect(function()
+		set(true)
+	end)
+	row.MouseLeave:Connect(function()
+		set(false)
+	end)
 end
 
 function Parts.Trailing(kind)

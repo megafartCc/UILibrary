@@ -76,8 +76,8 @@ function ColorPicker.new(group, options, order)
 		BorderSizePixel = 0,
 		Parent = self.Header,
 		Create.new("UICorner", { CornerRadius = UDim.new(0, sizes.SwatchRadius) }),
-		Create.new("UIStroke", { Color = colors.SwatchStroke, Thickness = 1 }),
 	})
+	self.SwatchStroke = Create.new("UIStroke", { Color = colors.SwatchStroke, Thickness = 1, Parent = self.Swatch })
 
 	self.Panel = Create.new("Frame", {
 		Name = "Picker",
@@ -91,7 +91,7 @@ function ColorPicker.new(group, options, order)
 		Create.new("UICorner", { CornerRadius = UDim.new(0, sizes.DropdownRadius) }),
 	})
 
-	self.Square = Create.new("TextButton", {
+	self.Saturation = Create.new("TextButton", {
 		Name = "Saturation",
 		Position = UDim2.fromOffset(pad, pad),
 		Size = UDim2.new(1, -(pad * 3 + sizes.HueWidth), 0, sizes.PickerHeight),
@@ -99,8 +99,8 @@ function ColorPicker.new(group, options, order)
 		Parent = self.Panel,
 		Create.new("UICorner", { CornerRadius = UDim.new(0, radius) }),
 	})
-	overlay(self.Square, Color3.new(1, 1, 1), 0, radius)
-	local shade = overlay(self.Square, Color3.new(0, 0, 0), 270, radius)
+	overlay(self.Saturation, Color3.new(1, 1, 1), 0, radius)
+	local shade = overlay(self.Saturation, Color3.new(0, 0, 0), 270, radius)
 	shade.ZIndex = 2
 
 	self.Cursor = Create.new("Frame", {
@@ -109,7 +109,7 @@ function ColorPicker.new(group, options, order)
 		Size = UDim2.fromOffset(sizes.PickerCursor, sizes.PickerCursor),
 		BackgroundTransparency = 1,
 		ZIndex = 3,
-		Parent = self.Square,
+		Parent = self.Saturation,
 		Create.new("UICorner", { CornerRadius = UDim.new(1, 0) }),
 		Create.new("UIStroke", { Color = Color3.new(1, 1, 1), Thickness = 1.5 }),
 	})
@@ -154,6 +154,10 @@ function ColorPicker.new(group, options, order)
 		Create.Padding(pad + 2, pad),
 	})
 
+	Parts.Hover(self, self.Header, function(hovered)
+		Motion.Apply(self.SwatchStroke, { Color = if hovered then colors.SwatchStrokeHover else colors.SwatchStroke }, true)
+	end)
+
 	self.Header.Activated:Connect(function()
 		if self.Opened then
 			self:Close()
@@ -177,7 +181,7 @@ function ColorPicker.new(group, options, order)
 		local origin, size = target.AbsolutePosition, target.AbsoluteSize
 		local x = math.clamp((position.X - origin.X) / math.max(size.X, 1), 0, 1)
 		local y = math.clamp((position.Y - origin.Y) / math.max(size.Y, 1), 0, 1)
-		if target == self.Square then
+		if target == self.Saturation then
 			self._s, self._v = x, 1 - y
 		else
 			self._h = y
@@ -185,7 +189,7 @@ function ColorPicker.new(group, options, order)
 		self:_apply(true)
 	end
 
-	for _, target in { self.Square, self.Hue } do
+	for _, target in { self.Saturation, self.Hue } do
 		target.InputBegan:Connect(function(input)
 			if PRESS[input.UserInputType] then
 				dragging = target
@@ -221,7 +225,7 @@ end
 function ColorPicker:_apply(fire)
 	local color = Color3.fromHSV(self._h, self._s, self._v)
 	self.Swatch.BackgroundColor3 = color
-	self.Square.BackgroundColor3 = Color3.fromHSV(self._h, 1, 1)
+	self.Saturation.BackgroundColor3 = Color3.fromHSV(self._h, 1, 1)
 	self.Cursor.Position = UDim2.fromScale(self._s, 1 - self._v)
 	self.HueBar.Position = UDim2.fromScale(0.5, self._h)
 	self.Hex.Text = "#" .. string.upper(color:ToHex())

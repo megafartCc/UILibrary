@@ -30,6 +30,7 @@ function Button.new(group, options, order)
 	})
 
 	self.Square = Parts.Square(self.Frame, options.Icon)
+	Parts.Hover(self, self.Frame)
 	self.Frame.Activated:Connect(function()
 		self:Press()
 	end)

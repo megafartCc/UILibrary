@@ -30,6 +30,7 @@ function Toggle.new(group, options, order)
 	})
 
 	self.Switch = Parts.Switch(self.Frame)
+	Parts.Hover(self, self.Frame)
 	self.Frame.Activated:Connect(function()
 		self:Set(not self.Value)
 	end)
