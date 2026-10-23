@@ -49,6 +49,7 @@ function Slider.new(group, options, order)
 		TextTruncate = Enum.TextTruncate.AtEnd,
 		Parent = self.Frame,
 	})
+	Parts.ClipLabel(self.Label)
 
 	self.Track = Create.new("TextButton", {
 		Name = "Track",

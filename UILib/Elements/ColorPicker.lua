@@ -67,6 +67,7 @@ function ColorPicker.new(group, options, order)
 		TextTruncate = Enum.TextTruncate.AtEnd,
 		Parent = self.Header,
 	})
+	Parts.ClipLabel(self.Label)
 
 	self.Swatch = Create.new("Frame", {
 		Name = "Swatch",

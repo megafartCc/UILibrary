@@ -49,6 +49,7 @@ function Dropdown.new(group, options, order)
 		TextTruncate = Enum.TextTruncate.AtEnd,
 		Parent = self.Header,
 	})
+	Parts.ClipLabel(self.Label)
 
 	self.Selector = Create.new("Frame", {
 		Name = "Selector",

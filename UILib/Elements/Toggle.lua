@@ -28,6 +28,7 @@ function Toggle.new(group, options, order)
 		TextTruncate = Enum.TextTruncate.AtEnd,
 		Parent = self.Frame,
 	})
+	Parts.ClipLabel(self.Label)
 
 	self.Switch = Parts.Switch(self.Frame)
 	Parts.Hover(self, self.Frame)

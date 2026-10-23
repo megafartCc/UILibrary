@@ -6,9 +6,11 @@ local Create = import("Util/Create")
 
 local Parts = {}
 
+local TextService = game:GetService("TextService")
+
 local marquees = setmetatable({}, { __mode = "k" })
 
-local function wrap(label)
+function Parts.ClipLabel(label)
 	local clip = Create.new("Frame", {
 		Name = label.Name .. "Clip",
 		AnchorPoint = label.AnchorPoint,
@@ -23,81 +25,73 @@ local function wrap(label)
 	label.Position = UDim2.fromScale(0, 0)
 	label.Size = UDim2.fromScale(1, 1)
 	label.Parent = clip
+	marquees[label] = { Clip = clip, Token = 0 }
 	return clip
 end
 
-local function reset(label)
-	label.AutomaticSize = Enum.AutomaticSize.None
-	label.AnchorPoint = Vector2.zero
-	label.Position = UDim2.fromScale(0, 0)
+local function textWidth(label)
+	local ok, bounds = pcall(function()
+		local params = Instance.new("GetTextBoundsParams")
+		params.Text = label.Text
+		params.Font = label.FontFace
+		params.Size = label.TextSize
+		params.Width = 100000
+		return TextService:GetTextBoundsAsync(params)
+	end)
+	if ok and bounds then
+		return bounds.X
+	end
+	ok, bounds = pcall(function()
+		return TextService:GetTextSize(label.Text, label.TextSize, Enum.Font.GothamMedium, Vector2.new(100000, 100000))
+	end)
+	return if ok and bounds then bounds.X else 0
+end
+
+local function rest(label)
+	Motion.Apply(label, { Position = UDim2.fromScale(0, 0) }, false)
 	label.Size = UDim2.fromScale(1, 1)
 	label.TextTruncate = Enum.TextTruncate.AtEnd
 end
 
-local function slide(label, toEnd, duration)
-	local t = if toEnd then 1 else 0
-	Motion.Apply(label, {
-		AnchorPoint = Vector2.new(t, 0),
-		Position = UDim2.fromScale(t, 0),
-	}, true, duration, Enum.EasingStyle.Sine)
-end
-
 function Parts.Marquee(label, active)
 	local state = marquees[label]
-	if not active then
-		if state then
-			state.Token += 1
-			Motion.Apply(label, { AnchorPoint = Vector2.zero, Position = UDim2.fromScale(0, 0) }, false)
-			reset(label)
-		end
-		return
-	end
-
 	if not state then
-		state = { Clip = wrap(label), Token = 0 }
-		marquees[label] = state
+		return
 	end
 	state.Token += 1
 	local token = state.Token
-	local clip = state.Clip
-	local motion = Theme.Motion
+	if not active then
+		rest(label)
+		return
+	end
 
+	local motion = Theme.Motion
 	task.spawn(function()
 		task.wait(motion.MarqueeDelay)
 		if state.Token ~= token then
 			return
 		end
 
-		local before = label.AbsoluteSize.X
-		label.TextTruncate = Enum.TextTruncate.None
-		label.Size = UDim2.fromScale(0, 1)
-		label.AutomaticSize = Enum.AutomaticSize.X
-
-		local width = clip.AbsoluteSize.X
-		for _ = 1, 30 do
-			task.wait()
-			if state.Token ~= token then
-				return
-			end
-			if label.AbsoluteSize.X ~= before and label.AbsoluteSize.X > 0 then
-				break
-			end
-		end
-
-		local overflow = label.AbsoluteSize.X - width
-		if overflow <= 1 or width <= 0 then
-			reset(label)
+		local clip = state.Clip
+		local scale = if clip.AbsoluteSize.Y > 0 then clip.AbsoluteSize.Y / Theme.Sizes.ElementHeight else 1
+		local visible = clip.AbsoluteSize.X / scale
+		local full = textWidth(label)
+		local overflow = full - visible
+		if state.Token ~= token or overflow <= 1 then
 			return
 		end
 
+		label.TextTruncate = Enum.TextTruncate.None
+		label.Size = UDim2.new(0, math.ceil(full) + 2, 1, 0)
 		local duration = math.max(overflow / motion.MarqueeSpeed, 0.4)
+
 		while state.Token == token do
-			slide(label, true, duration)
+			Motion.Apply(label, { Position = UDim2.fromOffset(-overflow - 2, 0) }, true, duration, Enum.EasingStyle.Sine)
 			task.wait(duration + motion.MarqueePause)
 			if state.Token ~= token then
 				return
 			end
-			slide(label, false, duration)
+			Motion.Apply(label, { Position = UDim2.fromOffset(0, 0) }, true, duration, Enum.EasingStyle.Sine)
 			task.wait(duration + motion.MarqueePause)
 		end
 	end)
