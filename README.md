@@ -193,3 +193,12 @@ To add a module: create `UILib/Something.lua`, start it with
 - The window has sharp corners. Only the selected page highlight is rounded, and it slides between pages.
 - No CanvasGroup.
 - Animations go through `Motion.lua`. Speed and easing live in `Theme.Motion`.
+
+## Sealixo local example
+
+`sealixo/example.lua` runs the SeaHub (sealixo) UI library from a local file instead of a URL.
+
+1. Copy `sealixouilib.lua` (or `sealixouilib (1).txt`) into your executor's `workspace` folder.
+2. Run `sealixo/example.lua`.
+
+On first run it copies the library to `workspace/sealixo/sealixouilib.lua` with `writefile` and loads it with `readfile` + `loadstring` every run after that. The example also stores a launch counter (`data.json`), a note (`notes.txt`) and an exported config (`config.json`) in the same folder.
