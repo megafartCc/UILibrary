@@ -268,6 +268,9 @@ function Search:_open(result)
 	self:_update()
 	self.Window:SelectPage(result.Page.Name)
 	if result.Group then
+		if result.Group.Collapsed then
+			result.Group:SetCollapsed(false, false)
+		end
 		task.defer(function()
 			result.Page:Reveal(result.Group, result.Element, self.Window.UIScale.Scale)
 		end)

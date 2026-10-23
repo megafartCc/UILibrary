@@ -53,7 +53,7 @@ See `example.lua` for a full example.
 | `Window:AddPage({ Name, Icon, Section, Order })` | Adds a page, making the section if needed |
 | `Window:SelectPage(name)` | Shows a page. Pages added later won't take over the selection |
 | `Window:GetPage(name)` | Returns a page |
-| `Page:AddGroup(name)` or `Page:AddGroup({ Name, Side })` | Adds an outlined box to the page. `Side` is `"Left"` or `"Right"`; leave it out to use the column with fewer boxes. Put your UI in `group.Body`; the box grows to fit it |
+| `Page:AddGroup(name)` or `Page:AddGroup({ Name, Side, Collapsed })` | Adds a box with a header (name, ^ to collapse) and a thin line under it. Tap the header to fold or unfold it; `group:SetCollapsed(true)` / `group:Toggle()` from code, `Collapsed = true` to start folded. `Side` is `"Left"` or `"Right"`; leave it out to use the column with fewer boxes. Put your UI in `group.Body`; the box grows to fit it |
 | `Group:AddSlider({ Name, Min, Max, Default, Step, Suffix, Callback })` | Adds a one-row slider: name on the left, bar on the right. `slider:Set(value)` and `slider:Get()` read and change it; `Callback(value)` runs when the value changes |
 | `Group:AddToggle({ Name, Default, Callback })` | Adds an iPhone-style switch. `toggle:Set(true)` and `toggle:Get()`; `Callback(on)` runs when it changes |
 | `Group:AddButton({ Name, Icon, Callback })` | Adds a row with a small rounded square on the right. Tapping the row runs `Callback()` with a press animation. `Icon` is any Lucide name (default `pointer`) |
@@ -136,7 +136,7 @@ UILib/
     Page.lua             content area for one page, two columns
     Notifications.lua    top-right notifications
     Search.lua           search box in the header and live results
-    Group.lua            filled box, title half over its top edge; Add<Element> methods come from UILib/Elements
+    Group.lua            box with a collapsible header and line; Add<Element> methods come from UILib/Elements
   Elements/
     Slider.lua           slider with a fill and the value in the middle
     Toggle.lua           pill switch with a sliding knob

@@ -16,7 +16,7 @@ local function column(name, x, parent)
 		AutomaticSize = Enum.AutomaticSize.Y,
 		BackgroundTransparency = 1,
 		Parent = parent,
-		Create.Padding(0, 0, sizes.GroupTitleRaise + 1, 1),
+		Create.Padding(0, 0, 1, 1),
 		Create.List(Enum.FillDirection.Vertical, sizes.GroupGap),
 	})
 end
@@ -70,7 +70,7 @@ function Page:Reveal(group, element, scale)
 	scale = scale or 1
 	local body = self.Body
 	local offset = (group.Frame.AbsolutePosition.Y - body.AbsolutePosition.Y) / scale
-	local y = offset + body.CanvasPosition.Y - Theme.Sizes.GroupTitleRaise - 4
+	local y = offset + body.CanvasPosition.Y - 4
 	Motion.Apply(body, { CanvasPosition = Vector2.new(0, math.max(y, 0)) }, true)
 
 	local colors, motion = Theme.Colors, Theme.Motion
