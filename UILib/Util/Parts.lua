@@ -113,6 +113,7 @@ function Parts.Marquee(label, active, persistent)
 
 	task.spawn(function()
 		task.wait(motion.MarqueeDelay)
+		local lapped = false
 		while alive() do
 			local overflow, full = overflowOf(state, label)
 			if overflow <= 1 then
@@ -133,10 +134,13 @@ function Parts.Marquee(label, active, persistent)
 			ghostOf(state, label, distance)
 
 			label.Position = UDim2.fromOffset(0, 0)
-			task.wait(motion.MarqueePause)
-			if not alive() then
-				return
+			if lapped then
+				task.wait(motion.MarqueePause)
+				if not alive() then
+					return
+				end
 			end
+			lapped = true
 			local duration = distance / motion.MarqueeSpeed
 			Motion.Apply(label, { Position = UDim2.fromOffset(-distance, 0) }, true, duration, Enum.EasingStyle.Linear)
 			task.wait(duration)

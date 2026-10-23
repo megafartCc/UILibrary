@@ -168,7 +168,7 @@ return {
 		PressScale = 0.8,
 		PressDuration = 0.35,
 		FlashDuration = 0.9,
-		MarqueeDelay = 0.35,
+		MarqueeDelay = 0,
 		MarqueeSpeed = 40,
 		MarqueePause = 0.8,
 		MarqueeGap = 32,
