@@ -99,6 +99,11 @@ return {
 		PickerRadius = 4,
 		PickerCursor = 10,
 		SwatchSize = 16,
+		MiniWidth = 240,
+		MiniHeight = 34,
+		MiniRadius = 8,
+		MiniPad = 12,
+		MiniTop = 12,
 		KeyWidth = 392,
 		KeyHeight = 208,
 		SwatchRadius = 3,
@@ -148,6 +153,7 @@ return {
 		Search = 12,
 		ResultPath = 10,
 		NotifyTitle = 13,
+		Mini = 13,
 		NotifyText = 12,
 	},
 
@@ -159,5 +165,8 @@ return {
 		PressScale = 0.8,
 		PressDuration = 0.35,
 		FlashDuration = 0.9,
+		MarqueeDelay = 0.35,
+		MarqueeSpeed = 40,
+		MarqueePause = 0.8,
 	},
 }

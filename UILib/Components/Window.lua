@@ -86,35 +86,44 @@ function Window.new(options, library)
 		Parent = self.Header,
 	})
 
-	self.CloseButton = Create.new("TextButton", {
-		Name = "Close",
-		AnchorPoint = Vector2.new(1, 0.5),
-		Position = UDim2.new(1, -(sizes.ContentPadX - (sizes.CloseSize - sizes.CloseIconSize) / 2), 0.5, 0),
-		Size = UDim2.fromOffset(sizes.CloseSize, sizes.CloseSize),
-		BackgroundColor3 = colors.Selected,
-		BackgroundTransparency = 1,
-		Parent = self.Header,
-		Create.new("UICorner", { CornerRadius = UDim.new(0, sizes.HighlightRadius) }),
-	})
-	local closeIcon = Create.new("ImageLabel", {
-		Name = "Icon",
-		AnchorPoint = Vector2.new(0.5, 0.5),
-		Position = UDim2.fromScale(0.5, 0.5),
-		Size = UDim2.fromOffset(sizes.CloseIconSize, sizes.CloseIconSize),
-		ImageColor3 = colors.Muted,
-		Parent = self.CloseButton,
-	})
-	Icons.Apply(closeIcon, "x")
-	self.CloseButton.MouseEnter:Connect(function()
-		Motion.Apply(self.CloseButton, { BackgroundTransparency = 0 }, true)
-		Motion.Apply(closeIcon, { ImageColor3 = colors.Text }, true)
-	end)
-	self.CloseButton.MouseLeave:Connect(function()
-		Motion.Apply(self.CloseButton, { BackgroundTransparency = 1 }, true)
-		Motion.Apply(closeIcon, { ImageColor3 = colors.Muted }, true)
-	end)
-	self.CloseButton.Activated:Connect(function()
+	local function headerButton(name, icon, slot, onClick)
+		local right = sizes.ContentPadX - (sizes.CloseSize - sizes.CloseIconSize) / 2 + slot * (sizes.CloseSize + 2)
+		local button = Create.new("TextButton", {
+			Name = name,
+			AnchorPoint = Vector2.new(1, 0.5),
+			Position = UDim2.new(1, -right, 0.5, 0),
+			Size = UDim2.fromOffset(sizes.CloseSize, sizes.CloseSize),
+			BackgroundColor3 = colors.Selected,
+			BackgroundTransparency = 1,
+			Parent = self.Header,
+			Create.new("UICorner", { CornerRadius = UDim.new(0, sizes.HighlightRadius) }),
+		})
+		local image = Create.new("ImageLabel", {
+			Name = "Icon",
+			AnchorPoint = Vector2.new(0.5, 0.5),
+			Position = UDim2.fromScale(0.5, 0.5),
+			Size = UDim2.fromOffset(sizes.CloseIconSize, sizes.CloseIconSize),
+			ImageColor3 = colors.Muted,
+			Parent = button,
+		})
+		Icons.Apply(image, icon)
+		button.MouseEnter:Connect(function()
+			Motion.Apply(button, { BackgroundTransparency = 0 }, true)
+			Motion.Apply(image, { ImageColor3 = colors.Text }, true)
+		end)
+		button.MouseLeave:Connect(function()
+			Motion.Apply(button, { BackgroundTransparency = 1 }, true)
+			Motion.Apply(image, { ImageColor3 = colors.Muted }, true)
+		end)
+		button.Activated:Connect(onClick)
+		return button
+	end
+
+	self.CloseButton = headerButton("Close", "x", 0, function()
 		self:Destroy()
+	end)
+	self.MinimizeButton = headerButton("Minimize", "minus", 1, function()
+		self:Minimize()
 	end)
 
 	self.Bottom = Create.new("Frame", {
@@ -195,6 +204,9 @@ end
 function Window:SetTitle(text)
 	self.Title.Text = text
 	self.Gui.Name = text
+	if self.MiniBar then
+		self.MiniBar.Title.Text = text
+	end
 end
 
 function Window:SetScale(scale)
@@ -257,7 +269,9 @@ function Window:Destroy()
 	self.SelectedPage = nil
 end
 
-function Window:_makeDraggable(handles)
+function Window:_makeDraggable(handles, target)
+	target = target or self.Frame
+	local state = { Moved = false }
 	local dragInput, startPointer, startPosition
 
 	for _, handle in handles do
@@ -265,7 +279,8 @@ function Window:_makeDraggable(handles)
 			if PRESS[input.UserInputType] and not dragInput then
 				dragInput = input
 				startPointer = input.Position
-				startPosition = self.Frame.Position
+				startPosition = target.Position
+				state.Moved = false
 			end
 		end)
 	end
@@ -285,11 +300,14 @@ function Window:_makeDraggable(handles)
 			if input.UserInputType == Enum.UserInputType.Touch and input ~= dragInput then
 				return
 			end
-			local screen, size = self.Gui.AbsoluteSize, self.Frame.AbsoluteSize
+			local screen, size = self.Gui.AbsoluteSize, target.AbsoluteSize
 			local delta = input.Position - startPointer
+			if math.abs(delta.X) + math.abs(delta.Y) > 4 then
+				state.Moved = true
+			end
 			local x = clamp(startPosition.X.Scale * screen.X + startPosition.X.Offset + delta.X, size.X, screen.X)
 			local y = clamp(startPosition.Y.Scale * screen.Y + startPosition.Y.Offset + delta.Y, size.Y, screen.Y)
-			Motion.Apply(self.Frame, { Position = UDim2.fromOffset(x, y) }, true, Theme.Motion.DragDuration, Theme.Motion.DragStyle)
+			Motion.Apply(target, { Position = UDim2.fromOffset(x, y) }, true, Theme.Motion.DragDuration, Theme.Motion.DragStyle)
 		end),
 		UserInputService.InputEnded:Connect(function(input)
 			if input == dragInput or (dragInput and input.UserInputType == Enum.UserInputType.MouseButton1) then
@@ -302,6 +320,122 @@ function Window:_makeDraggable(handles)
 			connection:Disconnect()
 		end
 	end)
+	return state
+end
+
+function Window:_buildMiniBar()
+	local sizes, colors = Theme.Sizes, Theme.Colors
+	self.MiniBar = Create.new("TextButton", {
+		Name = "Minimized",
+		AnchorPoint = Vector2.new(0.5, 0.5),
+		Position = UDim2.new(0.5, 0, 0, -sizes.MiniHeight),
+		Size = UDim2.fromOffset(sizes.MiniWidth, sizes.MiniHeight),
+		BackgroundColor3 = colors.Bar,
+		Visible = false,
+		Parent = self.Gui,
+		Create.new("UICorner", { CornerRadius = UDim.new(0, sizes.MiniRadius) }),
+		Create.new("UIStroke", { Color = colors.Divider, Thickness = 1 }),
+		Create.new("UIScale", { Scale = self.UIScale.Scale }),
+	})
+
+	Create.new("TextLabel", {
+		Name = "Title",
+		Position = UDim2.fromOffset(sizes.MiniPad, 0),
+		Size = UDim2.new(1, -(sizes.MiniPad * 2 + sizes.CloseIconSize + 6), 1, 0),
+		FontFace = Theme.Fonts.Title,
+		Text = self.Title.Text,
+		TextSize = Theme.TextSizes.Mini,
+		TextColor3 = colors.Text,
+		TextTruncate = Enum.TextTruncate.AtEnd,
+		Parent = self.MiniBar,
+	})
+
+	local icon = Create.new("ImageLabel", {
+		Name = "Icon",
+		AnchorPoint = Vector2.new(1, 0.5),
+		Position = UDim2.new(1, -sizes.MiniPad, 0.5, 0),
+		Size = UDim2.fromOffset(sizes.CloseIconSize, sizes.CloseIconSize),
+		ImageColor3 = colors.Muted,
+		Parent = self.MiniBar,
+	})
+	Icons.Apply(icon, "maximize-2")
+
+	self.MiniBar.MouseEnter:Connect(function()
+		Motion.Apply(self.MiniBar, { BackgroundColor3 = colors.Selected }, true)
+		Motion.Apply(icon, { ImageColor3 = colors.Text }, true)
+	end)
+	self.MiniBar.MouseLeave:Connect(function()
+		Motion.Apply(self.MiniBar, { BackgroundColor3 = colors.Bar }, true)
+		Motion.Apply(icon, { ImageColor3 = colors.Muted }, true)
+	end)
+
+	local drag = self:_makeDraggable({ self.MiniBar }, self.MiniBar)
+	self.MiniBar.Activated:Connect(function()
+		if drag.Moved then
+			drag.Moved = false
+			return
+		end
+		self:Restore()
+	end)
+end
+
+function Window:Minimize()
+	if self.Minimized or self.Destroyed then
+		return
+	end
+	local sizes = Theme.Sizes
+	self.Minimized = true
+	self._minToken = (self._minToken or 0) + 1
+	local token = self._minToken
+	if not self.MiniBar then
+		self:_buildMiniBar()
+	end
+	self.Search:_hide()
+
+	local scale = self.UIScale.Scale
+	self._restoreScale = scale
+	Motion.Apply(self.UIScale, { Scale = scale * 0.92 }, true)
+	task.delay(Theme.Motion.Duration, function()
+		if self._minToken == token and self.Minimized then
+			self.Frame.Visible = false
+			self.UIScale.Scale = scale
+		end
+	end)
+
+	self.MiniBar.Visible = true
+	self.MiniBar.Position = UDim2.new(0.5, 0, 0, -sizes.MiniHeight)
+	Motion.Apply(self.MiniBar, { Position = UDim2.new(0.5, 0, 0, sizes.MiniTop + sizes.MiniHeight / 2) }, true)
+end
+
+function Window:Restore()
+	if not self.Minimized or self.Destroyed then
+		return
+	end
+	local sizes = Theme.Sizes
+	self.Minimized = false
+	self._minToken = (self._minToken or 0) + 1
+	local token = self._minToken
+	local scale = self._restoreScale or self.UIScale.Scale
+
+	self.Frame.Visible = true
+	self.UIScale.Scale = scale * 0.92
+	Motion.Apply(self.UIScale, { Scale = scale }, true)
+
+	local bar = self.MiniBar
+	Motion.Apply(bar, { Position = UDim2.new(0.5, 0, 0, -sizes.MiniHeight) }, true)
+	task.delay(Theme.Motion.Duration, function()
+		if self._minToken == token and not self.Minimized then
+			bar.Visible = false
+		end
+	end)
+end
+
+function Window:ToggleMinimize()
+	if self.Minimized then
+		self:Restore()
+	else
+		self:Minimize()
+	end
 end
 
 function Window:_show(name, animate)

@@ -6,6 +6,74 @@ local Create = import("Util/Create")
 
 local Parts = {}
 
+local marquees = setmetatable({}, { __mode = "k" })
+
+local function wrap(label)
+	local clip = Create.new("Frame", {
+		Name = label.Name .. "Clip",
+		AnchorPoint = label.AnchorPoint,
+		Position = label.Position,
+		Size = label.Size,
+		LayoutOrder = label.LayoutOrder,
+		BackgroundTransparency = 1,
+		ClipsDescendants = true,
+		Parent = label.Parent,
+	})
+	label.AnchorPoint = Vector2.zero
+	label.Position = UDim2.fromScale(0, 0)
+	label.Size = UDim2.fromScale(1, 1)
+	label.Parent = clip
+	return clip
+end
+
+function Parts.Marquee(label, active)
+	local state = marquees[label]
+	if not active then
+		if state then
+			state.Token += 1
+			label.AutomaticSize = Enum.AutomaticSize.None
+			label.Size = UDim2.fromScale(1, 1)
+			label.TextTruncate = Enum.TextTruncate.AtEnd
+			Motion.Apply(label, { Position = UDim2.fromScale(0, 0) }, false)
+		end
+		return
+	end
+	if label.TextFits ~= false then
+		return
+	end
+
+	if not state then
+		state = { Clip = wrap(label), Token = 0 }
+		marquees[label] = state
+	end
+	state.Token += 1
+	local token = state.Token
+	local clip = state.Clip
+	local motion = Theme.Motion
+
+	label.TextTruncate = Enum.TextTruncate.None
+	label.Size = UDim2.fromScale(0, 1)
+	label.AutomaticSize = Enum.AutomaticSize.X
+
+	task.spawn(function()
+		task.wait(motion.MarqueeDelay)
+		while state.Token == token do
+			local overflow = label.AbsoluteSize.X - clip.AbsoluteSize.X
+			if overflow <= 0 or clip.AbsoluteSize.X <= 0 then
+				return
+			end
+			local duration = math.max(overflow / motion.MarqueeSpeed, 0.3)
+			Motion.Apply(label, { Position = UDim2.fromScale(-overflow / clip.AbsoluteSize.X, 0) }, true, duration, Enum.EasingStyle.Sine)
+			task.wait(duration + motion.MarqueePause)
+			if state.Token ~= token then
+				return
+			end
+			Motion.Apply(label, { Position = UDim2.fromScale(0, 0) }, true, duration, Enum.EasingStyle.Sine)
+			task.wait(duration + motion.MarqueePause)
+		end
+	end)
+end
+
 function Parts.Switch(parent)
 	local sizes, colors = Theme.Sizes, Theme.Colors
 	local inset = sizes.KnobInset
@@ -113,6 +181,7 @@ function Parts.Hover(element, row, extra)
 		element.Hovered = hovered
 		if element.Label then
 			Motion.Apply(element.Label, { TextColor3 = if hovered then colors.ElementTextHover else colors.ElementText }, true)
+			Parts.Marquee(element.Label, hovered)
 		end
 		if type(element.Switch) == "table" then
 			element.Switch.SetHover(hovered)

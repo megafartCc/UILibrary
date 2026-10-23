@@ -46,6 +46,8 @@ See `example.lua` for a full example.
 | `Window:SetScale(scale)` | Makes the whole window bigger or smaller. Default is `Theme.Scale` (1.2) |
 | Search (top centre) | Type to find pages, boxes and controls as you go. Tap a result (or press Enter for the first) to open that page, scroll to the box and flash it. Tap outside to hide the list. `Window.Search:Find(text)` returns the matches |
 | Moving the window | Drag the header or bottom bar with mouse or finger. It follows smoothly and stays on screen |
+| `Window:Minimize()`, `Window:Restore()`, `Window:ToggleMinimize()` | The – next to the X hides the window and shows a short wide bar at the top centre with the title; tap the bar to bring it back, drag it to move it. `Window.Minimized` tells you the state |
+| Long names | When a control's name is cut off with …, hovering it scrolls the full name back and forth (speed and pauses in `Theme.Motion`) |
 | `Window:OnClose(fn)` | Runs `fn` when the window closes; stop your loops here |
 | `Window:SetTitle(text)` | Renames the window |
 | `Window:AddSection(name)` or `Window:AddSection({ Name, Order })` | Adds a section label, or returns the existing one with that name |
