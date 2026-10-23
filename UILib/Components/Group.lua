@@ -174,6 +174,10 @@ end
 function Group:_add(kind, options)
 	assert(type(options) == "table" and options.Name, "UILib: Add" .. kind .. " needs a Name")
 	local element = Elements[kind].new(self, options, #self.Elements + 1)
+	element.Kind = kind
+	element.Group = self
+	element.Flag = options.Flag or table.concat({ if self.Page then self.Page.Name else "", self.Name, options.Name }, ".")
+	element.NoConfig = options.NoConfig == true or self.NoConfig == true
 	table.insert(self.Elements, element)
 	return element
 end

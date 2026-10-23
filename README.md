@@ -71,6 +71,28 @@ See `example.lua` for a full example.
 | `UILib:Notify({ Title, Text, Duration, Type })` or `UILib:Notify(title, text, duration)` | Shows a notification in the top right. `Type` is `"Success"` (green), `"Warning"` (amber), `"Error"` (red) or `"Info"` (blue): adds a matching icon and line colour; without it the line is coral. It slides in, a line at the bottom drains until it slides out, and tapping it closes it early. Up to 5 stack. Returns a handle with `:Close()` |
 | `UILib:Destroy()` | Destroys every window this UILib made and clears notifications |
 
+## Settings page and configs
+
+Every window gets a **Settings** page at the bottom of the sidebar:
+
+- **CONFIGS:** type a **Name** and **Save**. Pick one in **Configs**, then **Load**, **Delete** or **Refresh**. **Autoload selected** loads that config automatically about 1 second after the script starts.
+- **INTERFACE:** **UI Scale** slider and **Unload UI**.
+
+Every toggle, slider, dropdown, multi-select, color picker, text input and combined row is saved. Loading sets each one back and runs its callback. Buttons aren't saved.
+
+| Option / call | What it does |
+| --- | --- |
+| `Flag = "aimbot_enabled"` on any control | The key it's saved under. Default is `Page.Box.Name` |
+| `NoConfig = true` on a control or box | Leave it out of configs |
+| `SettingsPage = false` | Don't add the Settings page |
+| `SettingsName` | Rename the Settings page |
+| `ConfigFolder` | Where configs go (default `UILib/configs/<Title>`) |
+| `Autoload = false`, `AutoloadDelay` | Turn off or delay the autoload |
+| `Window:SaveConfig(name)`, `Window:LoadConfig(name)` | Same as the buttons, from code |
+| `Window.Config:List()`, `:Delete(name)`, `:GetAutoload()`, `:SetAutoload(name)` | Manage configs from code |
+
+Configs are JSON files, so they need an executor with `writefile`, `readfile` and `listfiles`. The page's own controls aren't saved in configs. Don't name one of your pages "Settings" unless you rename the built-in one.
+
 ## Key system
 
 Same logic and the same card design as the old UiLib. While locked, only the
@@ -130,6 +152,7 @@ UILib/
   Icons.lua              Lucide icons by name
   Motion.lua             all state changes go through here (tweens, set Motion.Enabled = false to turn off)
   Util/Create.lua        instance helpers with per-class defaults
+  Util/Files.lua         file helpers (JSON, list, delete) for configs
   Util/Parts.lua         shared switch and button square, and the extra control on combined rows
   Components/
     Window.lua           the black box, creates pages and handles selection
@@ -139,6 +162,8 @@ UILib/
     Page.lua             content area for one page, two columns
     Notifications.lua    top-right notifications
     Search.lua           search box in the header and live results
+    Config.lua           save/load/list/delete configs, autoload
+    Settings.lua         built-in Settings page (configs, UI scale, unload)
     Group.lua            box with a collapsible header and line; Add<Element> methods come from UILib/Elements
   Elements/
     Slider.lua           slider with a fill and the value in the middle

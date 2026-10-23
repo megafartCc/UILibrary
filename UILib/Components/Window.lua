@@ -8,6 +8,8 @@ local PageButton = import("Components/PageButton")
 local Page = import("Components/Page")
 local Search = import("Components/Search")
 local Gate = import("Key/Gate")
+local Config = import("Components/Config")
+local Settings = import("Components/Settings")
 
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
@@ -180,6 +182,11 @@ function Window.new(options, library)
 		Parent = self.Frame,
 	})
 
+	self.Config = Config.new(self, options)
+	if options.SettingsPage ~= false then
+		self.Settings = Settings.Build(self, options)
+	end
+
 	for _, pageOptions in ipairs(options.Pages or {}) do
 		self:AddPage(pageOptions)
 	end
@@ -198,6 +205,14 @@ function Window.new(options, library)
 	if self.Gate and options.WaitForKey ~= false then
 		self.Gate:Wait()
 	end
+
+	if self.Settings and options.Autoload ~= false then
+		task.delay(options.AutoloadDelay or 1, function()
+			if not self.Destroyed then
+				self.Settings.Autoload()
+			end
+		end)
+	end
 	return self
 end
 
@@ -211,6 +226,14 @@ end
 
 function Window:SetScale(scale)
 	self.UIScale.Scale = scale
+end
+
+function Window:SaveConfig(name)
+	return self.Config:Save(name)
+end
+
+function Window:LoadConfig(name)
+	return self.Config:Load(name)
 end
 
 function Window:SetFooter(text)

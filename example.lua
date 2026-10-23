@@ -23,7 +23,7 @@ Items:AddPage({ Name = "Shop", Icon = "shopping-bag" })
 Items:AddPage({ Name = "Inventory", Icon = "package" })
 
 local Other = Window:AddSection({ Name = "Other", Order = 3 })
-Other:AddPage({ Name = "Settings", Icon = "settings" })
+Other:AddPage({ Name = "Credits", Icon = "info" })
 
 local Aimbot = Home:AddGroup({ Name = "AIMBOT", Side = "Left" })
 Aimbot:AddToggle({
