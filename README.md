@@ -63,9 +63,10 @@ See `example.lua` for a full example.
 | `Group:AddDropdownButton({ Name, Options, Default, Icon, Callback })` | Dropdown and button on one line. Picking only selects; tapping the button runs `Callback(choice)` |
 | `Group:AddMultiDropdown({ Name, Options, Default, Callback })` | Dropdown where each option has a checkbox; tick as many as you want and the list stays open. `Default` and `Callback(list)` use tables |
 | `Group:AddMultiDropdownToggle({ Name, Options, Default, Enabled, Callback })` | Multi-select dropdown and switch on one line. `Callback(list, enabled)` |
+| `Group:AddInput({ Name, Default, Placeholder, Numeric, Live, ClearOnFocus, Callback })` (also `AddTextBox`) | Text box on the right. `Callback(text)` runs when you finish typing and the text changed; `Live = true` runs it on every change; `Numeric = true` only allows numbers and gives a number. `:Set(v)`, `:Get()` |
 | `Group:AddColorPicker({ Name, Default, Callback })` | Colour swatch on the right; tap the row to open a saturation square, hue bar and hex box under it. `Callback(color)` gets a Color3. `:Set(color)`, `:Get()`, `:Open()`, `:Close()` |
 | `Window:Destroy()` | Same as the X: runs OnClose, clears every callback and value, disconnects input, deletes the UI. `Window.Destroyed` turns true |
-| `UILib:Notify({ Title, Text, Duration })` or `UILib:Notify(title, text, duration)` | Shows a notification in the top right. It slides in, a line at the bottom drains until it slides out, and tapping it closes it early. Up to 5 stack. Returns a handle with `:Close()` |
+| `UILib:Notify({ Title, Text, Duration, Type })` or `UILib:Notify(title, text, duration)` | Shows a notification in the top right. `Type` is `"Success"` (green), `"Warning"` (amber), `"Error"` (red) or `"Info"` (blue): adds a matching icon and line colour; without it the line is coral. It slides in, a line at the bottom drains until it slides out, and tapping it closes it early. Up to 5 stack. Returns a handle with `:Close()` |
 | `UILib:Destroy()` | Destroys every window this UILib made and clears notifications |
 
 ## Key system
@@ -143,6 +144,7 @@ UILib/
     Button.lua           row with a tappable rounded square
     Dropdown.lua         single or multi select list that opens under the row
     ColorPicker.lua      swatch with a saturation square, hue bar and hex input
+    Input.lua            text box row, optional numbers-only
   Key/
     Backend.lua          key check against the server, saving, publishing, clipboard
     Gate.lua             key card (old UiLib design, draggable), lock/unlock, expiry countdown

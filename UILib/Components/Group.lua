@@ -6,6 +6,7 @@ local Create = import("Util/Create")
 
 local Slider = import("Elements/Slider")
 local Dropdown = import("Elements/Dropdown")
+local Input = import("Elements/Input")
 
 local function variant(element, overrides)
 	return {
@@ -25,6 +26,8 @@ local Elements = {
 	Button = import("Elements/Button"),
 	Dropdown = Dropdown,
 	ColorPicker = import("Elements/ColorPicker"),
+	Input = Input,
+	TextBox = Input,
 	SliderToggle = variant(Slider, { Accessory = "Toggle" }),
 	DropdownToggle = variant(Dropdown, { Accessory = "Toggle" }),
 	DropdownButton = variant(Dropdown, { Accessory = "Button" }),
@@ -49,7 +52,7 @@ function Group.new(column, options, order)
 		BorderSizePixel = 0,
 		Parent = column,
 		Create.new("UICorner", { CornerRadius = UDim.new(0, sizes.GroupRadius) }),
-		Create.new("UIStroke", { Color = colors.GroupStroke, Thickness = 1 }),
+		Create.new("UIStroke", { Color = colors.GroupStroke, Thickness = sizes.GroupStroke }),
 		Create.List(Enum.FillDirection.Vertical, 0),
 	})
 

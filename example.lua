@@ -12,7 +12,7 @@ local Window = UILib:CreateWindow({
 	end,
 })
 
-UILib:Notify({ Title = "Key accepted", Text = "Welcome, key " .. UILib.GetKey(), Duration = 3 })
+UILib:Notify({ Title = "Key accepted", Text = "Welcome, key " .. UILib.GetKey(), Duration = 3, Type = "Success" })
 
 local Main = Window:AddSection({ Name = "Main", Order = 1 })
 local Home = Main:AddPage({ Name = "Home", Icon = "home", Order = 1 })
@@ -85,11 +85,18 @@ Misc:AddDropdownButton({
 	end,
 })
 Misc:AddToggle({ Name = "Anti AFK", Default = true })
+Misc:AddInput({
+	Name = "Player",
+	Placeholder = "Username",
+	Callback = function(text)
+		UILib:Notify({ Title = "Target set", Text = text, Type = "Success" })
+	end,
+})
 Misc:AddToggle({ Name = "Auto Respawn" })
 Misc:AddButton({
 	Name = "Rejoin",
 	Callback = function()
-		UILib:Notify({ Title = "Rejoin", Text = "Rejoining the server...", Duration = 3 })
+		UILib:Notify({ Title = "Rejoin", Text = "Rejoining the server...", Duration = 3, Type = "Info" })
 	end,
 })
 local World = Home:AddGroup({ Name = "WORLD", Side = "Right" })

@@ -2,6 +2,14 @@ local import = ...
 local Theme = import("Theme")
 local Motion = import("Motion")
 local Create = import("Util/Create")
+local Icons = import("Icons")
+
+local KINDS = {
+	success = { Icon = "circle-check", Color = "Success" },
+	warning = { Icon = "triangle-alert", Color = "Warning" },
+	error = { Icon = "circle-x", Color = "Error" },
+	info = { Icon = "info", Color = "Info" },
+}
 
 local Players = game:GetService("Players")
 
@@ -78,17 +86,45 @@ function Notifications.Notify(options, text, duration)
 		Create.List(Enum.FillDirection.Vertical, 3),
 	})
 
+	local kind = KINDS[string.lower(tostring(options.Type or ""))]
+	local tint = if kind then colors[kind.Color] else colors.Accent
+	local iconSize = sizes.NotifyIcon
+	local titleHeight = Theme.TextSizes.NotifyTitle + 2
+
+	local titleRow = Create.new("Frame", {
+		Name = "TitleRow",
+		LayoutOrder = 1,
+		Size = UDim2.new(1, 0, 0, math.max(titleHeight, if kind then iconSize else 0)),
+		BackgroundTransparency = 1,
+		Parent = content,
+	})
+
+	local icon
+	if kind then
+		icon = Create.new("ImageLabel", {
+			Name = "Icon",
+			AnchorPoint = Vector2.new(0, 0.5),
+			Position = UDim2.fromScale(0, 0.5),
+			Size = UDim2.fromOffset(iconSize, iconSize),
+			ImageColor3 = tint,
+			ImageTransparency = 1,
+			Parent = titleRow,
+		})
+		Icons.Apply(icon, kind.Icon)
+	end
+
+	local titleX = if kind then iconSize + 6 else 0
 	local title = Create.new("TextLabel", {
 		Name = "Title",
-		LayoutOrder = 1,
-		Size = UDim2.new(1, 0, 0, Theme.TextSizes.NotifyTitle + 2),
+		Position = UDim2.fromOffset(titleX, 0),
+		Size = UDim2.new(1, -titleX, 1, 0),
 		FontFace = Theme.Fonts.NotifyTitle,
 		Text = tostring(options.Title or "Notification"),
 		TextSize = Theme.TextSizes.NotifyTitle,
 		TextColor3 = colors.Text,
 		TextTransparency = 1,
 		TextTruncate = Enum.TextTruncate.AtEnd,
-		Parent = content,
+		Parent = titleRow,
 	})
 
 	local body = Create.new("TextLabel", {
@@ -120,14 +156,14 @@ function Notifications.Notify(options, text, duration)
 	local fill = Create.new("Frame", {
 		Name = "Fill",
 		Size = UDim2.fromScale(1, 1),
-		BackgroundColor3 = colors.Accent,
+		BackgroundColor3 = tint,
 		BackgroundTransparency = 1,
 		BorderSizePixel = 0,
 		Parent = line,
 		Create.new("UICorner", { CornerRadius = UDim.new(1, 0) }),
 	})
 
-	local toast = { Closed = false }
+	local toast = { Closed = false, Type = if kind then string.lower(tostring(options.Type)) else nil }
 
 	function toast.Close()
 		if toast.Closed then
@@ -142,6 +178,9 @@ function Notifications.Notify(options, text, duration)
 		Motion.Apply(stroke, { Transparency = 1 }, true)
 		Motion.Apply(title, { TextTransparency = 1 }, true)
 		Motion.Apply(body, { TextTransparency = 1 }, true)
+		if icon then
+			Motion.Apply(icon, { ImageTransparency = 1 }, true)
+		end
 		Motion.Apply(line, { BackgroundTransparency = 1 }, true)
 		Motion.Apply(fill, { BackgroundTransparency = 1 }, true)
 		Motion.Apply(slot, { Size = UDim2.fromScale(1, 0) }, true)
@@ -167,6 +206,9 @@ function Notifications.Notify(options, text, duration)
 		Motion.Apply(stroke, { Transparency = 0 }, true)
 		Motion.Apply(title, { TextTransparency = 0 }, true)
 		Motion.Apply(body, { TextTransparency = 0 }, true)
+		if icon then
+			Motion.Apply(icon, { ImageTransparency = 0 }, true)
+		end
 		Motion.Apply(line, { BackgroundTransparency = 0 }, true)
 		fill.BackgroundTransparency = 0
 		Motion.Apply(fill, { Size = UDim2.fromScale(0, 1) }, true, lifetime, Enum.EasingStyle.Linear)
