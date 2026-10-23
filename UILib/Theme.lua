@@ -170,7 +170,7 @@ return {
 		FlashDuration = 0.9,
 		MarqueeDelay = 0,
 		MarqueeSpeed = 40,
-		MarqueePause = 0.8,
+		MarqueePause = 0,
 		MarqueeGap = 32,
 		FitMargin = 0.92,
 	},
