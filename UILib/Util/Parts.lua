@@ -8,6 +8,7 @@ local Parts = {}
 
 local TextService = game:GetService("TextService")
 local UserInputService = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
 
 Parts.Touch = UserInputService.TouchEnabled and not UserInputService.MouseEnabled
 
@@ -50,7 +51,15 @@ local function textWidth(label)
 	return if ok and bounds then bounds.X else 0
 end
 
+local function stopTweens(state)
+	for _, tween in state.Tweens or {} do
+		tween:Cancel()
+	end
+	state.Tweens = {}
+end
+
 local function rest(state, label)
+	stopTweens(state)
 	if state.Ghost then
 		state.GhostSync:Disconnect()
 		state.Ghost:Destroy()
@@ -113,41 +122,42 @@ function Parts.Marquee(label, active, persistent)
 
 	task.spawn(function()
 		task.wait(motion.MarqueeDelay)
-		local lapped = false
 		while alive() do
 			local overflow, full = overflowOf(state, label)
+			local key = tostring(state.Clip.AbsoluteSize) .. label.Text
 			if overflow <= 1 then
 				rest(state, label)
 				if not persistent then
 					return
 				end
-				local key = tostring(state.Clip.AbsoluteSize) .. label.Text
-				repeat
-					task.wait(1)
-				until not alive() or tostring(state.Clip.AbsoluteSize) .. label.Text ~= key
-				continue
-			end
+			else
+				stopTweens(state)
+				local distance = math.ceil(full) + motion.MarqueeGap
+				local duration = distance / motion.MarqueeSpeed
+				local goal = { Position = UDim2.fromOffset(-distance, 0) }
+				label.TextTruncate = Enum.TextTruncate.None
+				label.Size = UDim2.new(0, math.ceil(full) + 2, 1, 0)
+				label.Position = UDim2.fromOffset(0, 0)
+				ghostOf(state, label, distance)
 
-			local distance = math.ceil(full) + motion.MarqueeGap
-			label.TextTruncate = Enum.TextTruncate.None
-			label.Size = UDim2.new(0, math.ceil(full) + 2, 1, 0)
-			ghostOf(state, label, distance)
-
-			label.Position = UDim2.fromOffset(0, 0)
-			if lapped then
-				task.wait(motion.MarqueePause)
-				if not alive() then
-					return
-				end
+				local first = TweenService:Create(label, TweenInfo.new(duration, Enum.EasingStyle.Linear), goal)
+				local loop = TweenService:Create(
+					label,
+					TweenInfo.new(duration, Enum.EasingStyle.Linear, Enum.EasingDirection.Out, -1, false, motion.MarqueePause),
+					goal
+				)
+				state.Tweens = { first, loop }
+				first.Completed:Connect(function(status)
+					if status == Enum.PlaybackState.Completed and alive() then
+						label.Position = UDim2.fromOffset(0, 0)
+						loop:Play()
+					end
+				end)
+				first:Play()
 			end
-			lapped = true
-			local duration = distance / motion.MarqueeSpeed
-			Motion.Apply(label, { Position = UDim2.fromOffset(-distance, 0) }, true, duration, Enum.EasingStyle.Linear)
-			task.wait(duration)
-			if not alive() then
-				return
-			end
-			Motion.Apply(label, { Position = UDim2.fromOffset(0, 0) }, false)
+			repeat
+				task.wait(1)
+			until not alive() or tostring(state.Clip.AbsoluteSize) .. label.Text ~= key
 		end
 	end)
 end
@@ -273,10 +283,32 @@ function Parts.Hover(element, row, extra)
 			extra(hovered)
 		end
 	end
+	local function inside()
+		local mouse = UserInputService:GetMouseLocation()
+		local position, size = row.AbsolutePosition, row.AbsoluteSize
+		return mouse.X >= position.X and mouse.Y >= position.Y and mouse.X <= position.X + size.X and mouse.Y <= position.Y + size.Y
+	end
 	row.MouseEnter:Connect(function()
+		if element.Hovered then
+			return
+		end
 		set(true)
+		if Parts.Touch then
+			return
+		end
+		task.spawn(function()
+			while element.Hovered and row.Parent do
+				task.wait(0.15)
+				if element.Hovered and not inside() then
+					set(false)
+				end
+			end
+		end)
 	end)
 	row.MouseLeave:Connect(function()
+		if not Parts.Touch and inside() then
+			return
+		end
 		set(false)
 	end)
 	if Parts.Touch and element.Label then
