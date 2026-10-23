@@ -41,13 +41,15 @@ See `example.lua` for a full example.
 
 | Call | What it does |
 | --- | --- |
-| `UILib:CreateWindow({ Title, Footer, DefaultPage, Width, Height, Scale, Pages, OnClose })` | Opens a window with a header bar (title, search, X) and a bottom bar (`Footer` text). The X closes it for good |
+| `UILib:CreateWindow({ Title, Footer, DefaultPage, Width, Height, Scale, Pages, OnClose, MobileButton })` | Opens a window with a header bar (title, search, X) and a bottom bar (`Footer` text). The X closes it for good |
 | `Window:SetFooter(text)` | Changes the bottom bar text |
-| `Window:SetScale(scale)` | Makes the whole window bigger or smaller. Default is `Theme.Scale` (1.2) |
+| `Window:SetScale(scale)` | Makes the whole window bigger or smaller. Default is `Theme.Scale` (1.2). On small screens (phones) the window shrinks automatically so it always fits |
+| `Window:SetVisible(on)`, `Window:ToggleVisible()` | Hides or shows the window without closing it. `Window.Hidden` tells you the state |
+| Phone and tablet | On touch devices a round button appears on the left; tap it to hide or show the window, drag it to move it. `MobileButton = true` forces it on, `false` turns it off. Sliders and the colour picker stop the page from scrolling while you drag them |
 | Search (top centre) | Type to find pages, boxes and controls as you go. Tap a result (or press Enter for the first) to open that page, scroll to the box and flash it. Tap outside to hide the list. `Window.Search:Find(text)` returns the matches |
 | Moving the window | Drag the header or bottom bar with mouse or finger. It follows smoothly and stays on screen |
 | `Window:Minimize()`, `Window:Restore()`, `Window:ToggleMinimize()` | The – next to the X hides the window and shows a short wide bar at the top centre with the title; tap the bar to bring it back, drag it to move it. `Window.Minimized` tells you the state |
-| Long names | When a control's name is cut off with …, hovering it scrolls the full name back and forth (speed and pauses in `Theme.Motion`) |
+| Long names | When a control's name is cut off with …, hovering it scrolls the name in a loop like a ticker (on touch devices it loops on its own). Speed, gap and pause live in `Theme.Motion` |
 | `Window:OnClose(fn)` | Runs `fn` when the window closes; stop your loops here |
 | `Window:SetTitle(text)` | Renames the window |
 | `Window:AddSection(name)` or `Window:AddSection({ Name, Order })` | Adds a section label, or returns the existing one with that name |

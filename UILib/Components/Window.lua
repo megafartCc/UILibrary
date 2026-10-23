@@ -3,6 +3,7 @@ local Theme = import("Theme")
 local Icons = import("Icons")
 local Motion = import("Motion")
 local Create = import("Util/Create")
+local Parts = import("Util/Parts")
 local Sidebar = import("Components/Sidebar")
 local PageButton = import("Components/PageButton")
 local Page = import("Components/Page")
@@ -53,7 +54,8 @@ function Window.new(options, library)
 		Parent = self.Gui,
 	})
 	self._fullSize = self.Frame.Size
-	self.UIScale = Create.new("UIScale", { Scale = options.Scale or Theme.Scale, Parent = self.Frame })
+	self._baseScale = options.Scale or Theme.Scale
+	self.UIScale = Create.new("UIScale", { Scale = self._baseScale, Parent = self.Frame })
 
 	local top = sizes.HeaderHeight + 1
 	local middle = top + sizes.BottomHeight + 1
@@ -201,9 +203,17 @@ function Window.new(options, library)
 	end
 	self.Gui:SetAttribute("UILib", true)
 	self.Gui.Parent = parent
+	self.Gui:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
+		self:_fit()
+	end)
+	self:_fit()
 
 	if self.Gate and options.WaitForKey ~= false then
 		self.Gate:Wait()
+	end
+
+	if options.MobileButton == true or (options.MobileButton == nil and Parts.Touch) then
+		self:_buildToggleButton()
 	end
 
 	if self.Settings and options.Autoload ~= false then
@@ -225,7 +235,79 @@ function Window:SetTitle(text)
 end
 
 function Window:SetScale(scale)
+	self._baseScale = scale
+	self:_fit()
+end
+
+function Window:_fit()
+	local screen = self.Gui.AbsoluteSize
+	local scale = self._baseScale
+	if screen.X > 0 and screen.Y > 0 then
+		local margin = Theme.Motion.FitMargin
+		local size = self._fullSize
+		scale = math.min(scale, screen.X * margin / size.X.Offset, screen.Y * margin / size.Y.Offset)
+	end
 	self.UIScale.Scale = scale
+	if self.MiniBar then
+		self.MiniBar.UIScale.Scale = scale
+	end
+end
+
+function Window:SetVisible(visible)
+	if self.Destroyed then
+		return
+	end
+	self.Hidden = not visible
+	if not visible then
+		self.Search:_hide()
+	end
+	self.Frame.Visible = visible and not self.Minimized
+	if self.MiniBar then
+		self.MiniBar.Visible = visible and self.Minimized == true
+	end
+end
+
+function Window:ToggleVisible()
+	if self.Minimized and not self.Hidden then
+		self:Restore()
+		return
+	end
+	self:SetVisible(self.Hidden == true)
+end
+
+function Window:_buildToggleButton()
+	local sizes, colors = Theme.Sizes, Theme.Colors
+	local button = Create.new("TextButton", {
+		Name = "ToggleButton",
+		AnchorPoint = Vector2.new(0.5, 0.5),
+		Position = UDim2.fromOffset(sizes.ToggleButton / 2 + 12, sizes.ToggleTop),
+		Size = UDim2.fromOffset(sizes.ToggleButton, sizes.ToggleButton),
+		BackgroundColor3 = colors.Bar,
+		ZIndex = 10,
+		Parent = self.Gui,
+		Create.new("UICorner", { CornerRadius = UDim.new(1, 0) }),
+		Create.new("UIStroke", { Color = colors.Divider, Thickness = 1 }),
+	})
+	local icon = Create.new("ImageLabel", {
+		Name = "Icon",
+		AnchorPoint = Vector2.new(0.5, 0.5),
+		Position = UDim2.fromScale(0.5, 0.5),
+		Size = UDim2.fromOffset(sizes.ToggleIcon, sizes.ToggleIcon),
+		ImageColor3 = colors.Text,
+		ZIndex = 11,
+		Parent = button,
+	})
+	Icons.Apply(icon, "layout-grid")
+
+	local drag = self:_makeDraggable({ button }, button)
+	button.Activated:Connect(function()
+		if drag.Moved then
+			drag.Moved = false
+			return
+		end
+		self:ToggleVisible()
+	end)
+	self.ToggleButton = button
 end
 
 function Window:SaveConfig(name)

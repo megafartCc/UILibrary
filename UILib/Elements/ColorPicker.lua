@@ -194,6 +194,7 @@ function ColorPicker.new(group, options, order)
 		target.InputBegan:Connect(function(input)
 			if PRESS[input.UserInputType] then
 				dragging = target
+				Parts.LockScroll(self.Frame, true)
 				drag(target, input.Position)
 			end
 		end)
@@ -206,8 +207,9 @@ function ColorPicker.new(group, options, order)
 			end
 		end),
 		UserInputService.InputEnded:Connect(function(input)
-			if PRESS[input.UserInputType] then
+			if dragging and PRESS[input.UserInputType] then
 				dragging = nil
+				Parts.LockScroll(self.Frame, false)
 			end
 		end),
 	}

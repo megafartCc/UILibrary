@@ -7,6 +7,9 @@ local Create = import("Util/Create")
 local Parts = {}
 
 local TextService = game:GetService("TextService")
+local UserInputService = game:GetService("UserInputService")
+
+Parts.Touch = UserInputService.TouchEnabled and not UserInputService.MouseEnabled
 
 local marquees = setmetatable({}, { __mode = "k" })
 
@@ -47,13 +50,51 @@ local function textWidth(label)
 	return if ok and bounds then bounds.X else 0
 end
 
-local function rest(label)
+local function rest(state, label)
+	if state.Ghost then
+		state.GhostSync:Disconnect()
+		state.Ghost:Destroy()
+		state.Ghost = nil
+	end
 	Motion.Apply(label, { Position = UDim2.fromScale(0, 0) }, false)
 	label.Size = UDim2.fromScale(1, 1)
 	label.TextTruncate = Enum.TextTruncate.AtEnd
 end
 
-function Parts.Marquee(label, active)
+local function overflowOf(state, label)
+	local clip = state.Clip
+	if clip.AbsoluteSize.X <= 0 or clip.AbsoluteSize.Y <= 0 then
+		return 0, 0
+	end
+	local scale = clip.AbsoluteSize.Y / Theme.Sizes.ElementHeight
+	local full = textWidth(label)
+	return full - clip.AbsoluteSize.X / scale, full
+end
+
+local function ghostOf(state, label, offset)
+	local ghost = state.Ghost
+	if not ghost then
+		ghost = label:Clone()
+		for _, child in ghost:GetChildren() do
+			child:Destroy()
+		end
+		ghost.Name = "Ghost"
+		ghost.Parent = label
+		state.Ghost = ghost
+		state.GhostSync = label:GetPropertyChangedSignal("TextColor3"):Connect(function()
+			ghost.TextColor3 = label.TextColor3
+		end)
+	end
+	ghost.Text = label.Text
+	ghost.TextColor3 = label.TextColor3
+	ghost.TextTruncate = Enum.TextTruncate.None
+	ghost.AnchorPoint = Vector2.zero
+	ghost.Position = UDim2.fromOffset(offset, 0)
+	ghost.Size = UDim2.fromScale(1, 1)
+	return ghost
+end
+
+function Parts.Marquee(label, active, persistent)
 	local state = marquees[label]
 	if not state then
 		return
@@ -61,38 +102,48 @@ function Parts.Marquee(label, active)
 	state.Token += 1
 	local token = state.Token
 	if not active then
-		rest(label)
+		rest(state, label)
 		return
 	end
 
 	local motion = Theme.Motion
+	local function alive()
+		return state.Token == token and label.Parent ~= nil
+	end
+
 	task.spawn(function()
 		task.wait(motion.MarqueeDelay)
-		if state.Token ~= token then
-			return
-		end
+		while alive() do
+			local overflow, full = overflowOf(state, label)
+			if overflow <= 1 then
+				rest(state, label)
+				if not persistent then
+					return
+				end
+				local key = tostring(state.Clip.AbsoluteSize) .. label.Text
+				repeat
+					task.wait(1)
+				until not alive() or tostring(state.Clip.AbsoluteSize) .. label.Text ~= key
+				continue
+			end
 
-		local clip = state.Clip
-		local scale = if clip.AbsoluteSize.Y > 0 then clip.AbsoluteSize.Y / Theme.Sizes.ElementHeight else 1
-		local visible = clip.AbsoluteSize.X / scale
-		local full = textWidth(label)
-		local overflow = full - visible
-		if state.Token ~= token or overflow <= 1 then
-			return
-		end
+			local distance = math.ceil(full) + motion.MarqueeGap
+			label.TextTruncate = Enum.TextTruncate.None
+			label.Size = UDim2.new(0, math.ceil(full) + 2, 1, 0)
+			ghostOf(state, label, distance)
 
-		label.TextTruncate = Enum.TextTruncate.None
-		label.Size = UDim2.new(0, math.ceil(full) + 2, 1, 0)
-		local duration = math.max(overflow / motion.MarqueeSpeed, 0.4)
-
-		while state.Token == token do
-			Motion.Apply(label, { Position = UDim2.fromOffset(-overflow - 2, 0) }, true, duration, Enum.EasingStyle.Sine)
-			task.wait(duration + motion.MarqueePause)
-			if state.Token ~= token then
+			label.Position = UDim2.fromOffset(0, 0)
+			task.wait(motion.MarqueePause)
+			if not alive() then
 				return
 			end
-			Motion.Apply(label, { Position = UDim2.fromOffset(0, 0) }, true, duration, Enum.EasingStyle.Sine)
-			task.wait(duration + motion.MarqueePause)
+			local duration = distance / motion.MarqueeSpeed
+			Motion.Apply(label, { Position = UDim2.fromOffset(-distance, 0) }, true, duration, Enum.EasingStyle.Linear)
+			task.wait(duration)
+			if not alive() then
+				return
+			end
+			Motion.Apply(label, { Position = UDim2.fromOffset(0, 0) }, false)
 		end
 	end)
 end
@@ -204,7 +255,9 @@ function Parts.Hover(element, row, extra)
 		element.Hovered = hovered
 		if element.Label then
 			Motion.Apply(element.Label, { TextColor3 = if hovered then colors.ElementTextHover else colors.ElementText }, true)
-			Parts.Marquee(element.Label, hovered)
+			if not Parts.Touch then
+				Parts.Marquee(element.Label, hovered)
+			end
 		end
 		if type(element.Switch) == "table" then
 			element.Switch.SetHover(hovered)
@@ -222,6 +275,19 @@ function Parts.Hover(element, row, extra)
 	row.MouseLeave:Connect(function()
 		set(false)
 	end)
+	if Parts.Touch and element.Label then
+		Parts.Marquee(element.Label, true, true)
+	end
+end
+
+function Parts.LockScroll(object, locked)
+	local parent = object.Parent
+	while parent do
+		if parent:IsA("ScrollingFrame") then
+			parent.ScrollingEnabled = not locked
+		end
+		parent = parent.Parent
+	end
 end
 
 function Parts.Trailing(kind)

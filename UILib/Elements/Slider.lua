@@ -94,6 +94,7 @@ function Slider.new(group, options, order)
 	self.Track.InputBegan:Connect(function(input)
 		if PRESS[input.UserInputType] then
 			dragging = true
+			Parts.LockScroll(self.Frame, true)
 			slideTo(input.Position.X, false)
 		end
 	end)
@@ -105,8 +106,9 @@ function Slider.new(group, options, order)
 			end
 		end),
 		UserInputService.InputEnded:Connect(function(input)
-			if PRESS[input.UserInputType] then
+			if dragging and PRESS[input.UserInputType] then
 				dragging = false
+				Parts.LockScroll(self.Frame, false)
 			end
 		end),
 	}

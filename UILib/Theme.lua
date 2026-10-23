@@ -125,6 +125,9 @@ return {
 		NotifyMax = 5,
 		NotifyIcon = 15,
 		SliderRadius = 3,
+		ToggleButton = 44,
+		ToggleIcon = 20,
+		ToggleTop = 110,
 	},
 
 	Fonts = {
@@ -168,5 +171,7 @@ return {
 		MarqueeDelay = 0.35,
 		MarqueeSpeed = 40,
 		MarqueePause = 0.8,
+		MarqueeGap = 32,
+		FitMargin = 0.92,
 	},
 }
