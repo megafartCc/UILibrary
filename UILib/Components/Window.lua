@@ -328,7 +328,7 @@ function Window:_buildMiniBar()
 	self.MiniBar = Create.new("TextButton", {
 		Name = "Minimized",
 		AnchorPoint = Vector2.new(0.5, 0.5),
-		Position = UDim2.new(0.5, 0, 0, -sizes.MiniHeight),
+		Position = UDim2.new(0.5, 0, 0, sizes.MiniTop + sizes.MiniHeight / 2),
 		Size = UDim2.fromOffset(sizes.MiniWidth, sizes.MiniHeight),
 		BackgroundColor3 = colors.Bar,
 		Visible = false,
@@ -383,51 +383,22 @@ function Window:Minimize()
 	if self.Minimized or self.Destroyed then
 		return
 	end
-	local sizes = Theme.Sizes
 	self.Minimized = true
-	self._minToken = (self._minToken or 0) + 1
-	local token = self._minToken
 	if not self.MiniBar then
 		self:_buildMiniBar()
 	end
 	self.Search:_hide()
-
-	local scale = self.UIScale.Scale
-	self._restoreScale = scale
-	Motion.Apply(self.UIScale, { Scale = scale * 0.92 }, true)
-	task.delay(Theme.Motion.Duration, function()
-		if self._minToken == token and self.Minimized then
-			self.Frame.Visible = false
-			self.UIScale.Scale = scale
-		end
-	end)
-
+	self.Frame.Visible = false
 	self.MiniBar.Visible = true
-	self.MiniBar.Position = UDim2.new(0.5, 0, 0, -sizes.MiniHeight)
-	Motion.Apply(self.MiniBar, { Position = UDim2.new(0.5, 0, 0, sizes.MiniTop + sizes.MiniHeight / 2) }, true)
 end
 
 function Window:Restore()
 	if not self.Minimized or self.Destroyed then
 		return
 	end
-	local sizes = Theme.Sizes
 	self.Minimized = false
-	self._minToken = (self._minToken or 0) + 1
-	local token = self._minToken
-	local scale = self._restoreScale or self.UIScale.Scale
-
 	self.Frame.Visible = true
-	self.UIScale.Scale = scale * 0.92
-	Motion.Apply(self.UIScale, { Scale = scale }, true)
-
-	local bar = self.MiniBar
-	Motion.Apply(bar, { Position = UDim2.new(0.5, 0, 0, -sizes.MiniHeight) }, true)
-	task.delay(Theme.Motion.Duration, function()
-		if self._minToken == token and not self.Minimized then
-			bar.Visible = false
-		end
-	end)
+	self.MiniBar.Visible = false
 end
 
 function Window:ToggleMinimize()
