@@ -124,9 +124,11 @@ function Settings.Build(window, options)
 					return
 				end
 				config:SetAutoload(name)
+				config:SetAutoloadOff(false)
 				notify("Autoload", name .. " loads on start", "Info")
 			elseif config:GetAutoload() == name then
 				config:SetAutoload(nil)
+				config:SetAutoloadOff(true)
 				notify("Autoload", "Turned off", "Info")
 			end
 		end,
@@ -171,8 +173,14 @@ function Settings.Build(window, options)
 		Page = page,
 		Refresh = refresh,
 		Autoload = function()
+			local created = config:EnsureDefault()
 			local autoName = config:GetAutoload()
 			if not autoName then
+				return
+			end
+			refresh(autoName)
+			if created then
+				notify("Autoload on", "Saved your settings as \"" .. autoName .. "\"", "Info")
 				return
 			end
 			local ok, result = config:Load(autoName)

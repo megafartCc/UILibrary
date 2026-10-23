@@ -7,12 +7,14 @@ Config.__index = Config
 local AUTOLOAD = "autoload.txt"
 local AUTOSAVE = "autosave.json"
 local PREFS = "settings.json"
+local DEFAULT = "default"
 
 function Config.new(window, options)
 	local folder = options.ConfigFolder or ("UILib/configs/" .. Files.Clean(options.Title or "UILib"))
 	local self = setmetatable({ Window = window, Folder = folder, AutoSave = true, _token = 0 }, Config)
 	local prefs = Files.ReadJson(folder .. "/" .. PREFS)
-	if type(prefs) == "table" and prefs.AutoSave == false then
+	self.Prefs = if type(prefs) == "table" then prefs else {}
+	if self.Prefs.AutoSave == false then
 		self.AutoSave = false
 	end
 	local stored = Files.ReadJson(folder .. "/" .. AUTOSAVE)
@@ -126,18 +128,42 @@ function Config:Flush()
 			changed = true
 		end
 	end
-	if not changed then
-		return false
+	if changed then
+		Files.WriteJson(self.Folder .. "/" .. AUTOSAVE, self.Stored)
 	end
-	return (Files.WriteJson(self.Folder .. "/" .. AUTOSAVE, self.Stored))
+	if self:GetAutoload() == DEFAULT then
+		Files.WriteJson(self:_path(DEFAULT), { Version = 1, Values = self:Snapshot() })
+	end
+	return true
+end
+
+function Config:_savePrefs()
+	self.Prefs.AutoSave = self.AutoSave
+	Files.WriteJson(self.Folder .. "/" .. PREFS, self.Prefs)
 end
 
 function Config:SetAutoSave(on)
 	self.AutoSave = on == true
-	Files.WriteJson(self.Folder .. "/" .. PREFS, { AutoSave = self.AutoSave })
+	self:_savePrefs()
 	if self.AutoSave then
 		self:Flush()
 	end
+end
+
+function Config:SetAutoloadOff(off)
+	self.Prefs.AutoloadOff = off == true
+	self:_savePrefs()
+end
+
+function Config:EnsureDefault()
+	if not Files.Available() or self.Prefs.AutoloadOff == true or self:GetAutoload() then
+		return false
+	end
+	if not table.find(self:List(), DEFAULT) then
+		self:Save(DEFAULT)
+	end
+	self:SetAutoload(DEFAULT)
+	return true
 end
 
 function Config:Save(name)
@@ -182,7 +208,13 @@ function Config:Delete(name)
 end
 
 function Config:List()
-	return Files.List(self.Folder, ".json")
+	local names = {}
+	for _, name in Files.List(self.Folder, ".json") do
+		if name .. ".json" ~= AUTOSAVE and name .. ".json" ~= PREFS then
+			table.insert(names, name)
+		end
+	end
+	return names
 end
 
 function Config:GetAutoload()

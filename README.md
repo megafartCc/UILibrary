@@ -77,6 +77,7 @@ Every window gets a **Settings** page at the bottom of the sidebar:
 
 - **CONFIGS:** type a **Name** and **Save**. Pick one in **Configs**, then **Load**, **Delete** or **Refresh**. **Autoload selected** loads that config automatically about 1 second after the script starts.
 - **INTERFACE:** **UI Scale** slider and **Unload UI**.
+- **First launch:** the script's current settings are saved as a config called **default**, and **Autoload** is switched on for it. While Auto Save is on, **default** is updated whenever something changes, so the next launch starts where you left off. Your own configs are never overwritten. Turning Autoload off is remembered.
 - **Auto Save** (on by default): every control created with a `SaveKey` is saved about a second after it changes and restored the next time the script runs, with its callback fired. Turning it off is remembered too. Files: `autosave.json` and `settings.json` in the config folder.
 
 Adding a page whose name already exists returns that page instead of erroring, so `AddPage({ Name = "Settings" })` gives you the built-in Settings page to add your own boxes to.
