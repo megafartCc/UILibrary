@@ -26,19 +26,20 @@ local function wrap(label)
 	return clip
 end
 
+local function reset(label)
+	label.AutomaticSize = Enum.AutomaticSize.None
+	label.Size = UDim2.fromScale(1, 1)
+	label.TextTruncate = Enum.TextTruncate.AtEnd
+end
+
 function Parts.Marquee(label, active)
 	local state = marquees[label]
 	if not active then
 		if state then
 			state.Token += 1
-			label.AutomaticSize = Enum.AutomaticSize.None
-			label.Size = UDim2.fromScale(1, 1)
-			label.TextTruncate = Enum.TextTruncate.AtEnd
 			Motion.Apply(label, { Position = UDim2.fromScale(0, 0) }, false)
+			reset(label)
 		end
-		return
-	end
-	if label.TextFits ~= false then
 		return
 	end
 
@@ -51,19 +52,25 @@ function Parts.Marquee(label, active)
 	local clip = state.Clip
 	local motion = Theme.Motion
 
-	label.TextTruncate = Enum.TextTruncate.None
-	label.Size = UDim2.fromScale(0, 1)
-	label.AutomaticSize = Enum.AutomaticSize.X
-
 	task.spawn(function()
 		task.wait(motion.MarqueeDelay)
+		if state.Token ~= token then
+			return
+		end
+		label.TextTruncate = Enum.TextTruncate.None
+		label.Size = UDim2.fromScale(0, 1)
+		label.AutomaticSize = Enum.AutomaticSize.X
+		task.wait()
+
 		while state.Token == token do
-			local overflow = label.AbsoluteSize.X - clip.AbsoluteSize.X
-			if overflow <= 0 or clip.AbsoluteSize.X <= 0 then
+			local width = clip.AbsoluteSize.X
+			local overflow = label.AbsoluteSize.X - width
+			if overflow <= 1 or width <= 0 then
+				reset(label)
 				return
 			end
-			local duration = math.max(overflow / motion.MarqueeSpeed, 0.3)
-			Motion.Apply(label, { Position = UDim2.fromScale(-overflow / clip.AbsoluteSize.X, 0) }, true, duration, Enum.EasingStyle.Sine)
+			local duration = math.max(overflow / motion.MarqueeSpeed, 0.4)
+			Motion.Apply(label, { Position = UDim2.fromScale(-overflow / width, 0) }, true, duration, Enum.EasingStyle.Sine)
 			task.wait(duration + motion.MarqueePause)
 			if state.Token ~= token then
 				return

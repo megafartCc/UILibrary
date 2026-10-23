@@ -34,6 +34,15 @@ Aimbot:AddToggle({
 	end,
 })
 Aimbot:AddToggle({ Name = "Team Check" })
+Aimbot:AddInput({
+	Name = "Walk Speed",
+	Numeric = true,
+	Default = 16,
+	Placeholder = "16",
+	Callback = function(speed)
+		print("Walk Speed", speed)
+	end,
+})
 Aimbot:AddDropdown({
 	Name = "Target Part",
 	Options = { "Head", "Torso", "Closest" },
