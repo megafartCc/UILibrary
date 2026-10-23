@@ -283,34 +283,21 @@ function Parts.Hover(element, row, extra)
 			extra(hovered)
 		end
 	end
-	local function inside()
-		local mouse = UserInputService:GetMouseLocation()
-		local position, size = row.AbsolutePosition, row.AbsoluteSize
-		return mouse.X >= position.X and mouse.Y >= position.Y and mouse.X <= position.X + size.X and mouse.Y <= position.Y + size.Y
-	end
 	row.MouseEnter:Connect(function()
-		if element.Hovered then
-			return
+		if not element.Hovered then
+			set(true)
 		end
-		set(true)
-		if Parts.Touch then
-			return
-		end
-		task.spawn(function()
-			while element.Hovered and row.Parent do
-				task.wait(0.15)
-				if element.Hovered and not inside() then
-					set(false)
-				end
-			end
-		end)
 	end)
 	row.MouseLeave:Connect(function()
-		if not Parts.Touch and inside() then
-			return
-		end
 		set(false)
 	end)
+	if not Parts.Touch then
+		row.InputChanged:Connect(function(input)
+			if input.UserInputType == Enum.UserInputType.MouseMovement and not element.Hovered then
+				set(true)
+			end
+		end)
+	end
 	if Parts.Touch and element.Label then
 		Parts.Marquee(element.Label, true, true)
 	end
