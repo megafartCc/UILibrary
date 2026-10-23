@@ -5,10 +5,19 @@ local Config = {}
 Config.__index = Config
 
 local AUTOLOAD = "autoload.txt"
+local AUTOSAVE = "autosave.json"
+local PREFS = "settings.json"
 
 function Config.new(window, options)
 	local folder = options.ConfigFolder or ("UILib/configs/" .. Files.Clean(options.Title or "UILib"))
-	return setmetatable({ Window = window, Folder = folder }, Config)
+	local self = setmetatable({ Window = window, Folder = folder, AutoSave = true, _token = 0 }, Config)
+	local prefs = Files.ReadJson(folder .. "/" .. PREFS)
+	if type(prefs) == "table" and prefs.AutoSave == false then
+		self.AutoSave = false
+	end
+	local stored = Files.ReadJson(folder .. "/" .. AUTOSAVE)
+	self.Stored = if type(stored) == "table" then stored else {}
+	return self
 end
 
 function Config:_path(name)
@@ -44,14 +53,32 @@ local function decode(value)
 	return value
 end
 
+local function entryFor(element)
+	local entry = { Value = encode(element:Get()) }
+	if element.Enabled ~= nil then
+		entry.Enabled = element.Enabled
+	end
+	return entry
+end
+
+local function applyEntry(element, entry)
+	if type(entry) ~= "table" then
+		return false
+	end
+	local value = decode(entry.Value)
+	if value ~= nil and type(element.Set) == "function" then
+		pcall(element.Set, element, value)
+	end
+	if entry.Enabled ~= nil and type(element.SetEnabled) == "function" and entry.Enabled ~= element.Enabled then
+		pcall(element.SetEnabled, element, entry.Enabled)
+	end
+	return true
+end
+
 function Config:Snapshot()
 	local values = {}
 	for _, element in self:Elements() do
-		local entry = { Value = encode(element:Get()) }
-		if element.Enabled ~= nil then
-			entry.Enabled = element.Enabled
-		end
-		values[element.Flag] = entry
+		values[element.Flag] = entryFor(element)
 	end
 	return values
 end
@@ -62,19 +89,55 @@ function Config:Apply(values)
 	end
 	local applied = 0
 	for _, element in self:Elements() do
-		local entry = values[element.Flag]
-		if type(entry) == "table" then
-			local value = decode(entry.Value)
-			if value ~= nil and type(element.Set) == "function" then
-				pcall(element.Set, element, value)
-			end
-			if entry.Enabled ~= nil and type(element.SetEnabled) == "function" and entry.Enabled ~= element.Enabled then
-				pcall(element.SetEnabled, element, entry.Enabled)
-			end
+		if applyEntry(element, values[element.Flag]) then
 			applied += 1
 		end
 	end
 	return applied
+end
+
+function Config:Restore(element)
+	if self.AutoSave and element.SaveKey and not element.NoConfig then
+		applyEntry(element, self.Stored[element.SaveKey])
+	end
+end
+
+function Config:QueueAutosave()
+	if not self.AutoSave then
+		return
+	end
+	self._token += 1
+	local token = self._token
+	task.delay(1, function()
+		if self._token == token then
+			self:Flush()
+		end
+	end)
+end
+
+function Config:Flush()
+	if not self.AutoSave or not Files.Available() then
+		return false
+	end
+	local changed = false
+	for _, element in self:Elements() do
+		if element.SaveKey then
+			self.Stored[element.SaveKey] = entryFor(element)
+			changed = true
+		end
+	end
+	if not changed then
+		return false
+	end
+	return (Files.WriteJson(self.Folder .. "/" .. AUTOSAVE, self.Stored))
+end
+
+function Config:SetAutoSave(on)
+	self.AutoSave = on == true
+	Files.WriteJson(self.Folder .. "/" .. PREFS, { AutoSave = self.AutoSave })
+	if self.AutoSave then
+		self:Flush()
+	end
 end
 
 function Config:Save(name)

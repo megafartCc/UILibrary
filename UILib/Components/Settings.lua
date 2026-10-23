@@ -132,6 +132,15 @@ function Settings.Build(window, options)
 		end,
 	})
 
+	configs:AddToggle({
+		Name = "Auto Save",
+		Default = config.AutoSave,
+		Callback = function(on)
+			config:SetAutoSave(on)
+			notify("Auto Save", if on then "On: controls with a SaveKey are remembered" else "Off", "Info")
+		end,
+	})
+
 	interface:AddSlider({
 		Name = "UI Scale",
 		Min = 70,

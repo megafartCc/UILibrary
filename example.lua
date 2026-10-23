@@ -28,12 +28,13 @@ Other:AddPage({ Name = "Credits", Icon = "info" })
 local Aimbot = Home:AddGroup({ Name = "AIMBOT", Side = "Left" })
 Aimbot:AddToggle({
 	Name = "Enabled",
+	SaveKey = "aimbot_enabled",
 	Default = true,
 	Callback = function(on)
 		print("Aimbot", on)
 	end,
 })
-Aimbot:AddToggle({ Name = "Team Check" })
+Aimbot:AddToggle({ Name = "Team Check", SaveKey = "team_check" })
 Aimbot:AddInput({
 	Name = "Walk Speed",
 	Numeric = true,
@@ -51,7 +52,7 @@ Aimbot:AddDropdown({
 		print("Target Part", part)
 	end,
 })
-Aimbot:AddSlider({ Name = "FOV", Min = 0, Max = 100, Default = 25, Suffix = "%" })
+Aimbot:AddSlider({ Name = "FOV", SaveKey = "aimbot_fov", Min = 0, Max = 100, Default = 25, Suffix = "%" })
 Aimbot:AddSlider({ Name = "Smoothness", Min = 0, Max = 1, Step = 0.05, Default = 0.5 })
 
 local Visuals = Home:AddGroup({ Name = "VISUALS", Side = "Right" })
@@ -111,6 +112,7 @@ Misc:AddButton({
 local World = Home:AddGroup({ Name = "WORLD", Side = "Right" })
 World:AddColorPicker({
 	Name = "ESP Color",
+	SaveKey = "esp_color",
 	Default = Color3.fromRGB(255, 70, 95),
 	Callback = function(color)
 		print("ESP Color", color:ToHex())

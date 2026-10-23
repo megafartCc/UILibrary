@@ -77,12 +77,16 @@ Every window gets a **Settings** page at the bottom of the sidebar:
 
 - **CONFIGS:** type a **Name** and **Save**. Pick one in **Configs**, then **Load**, **Delete** or **Refresh**. **Autoload selected** loads that config automatically about 1 second after the script starts.
 - **INTERFACE:** **UI Scale** slider and **Unload UI**.
+- **Auto Save** (on by default): every control created with a `SaveKey` is saved about a second after it changes and restored the next time the script runs, with its callback fired. Turning it off is remembered too. Files: `autosave.json` and `settings.json` in the config folder.
+
+Adding a page whose name already exists returns that page instead of erroring, so `AddPage({ Name = "Settings" })` gives you the built-in Settings page to add your own boxes to.
 
 Every toggle, slider, dropdown, multi-select, color picker, text input and combined row is saved. Loading sets each one back and runs its callback. Buttons aren't saved.
 
 | Option / call | What it does |
 | --- | --- |
 | `Flag = "aimbot_enabled"` on any control | The key it's saved under. Default is `Page.Box.Name` |
+| `SaveKey = "aimbot_enabled"` on any control | Auto Save remembers this control between runs (and it's also its config key) |
 | `NoConfig = true` on a control or box | Leave it out of configs |
 | `SettingsPage = false` | Don't add the Settings page |
 | `SettingsName` | Rename the Settings page |

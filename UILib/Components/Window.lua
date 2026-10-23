@@ -269,6 +269,9 @@ function Window:Destroy()
 	if self.Destroyed then
 		return
 	end
+	if self.Config then
+		self.Config:Flush()
+	end
 	self.Destroyed = true
 
 	for _, callback in self._onClose do
@@ -445,9 +448,12 @@ end
 
 function Window:_addPage(options, layoutOrder)
 	local name = options.Name
-	assert(self.Pages[name] == nil, "UILib: a page named " .. name .. " already exists")
+	if self.Pages[name] then
+		return self.Pages[name]
+	end
 
 	local page = Page.new(options)
+	page.Window = self
 	page.LayoutOrder = layoutOrder
 	page.Button = PageButton.new(options, layoutOrder)
 	page.Button.Frame.Parent = self.Sidebar.Items

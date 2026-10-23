@@ -176,9 +176,23 @@ function Group:_add(kind, options)
 	local element = Elements[kind].new(self, options, #self.Elements + 1)
 	element.Kind = kind
 	element.Group = self
-	element.Flag = options.Flag or table.concat({ if self.Page then self.Page.Name else "", self.Name, options.Name }, ".")
+	element.SaveKey = options.SaveKey
+	element.Flag = options.Flag or options.SaveKey or table.concat({ if self.Page then self.Page.Name else "", self.Name, options.Name }, ".")
 	element.NoConfig = options.NoConfig == true or self.NoConfig == true
 	table.insert(self.Elements, element)
+
+	local window = self.Page and self.Page.Window
+	local config = window and window.Config
+	if config and not element.NoConfig and type(element.Get) == "function" then
+		local original = element.Callback
+		element.Callback = function(...)
+			config:QueueAutosave()
+			if original then
+				original(...)
+			end
+		end
+		config:Restore(element)
+	end
 	return element
 end
 
