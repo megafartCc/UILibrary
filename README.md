@@ -70,9 +70,9 @@ See `example.lua` for a full example.
 
 ## Key system
 
-Same logic as the old UiLib. While locked, the window shrinks to a key card
-(title, key box, status line, **Get Key** and **Unlock**). A valid key expands
-it into the full UI. `CreateWindow` waits until the key is accepted, so code
+Same logic and the same card design as the old UiLib. While locked, only the
+key card shows (KEY SYSTEM, key box, status line, **Get Key** and **Unlock**);
+drag it by the card to move it. A valid key expands it into the full UI. `CreateWindow` waits until the key is accepted, so code
 after it only runs once unlocked (`WaitForKey = false` turns that off).
 
 ```lua
@@ -145,7 +145,7 @@ UILib/
     ColorPicker.lua      swatch with a saturation square, hue bar and hex input
   Key/
     Backend.lua          key check against the server, saving, publishing, clipboard
-    Gate.lua             key screen, lock/unlock, expiry countdown
+    Gate.lua             key card (old UiLib design, draggable), lock/unlock, expiry countdown
   Vendor/Lucide/         icon sheet data from lucide-roblox (MIT + ISC)
 ```
 

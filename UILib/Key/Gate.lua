@@ -76,108 +76,118 @@ function Gate.new(window, options, library)
 	return self
 end
 
-function Gate:_build(getKeyText)
-	local sizes, colors = Theme.Sizes, Theme.Colors
-	local pad = sizes.KeyPad
+local CARD = {
+	Background = Color3.fromRGB(22, 22, 22),
+	Line = Color3.fromRGB(29, 29, 29),
+	Text = Color3.fromRGB(229, 229, 229),
+	TextDim = Color3.fromRGB(150, 150, 150),
+	TextMuted = Color3.fromRGB(100, 100, 100),
+	Input = Color3.fromRGB(28, 28, 28),
+	GetButton = Color3.fromRGB(32, 32, 32),
+	GetButtonHover = Color3.fromRGB(42, 42, 42),
+	Submit = Color3.fromRGB(45, 25, 30),
+	SubmitHover = Color3.fromRGB(60, 30, 38),
+}
 
+function Gate:_build(getKeyText)
 	self.Frame = Create.new("Frame", {
-		Name = "KeyGate",
-		Position = UDim2.fromOffset(0, sizes.HeaderHeight + 1),
-		Size = UDim2.new(1, 0, 1, -(sizes.HeaderHeight + 1)),
+		Name = "KeyGateRoot",
+		Size = UDim2.fromScale(1, 1),
 		BackgroundTransparency = 1,
 		Visible = false,
 		ZIndex = 4,
 		Parent = self.Window.Frame,
-		Create.Padding(pad, pad, pad, pad),
-		Create.List(Enum.FillDirection.Vertical, 6),
+	})
+
+	self.Card = Create.new("Frame", {
+		Name = "KeyGateCard",
+		AnchorPoint = Vector2.new(0.5, 0.5),
+		Position = UDim2.fromScale(0.5, 0.5),
+		Size = UDim2.fromOffset(360, 176),
+		BackgroundColor3 = CARD.Background,
+		BorderSizePixel = 0,
+		Parent = self.Frame,
+		Create.new("UICorner", { CornerRadius = UDim.new(0, 6) }),
+		Create.new("UIStroke", { Color = CARD.Line, Transparency = 0.25 }),
 	})
 
 	Create.new("TextLabel", {
 		Name = "Title",
-		LayoutOrder = 1,
-		Size = UDim2.new(1, 0, 0, 18),
-		FontFace = Theme.Fonts.Title,
-		Text = "Key System",
-		TextSize = Theme.TextSizes.KeyTitle,
-		TextColor3 = colors.Text,
-		Parent = self.Frame,
+		Position = UDim2.fromOffset(18, 14),
+		Size = UDim2.new(1, -36, 0, 22),
+		Font = Enum.Font.GothamBold,
+		Text = "KEY SYSTEM",
+		TextSize = 18,
+		TextColor3 = CARD.Text,
+		Parent = self.Card,
 	})
 
 	Create.new("TextLabel", {
 		Name = "Subtitle",
-		LayoutOrder = 2,
-		Size = UDim2.new(1, 0, 0, 14),
-		FontFace = Theme.Fonts.Element,
+		Position = UDim2.fromOffset(18, 38),
+		Size = UDim2.new(1, -36, 0, 18),
+		Font = Enum.Font.GothamMedium,
 		Text = "Enter your key to unlock the window.",
-		TextSize = Theme.TextSizes.KeyText,
-		TextColor3 = colors.Muted,
-		TextTruncate = Enum.TextTruncate.AtEnd,
-		Parent = self.Frame,
+		TextSize = 11,
+		TextColor3 = CARD.TextDim,
+		Parent = self.Card,
 	})
 
 	self.Input = Create.new("TextBox", {
-		Name = "Input",
-		LayoutOrder = 3,
-		Size = UDim2.new(1, 0, 0, sizes.KeyInputHeight),
-		BackgroundColor3 = colors.Search,
+		Name = "KeyInput",
+		Position = UDim2.fromOffset(18, 72),
+		Size = UDim2.new(1, -36, 0, 34),
+		BackgroundColor3 = CARD.Input,
 		BorderSizePixel = 0,
 		ClearTextOnFocus = false,
 		ClipsDescendants = true,
-		Text = "",
+		Font = Enum.Font.GothamMedium,
 		PlaceholderText = "Enter key here",
-		PlaceholderColor3 = colors.SectionLabel,
-		FontFace = Theme.Fonts.Value,
-		TextSize = Theme.TextSizes.KeyInput,
-		TextColor3 = colors.Text,
+		PlaceholderColor3 = CARD.TextMuted,
+		Text = "",
+		TextColor3 = CARD.Text,
+		TextSize = 13,
 		TextXAlignment = Enum.TextXAlignment.Left,
-		Parent = self.Frame,
-		Create.new("UICorner", { CornerRadius = UDim.new(0, sizes.KeyRadius) }),
+		Parent = self.Card,
+		Create.new("UICorner", { CornerRadius = UDim.new(0, 4) }),
 		Create.Padding(10, 10),
 	})
-	self.InputStroke = Create.new("UIStroke", { Color = colors.Divider, Thickness = 1, Parent = self.Input })
+	self.InputStroke = Create.new("UIStroke", { Color = CARD.Line, Transparency = 0.45, Parent = self.Input })
 
 	self.Status = Create.new("TextLabel", {
 		Name = "Status",
-		LayoutOrder = 4,
-		Size = UDim2.new(1, 0, 0, 14),
-		FontFace = Theme.Fonts.Element,
+		Position = UDim2.fromOffset(18, 109),
+		Size = UDim2.new(1, -36, 0, 14),
+		Font = Enum.Font.GothamMedium,
 		Text = "",
-		TextSize = Theme.TextSizes.KeyText,
-		TextColor3 = colors.Muted,
+		TextSize = 10,
+		TextColor3 = CARD.TextDim,
 		TextTruncate = Enum.TextTruncate.AtEnd,
-		Parent = self.Frame,
+		Parent = self.Card,
 	})
 
-	local row = Create.new("Frame", {
-		Name = "Buttons",
-		LayoutOrder = 5,
-		Size = UDim2.new(1, 0, 0, sizes.KeyButtonHeight),
-		BackgroundTransparency = 1,
-		Parent = self.Frame,
-	})
-
-	local function button(name, text, x, background, stroke, textColor)
+	local function button(name, text, anchorX, position, background, hover, stroke, strokeTransparency, textColor)
 		local frame = Create.new("TextButton", {
 			Name = name,
-			AnchorPoint = Vector2.new(x, 0),
-			Position = UDim2.fromScale(x, 0),
-			Size = UDim2.new(0.5, -4, 1, 0),
+			AnchorPoint = Vector2.new(anchorX, 0),
+			Position = position,
+			Size = UDim2.new(0.5, -23, 0, 30),
 			BackgroundColor3 = background,
 			BorderSizePixel = 0,
-			FontFace = Theme.Fonts.Value,
+			Font = Enum.Font.GothamMedium,
 			Text = text,
-			TextSize = Theme.TextSizes.KeyButton,
 			TextColor3 = textColor,
-			Parent = row,
-			Create.new("UICorner", { CornerRadius = UDim.new(0, sizes.KeyRadius) }),
+			TextSize = 11,
+			TextTruncate = Enum.TextTruncate.AtEnd,
+			Selectable = false,
+			Parent = self.Card,
+			Create.new("UICorner", { CornerRadius = UDim.new(0, 4) }),
 			Create.new("UIStroke", {
 				Color = stroke,
-				Thickness = 1,
-				Transparency = 0.35,
+				Transparency = strokeTransparency,
 				ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
 			}),
 		})
-		local hover = background:Lerp(Color3.new(1, 1, 1), 0.06)
 		frame.MouseEnter:Connect(function()
 			Motion.Apply(frame, { BackgroundColor3 = hover }, true)
 		end)
@@ -187,8 +197,10 @@ function Gate:_build(getKeyText)
 		return frame
 	end
 
-	self.GetButton = button("GetKey", getKeyText, 0, colors.Track, colors.Divider, colors.Text)
-	self.SubmitButton = button("Unlock", self.SubmitText, 1, colors.AccentSurface, colors.Accent, Color3.new(1, 1, 1))
+	self.GetButton = button("GetKeyButton", getKeyText, 0, UDim2.new(0, 18, 1, -50),
+		CARD.GetButton, CARD.GetButtonHover, CARD.Line, 0.4, CARD.Text)
+	self.SubmitButton = button("SubmitKeyButton", self.SubmitText, 1, UDim2.new(1, -18, 1, -50),
+		CARD.Submit, CARD.SubmitHover, Theme.Colors.Accent, 0.35, Color3.new(1, 1, 1))
 
 	self.GetButton.Activated:Connect(function()
 		self:GetKey()
@@ -201,6 +213,8 @@ function Gate:_build(getKeyText)
 			self:TryUnlock()
 		end
 	end)
+
+	self.Window:_makeDraggable({ self.Card })
 
 	if self.Mode == "remote" and self.ScriptId == "" and self.ProjectId == "" then
 		self:_status("ScriptId or ProjectId is missing.", BAD)
@@ -252,12 +266,16 @@ end
 
 function Gate:_status(text, color)
 	self.Status.Text = tostring(text or "")
-	self.Status.TextColor3 = color or Theme.Colors.Muted
+	self.Status.TextColor3 = color or CARD.TextDim
 end
 
 function Gate:_pulse(color)
-	self.InputStroke.Color = color
-	Motion.Apply(self.InputStroke, { Color = Theme.Colors.Divider }, true, 0.6, Enum.EasingStyle.Quad)
+	Motion.Apply(self.InputStroke, { Color = color, Transparency = 0.1 }, true)
+	task.delay(0.3, function()
+		if self.InputStroke.Parent then
+			Motion.Apply(self.InputStroke, { Color = CARD.Line, Transparency = 0.45 }, true)
+		end
+	end)
 end
 
 function Gate:_validate(key)
@@ -354,11 +372,12 @@ end
 
 function Gate:_setChrome(visible)
 	local window = self.Window
+	window.Header.Visible = visible
+	window.Bottom.Visible = visible
 	window.Sidebar.Frame.Visible = visible
 	window.Content.Visible = visible
 	window.Divider.Visible = visible
-	window.Search.Frame.Visible = visible
-	window.Bottom.Visible = visible
+	window.Frame.BackgroundTransparency = if visible then 0 else 1
 	if not visible then
 		window.Search:_hide()
 	end
